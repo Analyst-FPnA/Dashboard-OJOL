@@ -13,6 +13,6 @@ output = '/path/to/save/file.zip'
 
 try:
     gdown.download(download_url, output, quiet=False)
-    print("File successfully downloaded.")
+    st.write("File successfully downloaded.")
 except Exception as e:
-    print(f"An error occurred: {e}")
+    st.write(f"An error occurred: {e}")
