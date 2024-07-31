@@ -15,7 +15,7 @@ dest_path = 'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
 st.write(os.listdir()) 
 
-with zipfile.ZipFile('downloaded_file.zip.zip', 'r') as zip_ref:
+with zipfile.ZipFile('downloaded_file.zip', 'r') as zip_ref:
     zip_ref.extractall()
 
 st.write(os.listdir())
