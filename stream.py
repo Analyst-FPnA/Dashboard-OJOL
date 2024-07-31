@@ -2,6 +2,7 @@ import requests
 import zipfile
 import io
 import pandas as pd
+import streamlit as st
 
 # URL file ZIP di Google Drive atau sumber lain
 url = 'https://drive.google.com/uc?export=download&id=1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0'
