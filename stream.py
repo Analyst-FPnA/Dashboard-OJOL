@@ -13,6 +13,7 @@ def download_file_from_google_drive(file_id, dest_path):
 file_id = '1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0'
 dest_path = 'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
+st.write(os.listdir()) 
 
 with zipfile.ZipFile('downloaded_file.zip.zip', 'r') as zip_ref:
     zip_ref.extractall()
