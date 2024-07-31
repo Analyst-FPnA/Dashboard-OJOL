@@ -52,7 +52,7 @@ df_prov = df_prov.rename(columns={'Nama':'Nama Cabang','Provinsi Alamat':'Provin
 list_cab = df_prov['Nama Cabang'].str.extract(r'\((.*?)\)')[0].values
 
 
-st.title('Automate Breakdown Ojol')
+st.title('Dashboard - Ojol')
 
 all_cab = st.multiselect('Pilih Cabang', list_cab)
 all_cab = list(all_cab)
