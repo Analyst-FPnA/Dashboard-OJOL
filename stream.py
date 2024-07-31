@@ -15,9 +15,9 @@ with open('downloaded_file.zip', 'wb') as file:
     file.write(response.content)       
 st.write(os.listdir())
 
-def read_csv_from_zip(zip_content):
+def read_csv_from_zip():
     try:
-        with zipfile.ZipFile('Downloads.zip') as z:
+        with zipfile.ZipFile('downloaded_file.zip') as z:
             file_names = z.namelist()
             if file_names:
                 # Memilih file CSV pertama yang ditemukan
@@ -38,15 +38,4 @@ def read_csv_from_zip(zip_content):
     except Exception as e:
         st.error(f"Terjadi kesalahan: {e}")
         return None
-
-
-# Aplikasi Streamlit
-st.title("Download dan Baca CSV dari ZIP di Google Drive")
-
-# Input ID file Google Drive
-zip_content = download_zip_from_google_drive()
-if zip_content:
-        df = read_csv_from_zip(zip_content)
-        if df is not None:
-            st.write("Data dari CSV:")
-            st.dataframe(df)
+read_csv_from_zip()
