@@ -14,6 +14,8 @@ def download_zip_from_google_drive():
     else:
         st.error("Gagal mendownload file ZIP.")
         return None
+        
+download_zip_from_google_drive()        
 st.write(os.listdir())
 
 def read_csv_from_zip(zip_content):
