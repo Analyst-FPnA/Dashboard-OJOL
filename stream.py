@@ -24,7 +24,7 @@ def read_csv_from_zip(zip_content):
                 csv_file = [name for name in file_names if name.endswith('.csv')]
                 if csv_file:
                     with z.open(csv_file[0]) as f:
-                        df = pd.read_csv(f).head(0
+                        df = pd.read_csv(f).head()
                         return df
                 else:
                     st.error("Tidak ada file CSV dalam ZIP.")
