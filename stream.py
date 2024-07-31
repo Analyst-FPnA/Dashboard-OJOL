@@ -1,18 +1,9 @@
-import streamlit as st
-import pandas as pd
-import gdown
-from io import BytesIO
-import zipfile
+import requests
 
-# ID file dari Google Drive
 file_id = '1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0'
-download_url = f'https://drive.google.com/uc?id={file_id}'
+url = f'https://drive.google.com/uc?export=download&id={file_id}'
+response = requests.get(url, stream=True)
 
-# Lokasi penyimpanan file
-output = '/path/to/save/file.zip'
-
-try:
-    gdown.download(download_url, output, quiet=False)
-    st.write("File successfully downloaded.")
-except Exception as e:
-    st.write(f"An error occurred: {e}")
+with open('downloaded_file.zip', 'wb') as file:
+    for chunk in response.iter_content(chunk_size=8192):
+        file.write(chunk)
