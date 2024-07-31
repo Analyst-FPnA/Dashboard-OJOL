@@ -15,27 +15,7 @@ with open('downloaded_file.zip', 'wb') as file:
     file.write(response.content)       
 st.write(os.listdir())
 
-def read_csv_from_zip():
-    try:
-        with zipfile.ZipFile('downloaded_file.zip') as z:
-            file_names = z.namelist()
-            if file_names:
-                # Memilih file CSV pertama yang ditemukan
-                csv_file = [name for name in file_names if name.endswith('.csv')]
-                if csv_file:
-                    with z.open(csv_file[0]) as f:
-                        df = pd.read_csv(f).head()
-                        return df
-                else:
-                    st.error("Tidak ada file CSV dalam ZIP.")
-                    return None
-            else:
-                st.error("ZIP tidak berisi file.")
-                return None
-    except zipfile.BadZipFile:
-        st.error("File yang diunduh bukan file ZIP yang valid.")
-        return None
-    except Exception as e:
-        st.error(f"Terjadi kesalahan: {e}")
-        return None
-read_csv_from_zip()
+with zipfile.ZipFile('downloaded_file.zip', 'r') as zip_ref:
+    zip_ref.extractall()
+
+st.write(os.listdir())
