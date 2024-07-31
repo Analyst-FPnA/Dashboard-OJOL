@@ -5,7 +5,7 @@ from io import BytesIO
 import zipfile
 
 # URL Google Drive dari file ZIP
-file_url = 'https://drive.google.com/file/d/FILE_ID/view?usp=sharing'
+file_url = 'https://drive.google.com/file/d/1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0/view?usp=sharing'
 
 # Mendapatkan ID file dari URL
 file_id = file_url.split('/d/')[1].split('/view')[0]
