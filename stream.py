@@ -32,8 +32,7 @@ def read_csv_from_zip(zip_content):
 st.title("Download dan Baca CSV dari ZIP di Google Drive")
 
 # Input ID file Google Drive
-if file_id:
-    zip_content = download_zip_from_google_drive()
+zip_content = download_zip_from_google_drive()
     if zip_content:
         df = read_csv_from_zip(zip_content)
         if df is not None:
