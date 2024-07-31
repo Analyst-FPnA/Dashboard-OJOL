@@ -25,15 +25,7 @@ def load_data_from_zip():
         file_list = zip_ref.namelist()
         st.write("File dalam ZIP:", file_list)
         
-        # Membaca file Excel pertama dari ZIP (atau sesuai kebutuhan)
-        with zip_ref.open(file_list[0]) as file:
-            df = pd.read_csv(file)
-    return df
 
 # Memuat data
 st.write("Mengunduh dan memuat data dari Google Drive...")
-df = load_data_from_zip()
-
-# Menampilkan data di aplikasi Streamlit
-st.write("Berikut adalah data yang diunduh dari file Excel dalam ZIP:")
-st.dataframe(df.head())
+load_data_from_zip()
