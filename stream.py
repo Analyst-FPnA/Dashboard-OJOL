@@ -12,16 +12,16 @@ response.raise_for_status()  # Memastikan permintaan berhasil
 
 # Mengecek jenis konten
 content_type = response.headers.get('Content-Type')
-print(f"Content-Type: {content_type}")
+st.write(f"Content-Type: {content_type}")
 
 if 'application/zip' not in content_type:
-    print("The downloaded file is not a ZIP file or is not correctly downloaded.")
+    st.write("The downloaded file is not a ZIP file or is not correctly downloaded.")
 else:
     try:
         # Membaca file ZIP dari respons
         with zipfile.ZipFile(io.BytesIO(response.content)) as thezip:
-            print("Files in the ZIP:")
-            thezip.printdir()
+            st.write("Files in the ZIP:")
+            thezip.st.writedir()
             
             # Membaca setiap file dalam ZIP
             for file_name in thezip.namelist():
@@ -30,10 +30,10 @@ else:
                     with thezip.open(file_name) as file:
                         # Membaca file CSV ke dalam DataFrame pandas
                         df = pd.read_csv(file)
-                        print(f"\nData from {file_name}:")
-                        print(df.head())  # Menampilkan beberapa baris pertama data
+                        st.write(f"\nData from {file_name}:")
+                        st.write(df.head())  # Menampilkan beberapa baris pertama data
                 else:
-                    print(f"Skipping non-CSV file: {file_name}")
+                    st.write(f"Skipping non-CSV file: {file_name}")
 
     except zipfile.BadZipFile:
-        print("Failed to unzip the file. The file may be corrupted or not a ZIP file.")
+        st.write("Failed to unzip the file. The file may be corrupted or not a ZIP file.")
