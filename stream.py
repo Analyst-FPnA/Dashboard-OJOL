@@ -13,9 +13,21 @@ def download_file_from_google_drive(file_id, dest_path):
 file_id = '1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0'
 dest_path = 'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
-st.write(os.listdir()) 
 
 with zipfile.ZipFile('downloaded_file.zip', 'r') as zip_ref:
     zip_ref.extractall()
 
-st.write(os.listdir())
+df_merge = pd.read_csv('Compile Merge (ALL).csv')
+df_breakdown = pd.read_csv('Compile Breakdown (ALL).csv')
+
+df_merge['DATE'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d')
+df_breakdown['DATE'] = pd.to_datetime(df_breakdown['DATE'],format='%Y-%m-%d')
+
+df_merge['KAT'] = df_merge['KAT'].str.upper()
+df_merge2 = df_merge.groupby(['SOURCE','KAT'])[['NOM']].sum().reset_index()
+
+df_merge3 = df_merge2[df_merge2['KAT'].isin(['QRIS ESB','QRIS TELKOM'])].groupby('SOURCE')[['NOM']].sum().reset_index()
+df_merge3['KAT']='QRIS TELKOM/ESB'
+
+st.dataframe(pd.pivot(data=pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]), 
+         index='SOURCE', columns='KAT', values='NOM').reset_index())
