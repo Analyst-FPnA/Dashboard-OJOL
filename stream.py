@@ -6,7 +6,7 @@ import pandas as pd
 
 # Fungsi untuk mendownload file ZIP dari Google Drive
 def download_zip_from_google_drive():
-    url = f"https://drive.google.com/uc?export=download&id=1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0"
+    url = f"https://drive.google.com/uc?export=download&id=1f-YfvMvFG0UaOw9H5RqNpkPRJEB-8gfa"
     response = requests.get(url)
     if response.status_code == 200:
         return response.content
