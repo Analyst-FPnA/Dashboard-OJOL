@@ -3,6 +3,7 @@ import requests
 import zipfile
 import io
 import pandas as pd
+import os
 
 # Fungsi untuk mendownload file ZIP dari Google Drive
 def download_zip_from_google_drive():
