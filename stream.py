@@ -14,19 +14,31 @@ def download_zip_from_google_drive():
         st.error("Gagal mendownload file ZIP.")
         return None
 
-# Fungsi untuk membaca file CSV dari ZIP
+
 def read_csv_from_zip(zip_content):
-    with zipfile.ZipFile(io.BytesIO(zip_content)) as z:
-        # Daftar nama file dalam ZIP
-        file_names = z.namelist()
-        # Misalkan kita hanya ingin membaca file CSV pertama
-        if file_names:
-            with z.open(file_names[0]) as f:
-                df = pd.read_csv(f).head()
-                return df
-        else:
-            st.error("Tidak ada file di dalam ZIP.")
-            return None
+    try:
+        with zipfile.ZipFile(io.BytesIO(zip_content)) as z:
+            file_names = z.namelist()
+            if file_names:
+                # Memilih file CSV pertama yang ditemukan
+                csv_file = [name for name in file_names if name.endswith('.csv')]
+                if csv_file:
+                    with z.open(csv_file[0]) as f:
+                        df = pd.read_csv(f).head(0
+                        return df
+                else:
+                    st.error("Tidak ada file CSV dalam ZIP.")
+                    return None
+            else:
+                st.error("ZIP tidak berisi file.")
+                return None
+    except zipfile.BadZipFile:
+        st.error("File yang diunduh bukan file ZIP yang valid.")
+        return None
+    except Exception as e:
+        st.error(f"Terjadi kesalahan: {e}")
+        return None
+
 
 # Aplikasi Streamlit
 st.title("Download dan Baca CSV dari ZIP di Google Drive")
