@@ -14,16 +14,17 @@ file_id = file_url.split('/d/')[1].split('/view')[0]
 download_url = f'https://drive.google.com/uc?id={file_id}'
 
 # Fungsi untuk mengunduh file ZIP dan membaca file Excel di dalamnya
-@st.cache
+
 def load_data_from_zip():
-    output = BytesIO()
-    gdown.download(download_url, output, quiet=False)
-    output.seek(0)
-    
-    with zipfile.ZipFile(output, 'r') as zip_ref:
-        # Menampilkan semua nama file di dalam ZIP
-        file_list = zip_ref.namelist()
-        st.write("File dalam ZIP:", file_list)
+    try:
+        output = BytesIO()
+        gdown.download(download_url, output, quiet=False)
+        output.seek(0)
+        with zipfile.ZipFile(output, 'r') as zip_ref:
+            file_list = zip_ref.namelist()
+            st.write("File dalam ZIP:", file_list)
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
         
 
 # Memuat data
