@@ -6,21 +6,18 @@ import pandas as pd
 import os
 
 # Fungsi untuk mendownload file ZIP dari Google Drive
-def download_zip_from_google_drive():
-    url = f"https://drive.google.com/uc?export=download&id=1f-YfvMvFG0UaOw9H5RqNpkPRJEB-8gfa"
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.content
-    else:
-        st.error("Gagal mendownload file ZIP.")
-        return None
-        
-download_zip_from_google_drive()        
+url = 'https://drive.google.com/uc?export=download&id=1f-YfvMvFG0UaOw9H5RqNpkPRJEB-8gfa'
+response = requests.get(url)
+response.raise_for_status()
+
+# Menyimpan file untuk pemeriksaan manual
+with open('downloaded_file.zip', 'wb') as file:
+    file.write(response.content)       
 st.write(os.listdir())
 
 def read_csv_from_zip(zip_content):
     try:
-        with zipfile.ZipFile(io.BytesIO(zip_content)) as z:
+        with zipfile.ZipFile('Downloads.zip') as z:
             file_names = z.namelist()
             if file_names:
                 # Memilih file CSV pertama yang ditemukan
