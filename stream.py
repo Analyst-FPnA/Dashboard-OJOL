@@ -159,7 +159,7 @@ if st.button('Show'):
             df_merge_final = df_merge_final.applymap(format_number)
             
             st.markdown(f'## {cab}')
-            st.markdown('### SELISIH PER-PAYMENT')
+            st.markdown('#### SELISIH PER-PAYMENT')
             
             # Menerapkan styling pada DataFrame
             df_merge_final = df_merge_final.style.apply(highlight_last_row, axis=None)
@@ -167,7 +167,7 @@ if st.button('Show'):
             # Menampilkan DataFrame di Streamlit
             st.dataframe(df_merge_final, use_container_width=True, hide_index=True)
             
-            st.markdown('### KATEGORI PENGURANG')
+            st.markdown('#### KATEGORI PENGURANG')
             df_breakdown_pengurang = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_pengurang])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
             df_breakdown_pengurang.loc[len(df_breakdown_pengurang)] = ['TOTAL',
                                                                       df_breakdown_pengurang.iloc[:,1].sum(),
@@ -179,7 +179,7 @@ if st.button('Show'):
             df_breakdown_pengurang = df_breakdown_pengurang.style.apply(highlight_last_row, axis=None)
             st.dataframe(df_breakdown_pengurang, use_container_width=True, hide_index=True)
     
-            st.markdown('### KATEGORI DIPERIKSA')
+            st.markdown('#### KATEGORI DIPERIKSA')
             df_breakdown_diperiksa = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
             df_breakdown_diperiksa.loc[len(df_breakdown_diperiksa)] = ['TOTAL',
                                                                       df_breakdown_diperiksa.iloc[:,1].sum(),
