@@ -133,7 +133,7 @@ if st.button('Show'):
     
             df_merge_final = pd.pivot(data=pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]), 
                      index='SOURCE', columns='KAT', values='NOM')
-            df_merge_final = df_merge_final.reset_index()
+            df_merge_final = df_merge_final.reset_index().fillna(0)
             df_merge_final.loc[len(df_merge_final)] = ['SELISIH',
                                            df_merge_final.iloc[0,1] - df_merge_final.iloc[1,1],
                                           df_merge_final.iloc[0,2] - df_merge_final.iloc[1,2],
