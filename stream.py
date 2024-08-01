@@ -101,7 +101,7 @@ if st.button('Show'):
                                       df_merge.iloc[0,4] - df_merge.iloc[1,4],
                                       df_merge.iloc[0,5] - df_merge.iloc[1,5]]
         def highlight_last_row(x):
-            color = 'background-color: yellow'  # Warna yang ingin digunakan
+            color = 'background-color: #FF4B4B'  # Warna yang ingin digunakan
             df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
             
             # Memberikan warna khusus pada baris terakhir yang bernama 'SELISIH'
