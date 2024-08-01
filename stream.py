@@ -53,15 +53,20 @@ list_cab = df_prov['Nama Cabang'].str.extract(r'\((.*?)\)')[0].values
 
 st.title('Dashboard - Selisih Ojol')
 
-all_cab = st.multiselect('Pilih Cabang', list_cab)
-all_cab = list(all_cab)
 
-all_bulan = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-]
+col = st.columns(2)
 
-bulan = st.selectbox('Pilih Bulan', all_bulan)
+with col[0]:
+    all_cab = st.multiselect('Pilih Cabang', list_cab)
+    all_cab = list(all_cab)
+
+with col[1]:
+    all_bulan = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ]
+    
+    bulan = st.selectbox('Pilih Bulan', all_bulan)
 
 if "button_clicked" not in st.session_state:    
   st.session_state.button_clicked = False
