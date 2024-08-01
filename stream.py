@@ -57,6 +57,13 @@ st.title('Dashboard - Selisih Ojol')
 all_cab = st.multiselect('Pilih Cabang', list_cab)
 all_cab = list(all_cab)
 
+all_bulan = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+]
+
+bulan = st.selectbox('Pilih Bulan', all_bulan)
+
 if st.button('Show'):
     with tempfile.TemporaryDirectory() as tmpdirname:
         def download_file_from_google_drive(file_id, dest_path):
@@ -80,6 +87,9 @@ if st.button('Show'):
         
         df_merge['DATE'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d')
         df_breakdown['DATE'] = pd.to_datetime(df_breakdown['DATE'],format='%Y-%m-%d')
+
+        df_merge = df_merge[df_merge['MONTH']==bulan]
+        df_breakdown = df_breakdown[df_breakdown['MONTH']==bulan]
         
         df_merge['KAT'] = df_merge['KAT'].str.upper()
 
@@ -177,5 +187,5 @@ if st.button('Show'):
             df_breakdown_diperiksa = df_breakdown_diperiksa.style.apply(highlight_last_row, axis=None)
             st.dataframe(df_breakdown_diperiksa, use_container_width=True, hide_index=True)
             
-            if st.button('Close'):
-                print('close')
+        if st.button('Close'):
+            print('close')
