@@ -119,7 +119,11 @@ if st.button('Show'):
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
                 
             df_merge2 = df_merge2.groupby(['SOURCE','KAT'])[['NOM']].sum().reset_index()
-            
+            for i in ['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY']:
+                if i not in df_merge2['KAT']:
+                    df_merge2.loc[len(df_merge3)] = ['INVOICE',0,i]
+                    df_merge2.loc[len(df_merge3)] = ['WEB',0,i]
+                
             df_merge3 = df_merge2[df_merge2['KAT'].isin(['QRIS ESB','QRIS TELKOM'])].groupby('SOURCE')[['NOM']].sum().reset_index()
             df_merge3['KAT']='QRIS TELKOM/ESB'
             
