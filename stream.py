@@ -57,27 +57,26 @@ st.title('Dashboard - Ojol')
 all_cab = st.multiselect('Pilih Cabang', list_cab)
 all_cab = list(all_cab)
 
-# Tampilkan widget untuk memilih rentang tanggal
-start_date = st.date_input("Pilih Tanggal Awal")
-end_date = st.date_input("Pilih Tanggal Akhir")
-
 if st.button('Show'):
     with tempfile.TemporaryDirectory() as tmpdirname:
         def download_file_from_google_drive(file_id, dest_path):
-            url = f"https://drive.google.com/uc?id={file_id}"
-            gdown.download(url, dest_path, quiet=False)
-        
+            if not os.path.exists(dest_path):
+                url = f"https://drive.google.com/uc?id={file_id}"
+                gdown.download(url, dest_path, quiet=False)
+                with zipfile.ZipFile(f'{tmpdirname}/downloaded_file.zip', 'r') as zip_ref:
+                    zip_ref.extractall(tmpdirname)
+                    
         file_id = '1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0'
         dest_path = f'{tmpdirname}/downloaded_file.zip'
         download_file_from_google_drive(file_id, dest_path)
         
-        with zipfile.ZipFile(f'{tmpdirname}/downloaded_file.zip', 'r') as zip_ref:
-            zip_ref.extractall(tmpdirname)
-        
         df_merge = pd.read_csv(f'{tmpdirname}/Compile Merge (ALL).csv')
         df_breakdown = pd.read_csv(f'{tmpdirname}/Compile Breakdown (ALL).csv')
-        st.write(df_merge.loc[0,'DATE'])
-        st.write(start_date)
+        #st.write(df_merge.loc[0,'DATE'])
+        #st.write(start_date)
+
+        df_merge = df_merge[df_merge['CAB']==all_cab]
+        
         df_merge['DATE'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d')
         df_breakdown['DATE'] = pd.to_datetime(df_breakdown['DATE'],format='%Y-%m-%d')
 
