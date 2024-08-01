@@ -119,8 +119,8 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
         #df_merge = df_merge[df_merge['CAB'].isin(all_cab)]
         #df_breakdown = df_breakdown[df_breakdown['CAB'].isin(all_cab)]
         
-        df_merge['DATE'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d')
-        df_breakdown['DATE'] = pd.to_datetime(df_breakdown['DATE'],format='%Y-%m-%d')
+        df_merge['DATE'] = pd.to_datetime(df_merge['DATE'],format='%d/%m/%Y')
+        df_breakdown['DATE'] = pd.to_datetime(df_breakdown['DATE'],format='%d/%m/%Y')
 
         df_merge['MONTH'] = df_merge['DATE'].dt.month_name()
         df_breakdown['MONTH'] = df_breakdown['DATE'].dt.month_name()
