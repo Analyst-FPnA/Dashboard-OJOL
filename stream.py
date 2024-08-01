@@ -75,56 +75,13 @@ if st.button('Show'):
         #st.write(df_merge.loc[0,'DATE'])
         #st.write(start_date)
         
-        df_merge = df_merge[df_merge['CAB']==all_cab[0]]
-        df_breakdown = df_breakdown[df_breakdown['CAB']==all_cab[0]]
+        df_merge = df_merge[df_merge['CAB'].isin(all_cab)]
+        df_breakdown = df_breakdown[df_breakdown['CAB'].isin(all_cab)]
         
         df_merge['DATE'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d')
         df_breakdown['DATE'] = pd.to_datetime(df_breakdown['DATE'],format='%Y-%m-%d')
         
         df_merge['KAT'] = df_merge['KAT'].str.upper()
-        df_merge2 = df_merge.groupby(['SOURCE','KAT'])[['NOM']].sum().reset_index()
-        
-        df_merge3 = df_merge2[df_merge2['KAT'].isin(['QRIS ESB','QRIS TELKOM'])].groupby('SOURCE')[['NOM']].sum().reset_index()
-        df_merge3['KAT']='QRIS TELKOM/ESB'
-        
-        if df_merge3.empty:
-            df_merge3.loc[len(df_merge3)] = ['INVOICE',0,'QRIS TELKOM/ESB']
-            df_merge3.loc[len(df_merge3)] = ['WEB',0,'QRIS TELKOM/ESB']
-
-        df_merge = pd.pivot(data=pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]), 
-                 index='SOURCE', columns='KAT', values='NOM')
-        df_merge = df_merge.reset_index()
-        df_merge.loc[len(df_merge)] = ['SELISIH',
-                                       df_merge.iloc[0,1] - df_merge.iloc[1,1],
-                                      df_merge.iloc[0,2] - df_merge.iloc[1,2],
-                                      df_merge.iloc[0,3] - df_merge.iloc[1,3],
-                                      df_merge.iloc[0,4] - df_merge.iloc[1,4],
-                                      df_merge.iloc[0,5] - df_merge.iloc[1,5]]
-        def highlight_last_row(x):
-            font_color = 'color: white;'
-            background_color = 'background-color: #FF4B4B;'  # Warna yang ingin digunakan
-            df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
-            
-            # Memberikan warna khusus pada baris terakhir yang bernama 'SELISIH'
-            df_styles.iloc[-1, :] = font_color + background_color
-        
-            return df_styles
-            
-        def format_number(x):
-            if isinstance(x, (int, float)):
-                return "{:,.0f}".format(x)
-            return x
-        
-        # Terapkan format pada seluruh DataFrame
-        df_merge = df_merge.applymap(format_number)
-        
-        st.markdown('## Selisih per Payment')
-        
-        # Menerapkan styling pada DataFrame
-        df_merge = df_merge.style.apply(highlight_last_row, axis=None)
-        
-        # Menampilkan DataFrame di Streamlit
-        st.dataframe(df_merge, use_container_width=True, hide_index=True)
 
         kat_pengurang = ['Invoice Beda Hari',
                          'Transaksi Kemarin',
@@ -147,7 +104,57 @@ if st.button('Show'):
         df_breakdown['Kategori'] = df_breakdown['Kategori'].str.upper()
         df_breakdown.columns = df_breakdown.columns[:-7].to_list() + ['GO RESTO','GRAB FOOD','QRIS SHOPEE','QRIS TELKOM/ESB','SHOPEEPAY'] + df_breakdown.columns[-2:].to_list()
 
-        df_breakdown_pengurang = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_pengurang])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
+        for cab in all_cab:
+        df_merge2 = df_merge[df_merge['CAB'] == cab]
+        df_breakdown2 = df_breakdown2[df_breakdown['CAB'] == cab]
+            
+        df_merge2 = df_merge2.groupby(['SOURCE','KAT'])[['NOM']].sum().reset_index()
+        
+        df_merge3 = df_merge2[df_merge2['KAT'].isin(['QRIS ESB','QRIS TELKOM'])].groupby('SOURCE')[['NOM']].sum().reset_index()
+        df_merge3['KAT']='QRIS TELKOM/ESB'
+        
+        if df_merge3.empty:
+            df_merge3.loc[len(df_merge3)] = ['INVOICE',0,'QRIS TELKOM/ESB']
+            df_merge3.loc[len(df_merge3)] = ['WEB',0,'QRIS TELKOM/ESB']
+
+        df_merge_final = pd.pivot(data=pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]), 
+                 index='SOURCE', columns='KAT', values='NOM')
+        df_merge_final = df_merge_final.reset_index()
+        df_merge_final.loc[len(df_merge_final)] = ['SELISIH',
+                                       df_merge_final.iloc[0,1] - df_merge_final.iloc[1,1],
+                                      df_merge_final.iloc[0,2] - df_merge_final.iloc[1,2],
+                                      df_merge_final.iloc[0,3] - df_merge_final.iloc[1,3],
+                                      df_merge_final.iloc[0,4] - df_merge_final.iloc[1,4],
+                                      df_merge_final.iloc[0,5] - df_merge_final.iloc[1,5]]
+        def highlight_last_row(x):
+            font_color = 'color: white;'
+            background_color = 'background-color: #FF4B4B;'  # Warna yang ingin digunakan
+            df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
+            
+            # Memberikan warna khusus pada baris terakhir yang bernama 'SELISIH'
+            df_styles.iloc[-1, :] = font_color + background_color
+        
+            return df_styles
+            
+        def format_number(x):
+            if isinstance(x, (int, float)):
+                return "{:,.0f}".format(x)
+            return x
+        
+        # Terapkan format pada seluruh DataFrame
+        df_merge_final = df_merge_final.applymap(format_number)
+        
+        st.markdown(f'## {cab}')
+        st.markdown('### SELISIH PER-PAYMENT')
+        
+        # Menerapkan styling pada DataFrame
+        df_merge_final = df_merge_final.style.apply(highlight_last_row, axis=None)
+        
+        # Menampilkan DataFrame di Streamlit
+        st.dataframe(df_merge_final, use_container_width=True, hide_index=True)
+        
+        st.markdown('### KATEGORI PENGURANG')
+        df_breakdown_pengurang = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_pengurang])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
         df_breakdown_pengurang.loc[len(df_breakdown_pengurang)] = ['TOTAL',
                                                                   df_breakdown_pengurang.iloc[:,1].sum(),
                                                                   df_breakdown_pengurang.iloc[:,2].sum(),
@@ -157,7 +164,9 @@ if st.button('Show'):
         df_breakdown_pengurang = df_breakdown_pengurang.applymap(format_number)
         df_breakdown_pengurang = df_breakdown_pengurang.style.apply(highlight_last_row, axis=None)
         st.dataframe(df_breakdown_pengurang, use_container_width=True, hide_index=True)
-        df_breakdown_diperiksa = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
+
+        st.markdown('### KATEGORI DIPERIKSA')
+        df_breakdown_diperiksa = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
         df_breakdown_diperiksa.loc[len(df_breakdown_diperiksa)] = ['TOTAL',
                                                                   df_breakdown_diperiksa.iloc[:,1].sum(),
                                                                   df_breakdown_diperiksa.iloc[:,2].sum(),
@@ -167,3 +176,6 @@ if st.button('Show'):
         df_breakdown_diperiksa = df_breakdown_diperiksa.applymap(format_number)
         df_breakdown_diperiksa = df_breakdown_diperiksa.style.apply(highlight_last_row, axis=None)
         st.dataframe(df_breakdown_diperiksa, use_container_width=True, hide_index=True)
+        
+        if st.button('Close'):
+            print('close')
