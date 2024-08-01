@@ -149,8 +149,9 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
                          'Bayar Lebih dari 1 Kali - Banyak Struk (QRIS)',
                          'Kurang Input (Ojol)']
         df_breakdown['Kategori'] = df_breakdown['Kategori'].str.upper()
+        st.write(df_breakdown.head())
         df_breakdown.columns = df_breakdown.columns[:-7].to_list() + ['GO RESTO','GRAB FOOD','QRIS SHOPEE','QRIS TELKOM/ESB','SHOPEEPAY'] + df_breakdown.columns[-2:].to_list()
-
+        st.write(df_breakdown.head())
         for cab in all_cab:
             df_merge2 = df_merge[df_merge['CAB'] == cab]
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
