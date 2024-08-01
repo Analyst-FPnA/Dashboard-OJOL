@@ -51,9 +51,21 @@ df_prov = df_prov.loc[:265, ['Nama','Provinsi Alamat','Kota Alamat']]
 df_prov = df_prov.rename(columns={'Nama':'Nama Cabang','Provinsi Alamat':'Provinsi', 'Kota Alamat': 'Kota/Kabupaten'})
 list_cab = df_prov['Nama Cabang'].str.extract(r'\((.*?)\)')[0].values
 
-st.title('Dashboard - Selisih Ojol')
+with tempfile.TemporaryDirectory() as tmpdirname:
+    def download_file_from_google_drive(file_id, dest_path):
+        if not os.path.exists(dest_path):
+            url = f"https://drive.google.com/uc?id={file_id}"
+            gdown.download(url, dest_path, quiet=False)
+            with zipfile.ZipFile(f'{tmpdirname}/downloaded_file.zip', 'r') as zip_ref:
+                zip_ref.extractall(tmpdirname)
 
-all_cab = st.multiselect('Pilih Cabang', list_cab)
+    file_id = '1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0'
+    dest_path = f'{tmpdirname}/downloaded_file.zip'
+    download_file_from_google_drive(file_id, dest_path)
+
+st.title('Dashboard - Selisih Ojol')
+df_cab = pd.read_csv(f'{tmpdirname}/Compile Merge (ALL).csv')
+all_cab = st.multiselect('Pilih Cabang', df_cab['KAT'].unique())
 all_cab = list(all_cab)
 
 all_bulan = [
@@ -65,18 +77,6 @@ bulan = st.selectbox('Pilih Bulan', all_bulan)
 
 
 if st.button('Show'):
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        def download_file_from_google_drive(file_id, dest_path):
-            if not os.path.exists(dest_path):
-                url = f"https://drive.google.com/uc?id={file_id}"
-                gdown.download(url, dest_path, quiet=False)
-                with zipfile.ZipFile(f'{tmpdirname}/downloaded_file.zip', 'r') as zip_ref:
-                    zip_ref.extractall(tmpdirname)
-
-        file_id = '1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0'
-        dest_path = f'{tmpdirname}/downloaded_file.zip'
-        download_file_from_google_drive(file_id, dest_path)
-    
         df_merge = pd.read_csv(f'{tmpdirname}/Compile Merge (ALL).csv')
         df_breakdown = pd.read_csv(f'{tmpdirname}/Compile Breakdown (ALL).csv')
         #st.write(df_merge.loc[0,'DATE'])
