@@ -82,14 +82,39 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
                 with zipfile.ZipFile(f'{tmpdirname}/downloaded_file.zip', 'r') as zip_ref:
                     zip_ref.extractall(tmpdirname)
 
-        file_id = '1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0'
+        file_id = '1M3cbIMwJMgipATpDL7nIV_MEYe0clEBi'
         dest_path = f'{tmpdirname}/downloaded_file.zip'
         download_file_from_google_drive(file_id, dest_path)
-    
-        df_merge = pd.read_csv(f'{tmpdirname}/Compile Merge (ALL).csv')
-        df_breakdown = pd.read_csv(f'{tmpdirname}/Compile Breakdown (ALL).csv')
-        #st.write(df_merge.loc[0,'DATE'])
-        #st.write(start_date)
+
+        directory = f'{tmpdirname}/Merge'
+        dfs = []
+        # Iterate over each file in the directory
+        for filename in os.listdir(directory):
+            if filename.endswith('.csv'):
+                filepath = os.path.join(directory, filename)
+                try:
+                    # Read each CSV file into a DataFrame and append to the list
+                    dfs.append(pd.read_csv(filepath))
+                except Exception as e:
+                    print(f"Error reading {filepath}: {e}")
+        if dfs:
+            # Concatenate all DataFrames in the list along axis 0 (rows)
+            df_merge = pd.concat(dfs, ignore_index=True)
+            
+        directory = f'{tmpdirname}/Breakdown'
+        dfs = []
+        # Iterate over each file in the directory
+        for filename in os.listdir(directory):
+            if filename.endswith('.csv'):
+                filepath = os.path.join(directory, filename)
+                try:
+                    # Read each CSV file into a DataFrame and append to the list
+                    dfs.append(pd.read_csv(filepath))
+                except Exception as e:
+                    print(f"Error reading {filepath}: {e}")
+        if dfs:
+            # Concatenate all DataFrames in the list along axis 0 (rows)
+            df_breakdown = pd.concat(dfs, ignore_index=True)
         
         #df_merge = df_merge[df_merge['CAB'].isin(all_cab)]
         #df_breakdown = df_breakdown[df_breakdown['CAB'].isin(all_cab)]
@@ -97,6 +122,9 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
         df_merge['DATE'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d')
         df_breakdown['DATE'] = pd.to_datetime(df_breakdown['DATE'],format='%Y-%m-%d')
 
+        df_merge['MONTH'] = df_merge['DATE'].dt.month_name()
+        df_breakdown['MONTH'] = df_breakdown['DATE'].dt.month_name()
+        
         df_merge = df_merge[df_merge['MONTH']==bulan]
         df_breakdown = df_breakdown[df_breakdown['MONTH']==bulan]
         
