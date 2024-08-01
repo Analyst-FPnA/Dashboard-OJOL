@@ -75,7 +75,8 @@ if st.button('Show'):
         #st.write(df_merge.loc[0,'DATE'])
         #st.write(start_date)
         
-        #df_merge = df_merge[df_merge['CAB']==all_cab[0]]
+        df_merge = df_merge[df_merge['CAB']==all_cab[0]]
+        df_breakdown = df_breakdown[df_breakdown['CAB']==all_cab[0]]
         
         df_merge['DATE'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d')
         df_breakdown['DATE'] = pd.to_datetime(df_breakdown['DATE'],format='%Y-%m-%d')
@@ -85,6 +86,34 @@ if st.button('Show'):
         
         df_merge3 = df_merge2[df_merge2['KAT'].isin(['QRIS ESB','QRIS TELKOM'])].groupby('SOURCE')[['NOM']].sum().reset_index()
         df_merge3['KAT']='QRIS TELKOM/ESB'
+
+        df_merge = pd.pivot(data=pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]), 
+                 index='SOURCE', columns='KAT', values='NOM')
         
-        st.dataframe(pd.pivot(data=pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]), 
-                 index='SOURCE', columns='KAT', values='NOM'))
+        st.dataframe(df_merge)
+
+        kat_pengurang = ['Invoice Beda Hari',
+                         'Transaksi Kemarin',
+                         'Selisih IT',
+                         'Promo Marketing/Adjustment',
+                         'Cancel Nota',
+                         'Tidak Ada Transaksi di Web',
+                         'Selisih Lebih Bayar QRIS',
+                         'Selisih Lebih Bayar Ojol',
+                         'Salah Slot Pembayaran']
+        kat_diperiksa = ['Tidak Ada Invoice QRIS',
+                         'Tidak Ada Invoice Ojol',
+                         'Double Input',
+                         'Selisih Kurang Bayar QRIS',
+                         'Selisih Kurang Bayar Ojol',
+                         'Bayar Lebih dari 1 Kali - 1 Struk (QRIS)',
+                         'Bayar 1 Kali - Banyak Struk (QRIS)',
+                         'Bayar Lebih dari 1 Kali - Banyak Struk (QRIS)',
+                         'Kurang Input (Ojol)']
+        df_breakdown['Kategori'] = df_breakdown['Kategori'].str.upper()
+        df_breakdown.columns = df_breakdown.columns[:-7].to_list() + ['GO RESTO','GRAB FOOD','QRIS SHOPEE','QRIS TELKOM/ESB','SHOPEEPAY'] + df_breakdown.columns[-2:].to_list()
+
+        df_breakdown_pengurang = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_pengurang])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum()
+        st.dataframe(df_breakdown_pengurang)
+        df_breakdown_diperiksa = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum()
+        st.dataframe(df_breakdown_diperiksa)
