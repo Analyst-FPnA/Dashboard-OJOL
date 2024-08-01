@@ -86,9 +86,10 @@ if st.button('Show'):
         
         df_merge3 = df_merge2[df_merge2['KAT'].isin(['QRIS ESB','QRIS TELKOM'])].groupby('SOURCE')[['NOM']].sum().reset_index()
         df_merge3['KAT']='QRIS TELKOM/ESB'
+        
         if df_merge3.empty:
-            df_merge3.loc[len(df_merge3)] = [all_cab[0],'INVOICE',0,'QRIS TELKOM/ESB']
-            df_merge3.loc[len(df_merge3)] = [all_cab[0],'WEB',0,'QRIS TELKOM/ESB']
+            df_merge3.loc[len(df_merge3)] = ['KYBTEB','INVOICE',0,'QRIS TELKOM/ESB']
+            df_merge3.loc[len(df_merge3)] = ['KYBTEB','WEB',0,'QRIS TELKOM/ESB']
             
         df_merge = pd.pivot(data=pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]), 
                  index='SOURCE', columns='KAT', values='NOM')
