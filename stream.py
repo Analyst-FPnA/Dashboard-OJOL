@@ -189,6 +189,6 @@ if st.button('Show'):
             df_breakdown_diperiksa = df_breakdown_diperiksa.applymap(format_number)
             df_breakdown_diperiksa = df_breakdown_diperiksa.style.apply(highlight_last_row, axis=None)
             st.dataframe(df_breakdown_diperiksa, use_container_width=True, hide_index=True)
-            
+            st.markdown('---')
         if st.button('Close'):
             print('close')
