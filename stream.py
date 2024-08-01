@@ -79,8 +79,6 @@ if st.button('Show'):
         
         df_merge['DATE'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d')
         df_breakdown['DATE'] = pd.to_datetime(df_breakdown['DATE'],format='%Y-%m-%d')
-
-        df_merge = df_merge[(df_merge['DATE']>=start_date) & (df_merge['DATE']<=end_date)]
         
         df_merge['KAT'] = df_merge['KAT'].str.upper()
         df_merge2 = df_merge.groupby(['SOURCE','KAT'])[['NOM']].sum().reset_index()
