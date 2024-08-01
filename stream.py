@@ -93,12 +93,13 @@ if st.button('Show'):
 
         df_merge = pd.pivot(data=pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]), 
                  index='SOURCE', columns='KAT', values='NOM')
-        df_merge.loc[len(df_merge)] = [df_merge.iloc[0,0] - df_merge.iloc[1,0],
+        df_merge = df_merge.reset_index()
+        df_merge.loc[len(df_merge)] = ['SELISIH',
                                        df_merge.iloc[0,1] - df_merge.iloc[1,1],
                                       df_merge.iloc[0,2] - df_merge.iloc[1,2],
                                       df_merge.iloc[0,3] - df_merge.iloc[1,3],
-                                      df_merge.iloc[0,4] - df_merge.iloc[1,4]]
-        df_merge.index = ['INVOICE','WEB','SELISIH']
+                                      df_merge.iloc[0,4] - df_merge.iloc[1,4],
+                                      df_merge.iloc[0,5] - df_merge.iloc[1,5]]
         def highlight_last_row(x):
             color = 'background-color: yellow'  # Warna yang ingin digunakan
             df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
@@ -115,7 +116,7 @@ if st.button('Show'):
         styled_df = df_merge.style.apply(highlight_last_row, axis=None)
         
         # Menampilkan DataFrame di Streamlit
-        st.dataframe(styled_df, use_container_width=True)
+        st.dataframe(styled_df, use_container_width=True. hide_index=True))
 
         kat_pengurang = ['Invoice Beda Hari',
                          'Transaksi Kemarin',
