@@ -87,4 +87,4 @@ if st.button('Show'):
         df_merge3['KAT']='QRIS TELKOM/ESB'
         
         st.dataframe(pd.pivot(data=pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]), 
-                 index='SOURCE', columns='KAT', values='NOM').reset_index())
+                 index='SOURCE', columns='KAT', values='NOM'))
