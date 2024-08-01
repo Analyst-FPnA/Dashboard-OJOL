@@ -116,7 +116,7 @@ if st.button('Show'):
         styled_df = df_merge.style.apply(highlight_last_row, axis=None)
         
         # Menampilkan DataFrame di Streamlit
-        st.dataframe(styled_df, use_container_width=True. hide_index=True)
+        st.dataframe(styled_df, use_container_width=True, hide_index=True)
 
         kat_pengurang = ['Invoice Beda Hari',
                          'Transaksi Kemarin',
