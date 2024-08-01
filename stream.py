@@ -64,7 +64,7 @@ with tempfile.TemporaryDirectory() as tmpdirname:
     download_file_from_google_drive(file_id, dest_path)
 
 st.title('Dashboard - Selisih Ojol')
-df_cab = pd.read_csv(f'tmp/{tmpdirname}/Compile Merge (ALL).csv')
+df_cab = pd.read_csv(f'{tmpdirname}/Compile Merge (ALL).csv')
 all_cab = st.multiselect('Pilih Cabang', df_cab['KAT'].unique())
 all_cab = list(all_cab)
 
