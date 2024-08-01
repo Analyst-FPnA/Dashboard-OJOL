@@ -58,10 +58,10 @@ with tempfile.TemporaryDirectory() as tmpdirname:
             gdown.download(url, dest_path, quiet=False)
             with zipfile.ZipFile(f'{tmpdirname}/downloaded_file.zip', 'r') as zip_ref:
                 zip_ref.extractall(tmpdirname)
-
-file_id = '1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0'
-dest_path = f'{tmpdirname}/downloaded_file.zip'
-download_file_from_google_drive(file_id, dest_path)
+    
+    file_id = '1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0'
+    dest_path = f'{tmpdirname}/downloaded_file.zip'
+    download_file_from_google_drive(file_id, dest_path)
 
 st.title('Dashboard - Selisih Ojol')
 df_cab = pd.read_csv(f'tmp/{tmpdirname}/Compile Merge (ALL).csv')
