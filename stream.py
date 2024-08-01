@@ -93,10 +93,12 @@ if st.button('Show'):
 
         df_merge = pd.pivot(data=pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]), 
                  index='SOURCE', columns='KAT', values='NOM')
-        df_merge.loc[len(df_merge)] = ['Selisih',df_merge.iloc[0,1] - df_merge.iloc[1,1],
+        df_merge.loc[len(df_merge)] = [df_merge.iloc[0,0] - df_merge.iloc[1,0],
+                                       df_merge.iloc[0,1] - df_merge.iloc[1,1],
                                       df_merge.iloc[0,2] - df_merge.iloc[1,2],
                                       df_merge.iloc[0,3] - df_merge.iloc[1,3],
                                       df_merge.iloc[0,4] - df_merge.iloc[1,4]]
+        df_merge.index = ['INVOICE','WEB','SELISIH']
         st.dataframe(df_merge)
 
         kat_pengurang = ['Invoice Beda Hari',
