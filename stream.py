@@ -106,7 +106,7 @@ if st.button('Show'):
 
         for cab in all_cab:
             df_merge2 = df_merge[df_merge['CAB'] == cab]
-            df_breakdown2 = df_breakdown2[df_breakdown['CAB'] == cab]
+            df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
                 
             df_merge2 = df_merge2.groupby(['SOURCE','KAT'])[['NOM']].sum().reset_index()
             
