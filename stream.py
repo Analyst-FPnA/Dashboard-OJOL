@@ -63,7 +63,12 @@ bulan = st.selectbox('Pilih Bulan', all_bulan)
 
 st.title('Dashboard - Selisih Ojol')
 
-if st.button('Show'):
+if "button_clicked" not in st.session_state:    
+  st.session_state.button_clicked = False
+def callback():
+  st.session_state.button_clicked = True
+
+if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
     with tempfile.TemporaryDirectory() as tmpdirname:
         def download_file_from_google_drive(file_id, dest_path):
             if not os.path.exists(dest_path):
