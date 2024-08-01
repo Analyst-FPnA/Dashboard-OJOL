@@ -141,8 +141,20 @@ if st.button('Show'):
         df_breakdown.columns = df_breakdown.columns[:-7].to_list() + ['GO RESTO','GRAB FOOD','QRIS SHOPEE','QRIS TELKOM/ESB','SHOPEEPAY'] + df_breakdown.columns[-2:].to_list()
 
         df_breakdown_pengurang = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_pengurang])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
+        df_breakdown_pengurang.loc[len(df_breakdown_pengurang)] = ['TOTAL',
+                                                                  df_breakdown_pengurang.iloc[:,1].sum(),
+                                                                  df_breakdown_pengurang.iloc[:,2].sum(),
+                                                                  df_breakdown_pengurang.iloc[:,3].sum(),
+                                                                  df_breakdown_pengurang.iloc[:,4].sum(),
+                                                                  df_breakdown_pengurang.iloc[:,5].sum()]
         df_breakdown_pengurang = df_breakdown_pengurang.style.apply(highlight_last_row, axis=None)
         st.dataframe(df_breakdown_pengurang, use_container_width=True, hide_index=True)
         df_breakdown_diperiksa = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
+        df_breakdown_diperiksa.loc[len(df_breakdown_diperiksa)] = ['TOTAL',
+                                                                  df_breakdown_diperiksa.iloc[:,1].sum(),
+                                                                  df_breakdown_diperiksa.iloc[:,2].sum(),
+                                                                  df_breakdown_diperiksa.iloc[:,3].sum(),
+                                                                  df_breakdown_diperiksa.iloc[:,4].sum(),
+                                                                  df_breakdown_diperiksa.iloc[:,5].sum()]
         df_breakdown_diperiksa = df_breakdown_diperiksa.style.apply(highlight_last_row, axis=None)
         st.dataframe(df_breakdown_diperiksa, use_container_width=True, hide_index=True)
