@@ -72,11 +72,10 @@ if st.button('Show'):
                 gdown.download(url, dest_path, quiet=False)
                 with zipfile.ZipFile(f'{tmpdirname}/downloaded_file.zip', 'r') as zip_ref:
                     zip_ref.extractall(tmpdirname)
-                    
+
         file_id = '1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0'
         dest_path = f'{tmpdirname}/downloaded_file.zip'
         download_file_from_google_drive(file_id, dest_path)
-        
     
         df_merge = pd.read_csv(f'{tmpdirname}/Compile Merge (ALL).csv')
         df_breakdown = pd.read_csv(f'{tmpdirname}/Compile Breakdown (ALL).csv')
