@@ -52,7 +52,7 @@ df_prov = df_prov.rename(columns={'Nama':'Nama Cabang','Provinsi Alamat':'Provin
 list_cab = df_prov['Nama Cabang'].str.extract(r'\((.*?)\)')[0].values
 
 
-st.title('Dashboard - Ojol')
+st.title('Dashboard - Selisih Ojol')
 
 all_cab = st.multiselect('Pilih Cabang', list_cab)
 all_cab = list(all_cab)
@@ -118,7 +118,7 @@ if st.button('Show'):
         # Terapkan format pada seluruh DataFrame
         df_merge = df_merge.applymap(format_number)
         
-        st.markdown('##Selisih per Payment')
+        st.markdown('## Selisih per Payment')
         
         # Menerapkan styling pada DataFrame
         df_merge = df_merge.style.apply(highlight_last_row, axis=None)
@@ -154,6 +154,7 @@ if st.button('Show'):
                                                                   df_breakdown_pengurang.iloc[:,3].sum(),
                                                                   df_breakdown_pengurang.iloc[:,4].sum(),
                                                                   df_breakdown_pengurang.iloc[:,5].sum()]
+        df_breakdown_pengurang = df_breakdown_pengurang.applymap(format_number)
         df_breakdown_pengurang = df_breakdown_pengurang.style.apply(highlight_last_row, axis=None)
         st.dataframe(df_breakdown_pengurang, use_container_width=True, hide_index=True)
         df_breakdown_diperiksa = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
@@ -163,5 +164,6 @@ if st.button('Show'):
                                                                   df_breakdown_diperiksa.iloc[:,3].sum(),
                                                                   df_breakdown_diperiksa.iloc[:,4].sum(),
                                                                   df_breakdown_diperiksa.iloc[:,5].sum()]
+        df_breakdown_diperiksa = df_breakdown_diperiksa.applymap(format_number)
         df_breakdown_diperiksa = df_breakdown_diperiksa.style.apply(highlight_last_row, axis=None)
         st.dataframe(df_breakdown_diperiksa, use_container_width=True, hide_index=True)
