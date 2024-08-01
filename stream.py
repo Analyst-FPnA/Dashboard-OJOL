@@ -51,8 +51,6 @@ df_prov = df_prov.loc[:265, ['Nama','Provinsi Alamat','Kota Alamat']]
 df_prov = df_prov.rename(columns={'Nama':'Nama Cabang','Provinsi Alamat':'Provinsi', 'Kota Alamat': 'Kota/Kabupaten'})
 list_cab = df_prov['Nama Cabang'].str.extract(r'\((.*?)\)')[0].values
 
-st.title('Dashboard - Selisih Ojol')
-
 all_cab = st.multiselect('Pilih Cabang', list_cab)
 all_cab = list(all_cab)
 
@@ -63,6 +61,7 @@ all_bulan = [
 
 bulan = st.selectbox('Pilih Bulan', all_bulan)
 
+st.title('Dashboard - Selisih Ojol')
 
 if st.button('Show'):
     with tempfile.TemporaryDirectory() as tmpdirname:
