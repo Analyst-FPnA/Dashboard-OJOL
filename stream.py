@@ -7,14 +7,6 @@ import os
 import gdown
 import tempfile
 
-def style_last_row(df):
-    # Styling baris terakhir
-    styles = [
-        {'selector': 'tr:last-child',
-         'props': 'background-color: #f4cccc; color: black;'}
-    ]
-    return df.style.apply(lambda x: styles)
-
 def download_file_from_github(url, save_path):
     response = requests.get(url)
     if response.status_code == 200:
@@ -107,7 +99,24 @@ if st.button('Show'):
                                       df_merge.iloc[0,3] - df_merge.iloc[1,3],
                                       df_merge.iloc[0,4] - df_merge.iloc[1,4]]
         df_merge.index = ['INVOICE','WEB','SELISIH']
-        st.dataframe(style_last_row(df_merge))
+        def highlight_last_row(x):
+            color = 'background-color: yellow'  # Warna yang ingin digunakan
+            df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
+            
+            # Memberikan warna khusus pada baris terakhir yang bernama 'SELISIH'
+            if x['SOURCE'].iloc[-1] == 'SELISIH':
+                df_styles.iloc[-1, :] = color
+        
+            return df_styles
+        
+        # Streamlit app
+        st.title('DataFrame Styling Example')
+        
+        # Menerapkan styling pada DataFrame
+        styled_df = df_merge.style.apply(highlight_last_row, axis=None)
+        
+        # Menampilkan DataFrame di Streamlit
+        st.dataframe(styled_df, use_container_width=True)
 
         kat_pengurang = ['Invoice Beda Hari',
                          'Transaksi Kemarin',
