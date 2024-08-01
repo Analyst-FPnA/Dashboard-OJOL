@@ -75,7 +75,7 @@ if st.button('Show'):
         #st.write(df_merge.loc[0,'DATE'])
         #st.write(start_date)
 
-        df_merge = df_merge[df_merge['CAB']==all_cab[0]]
+        #df_merge = df_merge[df_merge['CAB']==all_cab[0]]
         
         df_merge['DATE'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d')
         df_breakdown['DATE'] = pd.to_datetime(df_breakdown['DATE'],format='%Y-%m-%d')
