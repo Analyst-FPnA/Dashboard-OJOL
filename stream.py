@@ -7,6 +7,14 @@ import os
 import gdown
 import tempfile
 
+def style_last_row(df):
+    # Styling baris terakhir
+    styles = [
+        {'selector': 'tr:last-child',
+         'props': 'background-color: #f4cccc; color: black;'}
+    ]
+    return df.style.apply(lambda x: styles)
+
 def download_file_from_github(url, save_path):
     response = requests.get(url)
     if response.status_code == 200:
@@ -99,7 +107,7 @@ if st.button('Show'):
                                       df_merge.iloc[0,3] - df_merge.iloc[1,3],
                                       df_merge.iloc[0,4] - df_merge.iloc[1,4]]
         df_merge.index = ['INVOICE','WEB','SELISIH']
-        st.dataframe(df_merge)
+        st.dataframe(style_last_row(df_merge))
 
         kat_pengurang = ['Invoice Beda Hari',
                          'Transaksi Kemarin',
