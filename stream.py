@@ -59,7 +59,7 @@ def download_file_from_google_drive(file_id, dest_path):
             zip_ref.extractall()
             
 file_id = '1wMeJXGaFF1ku2-txWshzDLaHoxS_tBz0'
-dest_path = downloaded_file.zip'
+dest_path = 'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
 
 st.title('Dashboard - Selisih Ojol')
