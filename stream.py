@@ -110,7 +110,7 @@ if st.button('Show'):
             return df_styles
         
         # Streamlit app
-        st.title('DataFrame Styling Example')
+        st.markdown('##Selisih per Payment')
         
         # Menerapkan styling pada DataFrame
         styled_df = df_merge.style.apply(highlight_last_row, axis=None)
@@ -139,7 +139,7 @@ if st.button('Show'):
         df_breakdown['Kategori'] = df_breakdown['Kategori'].str.upper()
         df_breakdown.columns = df_breakdown.columns[:-7].to_list() + ['GO RESTO','GRAB FOOD','QRIS SHOPEE','QRIS TELKOM/ESB','SHOPEEPAY'] + df_breakdown.columns[-2:].to_list()
 
-        df_breakdown_pengurang = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_pengurang])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum()
-        st.dataframe(df_breakdown_pengurang)
-        df_breakdown_diperiksa = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum()
-        st.dataframe(df_breakdown_diperiksa)
+        df_breakdown_pengurang = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_pengurang])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
+        st.dataframe(df_breakdown_pengurang, use_container_width=True, hide_index=True)
+        df_breakdown_diperiksa = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
+        st.dataframe(df_breakdown_diperiksa, use_container_width=True, hide_index=True)
