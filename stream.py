@@ -109,8 +109,15 @@ if st.button('Show'):
             df_styles.iloc[-1, :] = font_color + background_color
         
             return df_styles
+            
+        def format_number(x):
+            if isinstance(x, (int, float)):
+                return "{:,.0f}".format(x)
+            return x
         
-        # Streamlit app
+        # Terapkan format pada seluruh DataFrame
+        df_merge = df_merge.applymap(format_number)
+        
         st.markdown('##Selisih per Payment')
         
         # Menerapkan styling pada DataFrame
