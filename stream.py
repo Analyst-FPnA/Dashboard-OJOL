@@ -96,8 +96,7 @@ if st.button('Show'):
         df_merge.loc[len(df_merge)] = ['Selisih',df_merge.iloc[0,1] - df_merge.iloc[1,1],
                                       df_merge.iloc[0,2] - df_merge.iloc[1,2],
                                       df_merge.iloc[0,3] - df_merge.iloc[1,3],
-                                      df_merge.iloc[0,4] - df_merge.iloc[1,4],
-                                      df_merge.iloc[0,5] - df_merge.iloc[1,5]]
+                                      df_merge.iloc[0,4] - df_merge.iloc[1,4]]
         st.dataframe(df_merge)
 
         kat_pengurang = ['Invoice Beda Hari',
