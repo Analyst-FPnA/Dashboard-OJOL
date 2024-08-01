@@ -121,8 +121,8 @@ if st.button('Show'):
             df_merge2 = df_merge2.groupby(['SOURCE','KAT'])[['NOM']].sum().reset_index()
             for i in ['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY']:
                 if i not in df_merge2['KAT']:
-                    df_merge2.loc[len(df_merge3)] = ['INVOICE',i,0]
-                    df_merge2.loc[len(df_merge3)] = ['WEB',i,0]
+                    df_merge2.loc[len(df_merge2)] = ['INVOICE',i,0]
+                    df_merge2.loc[len(df_merge2)] = ['WEB',i,0]
                 
             df_merge3 = df_merge2[df_merge2['KAT'].isin(['QRIS ESB','QRIS TELKOM'])].groupby('SOURCE')[['NOM']].sum().reset_index()
             df_merge3['KAT']='QRIS TELKOM/ESB'
