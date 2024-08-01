@@ -106,7 +106,7 @@ if st.button('Show'):
             df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
             
             # Memberikan warna khusus pada baris terakhir yang bernama 'SELISIH'
-            df_styles.iloc[-1, :] = = font_color + background_color
+            df_styles.iloc[-1, :] = font_color + background_color
         
             return df_styles
         
