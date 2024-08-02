@@ -47,7 +47,13 @@ else:
 
 st.title('Dashboard - Selisih Ojol')
 
+if 'button_clicked' not in st.session_state:
+    st.session_state.button_clicked = False
 
+# Fungsi untuk mereset state button
+def reset_button_state():
+    st.session_state.button_clicked = False
+    
 col = st.columns(2)
 
 with col[0]:
