@@ -237,6 +237,6 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
             df_breakdown_diperiksa = df_breakdown_diperiksa.style.apply(highlight_last_row, axis=None)
             st.dataframe(df_breakdown_diperiksa, use_container_width=True, hide_index=True)
             st.markdown('---')
-        if st.button('Reset'):
-            st.experimental_rerun()
+        st.cache_data.clear()
+        st.cache_resource.clear()
 
