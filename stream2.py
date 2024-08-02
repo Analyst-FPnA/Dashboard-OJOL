@@ -79,8 +79,6 @@ dest_path = f'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
 
 if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
-    st.cache_data.clear()
-    st.cache_resource.clear()
 
         directory = f'Merge'
         dfs = []
