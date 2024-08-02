@@ -133,7 +133,7 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
         
         df_merge = df_merge[df_merge['MONTH']==bulan]
         df_breakdown = df_breakdown[df_breakdown['MONTH']==bulan]
-        
+        st.write(df_breakdown.head())
         df_merge['KAT'] = df_merge['KAT'].str.upper()
 
         kat_pengurang = ['Invoice Beda Hari',
@@ -163,6 +163,8 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
         for cab in all_cab:
             df_merge2 = df_merge[df_merge['CAB'] == cab]
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
+            st.write(bulan)
+            st.write(cab)
             st.write(df_breakdown2.head())
             df_merge2 = df_merge2.groupby(['SOURCE','KAT'])[['NOM']].sum().reset_index()
             for i in ['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY']:
