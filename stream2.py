@@ -66,22 +66,23 @@ if "button_clicked" not in st.session_state:
   st.session_state.button_clicked = False
 def callback():
   st.session_state.button_clicked = True
+    
+def download_file_from_google_drive(file_id, dest_path):
+    if not os.path.exists(dest_path):
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, dest_path, quiet=False)
+        with zipfile.ZipFile(f'downloaded_file.zip', 'r') as zip_ref:
+            zip_ref.extractall()
+            
+file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
+dest_path = f'downloaded_file.zip'
+download_file_from_google_drive(file_id, dest_path)
 
 if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
     st.cache_data.clear()
     st.cache_resource.clear()
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        def download_file_from_google_drive(file_id, dest_path):
-            if not os.path.exists(dest_path):
-                url = f"https://drive.google.com/uc?id={file_id}"
-                gdown.download(url, dest_path, quiet=False)
-                with zipfile.ZipFile(f'{tmpdirname}/downloaded_file.zip', 'r') as zip_ref:
-                    zip_ref.extractall(tmpdirname)
-        file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
-        dest_path = f'{tmpdirname}/downloaded_file.zip'
-        download_file_from_google_drive(file_id, dest_path)
 
-        directory = f'{tmpdirname}/Merge'
+        directory = f'Merge'
         dfs = []
         # Iterate over each file in the directory
         for filename in os.listdir(directory):
@@ -98,7 +99,7 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
             # Concatenate all DataFrames in the list along axis 0 (rows)
             df_merge = pd.concat(dfs, ignore_index=True)
             
-        directory = f'{tmpdirname}/Breakdown'
+        directory = f'Breakdown'
         dfs = []
         # Iterate over each file in the directory
         for filename in os.listdir(directory):
