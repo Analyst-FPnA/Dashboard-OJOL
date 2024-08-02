@@ -51,7 +51,7 @@ st.title('Dashboard - Selisih Ojol')
 col = st.columns(2)
 
 with col[0]:
-    all_cab = st.multiselect('Pilih Cabang', list_cab['CAB'].values)
+    all_cab = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().values)
     all_cab = list(all_cab)
 
 with col[1]:
