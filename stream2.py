@@ -130,7 +130,7 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
 
         df_merge['MONTH'] = df_merge['DATE'].dt.month_name()
         df_breakdown['MONTH'] = df_breakdown['DATE'].dt.month_name()
-        st.write(df_breakdown.head())
+        st.write(df_breakdown['MONTH'].unique())
         df_merge = df_merge[df_merge['MONTH']==bulan]
         df_breakdown = df_breakdown[df_breakdown['MONTH']==bulan]
         st.write(df_breakdown.head())
