@@ -66,22 +66,22 @@ if "button_clicked" not in st.session_state:
   st.session_state.button_clicked = False
 def callback():
   st.session_state.button_clicked = True
+    
+def download_file_from_google_drive(file_id, dest_path):
+    if not os.path.exists(dest_path):
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, dest_path, quiet=False)
+        with zipfile.ZipFile(f'downloaded_file.zip', 'r') as zip_ref:
+            zip_ref.extractall()
+            
+file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
+dest_path = f'downloaded_file.zip'
+download_file_from_google_drive(file_id, dest_path)
 
 if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
-    st.cache_data.clear()
-    st.cache_resource.clear()
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        def download_file_from_google_drive(file_id, dest_path):
-            if not os.path.exists(dest_path):
-                url = f"https://drive.google.com/uc?id={file_id}"
-                gdown.download(url, dest_path, quiet=False)
-                with zipfile.ZipFile(f'{tmpdirname}/downloaded_file.zip', 'r') as zip_ref:
-                    zip_ref.extractall(tmpdirname)
-        file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
-        dest_path = f'{tmpdirname}/downloaded_file.zip'
-        download_file_from_google_drive(file_id, dest_path)
-
-        directory = f'{tmpdirname}/Merge'
+        st.cache_data.clear()
+        st.cache_resource.clear()
+        directory = f'Merge'
         dfs = []
         # Iterate over each file in the directory
         for filename in os.listdir(directory):
@@ -98,7 +98,7 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
             # Concatenate all DataFrames in the list along axis 0 (rows)
             df_merge = pd.concat(dfs, ignore_index=True)
             
-        directory = f'{tmpdirname}/Breakdown'
+        directory = f'Breakdown'
         dfs = []
         # Iterate over each file in the directory
         for filename in os.listdir(directory):
@@ -130,10 +130,8 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
 
         df_merge['MONTH'] = df_merge['DATE'].dt.month_name()
         df_breakdown['MONTH'] = df_breakdown['DATE'].dt.month_name()
-        
         df_merge = df_merge[df_merge['MONTH']==bulan]
         df_breakdown = df_breakdown[df_breakdown['MONTH']==bulan]
-        
         df_merge['KAT'] = df_merge['KAT'].str.upper()
 
         kat_pengurang = ['Invoice Beda Hari',
@@ -163,7 +161,7 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
         for cab in all_cab:
             df_merge2 = df_merge[df_merge['CAB'] == cab]
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
-                
+
             df_merge2 = df_merge2.groupby(['SOURCE','KAT'])[['NOM']].sum().reset_index()
             for i in ['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY']:
                 if i not in df_merge2['KAT'].values:
@@ -237,6 +235,13 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
             df_breakdown_diperiksa = df_breakdown_diperiksa.style.apply(highlight_last_row, axis=None)
             st.dataframe(df_breakdown_diperiksa, use_container_width=True, hide_index=True)
             st.markdown('---')
+        df = None
+        dfs = None
+        df_merge = None
+        df_merge_final = None
+        df_breakdown = None
+        df_breakdown2 = None
+        df_breakdown_diperiksa = None
+        df_breakdown_pengurang = None
         st.cache_data.clear()
         st.cache_resource.clear()
-
