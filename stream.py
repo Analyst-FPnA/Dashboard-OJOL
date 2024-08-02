@@ -51,7 +51,7 @@ st.title('Dashboard - Selisih Ojol')
 col = st.columns(2)
 
 with col[0]:
-    all_cab = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().unique())
+    all_cab = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().unique(), on_change=reset_button_state)
     all_cab = list(all_cab)
 
 with col[1]:
@@ -60,12 +60,8 @@ with col[1]:
         'July', 'August', 'September', 'October', 'November', 'December'
     ]
     
-    bulan = st.selectbox('Pilih Bulan', all_bulan)
+    bulan = st.selectbox('Pilih Bulan', all_bulan, on_change=reset_button_state)
 
-if "button_clicked" not in st.session_state:    
-  st.session_state.button_clicked = False
-def callback():
-  st.session_state.button_clicked = True
     
 def download_file_from_google_drive(file_id, dest_path):
     if not os.path.exists(dest_path):
@@ -78,7 +74,13 @@ file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
 dest_path = f'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
 
-if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
+
+# Tombol untuk mengeksekusi aksi
+if st.button('Process'):
+    st.session_state.button_clicked = True
+
+# Eksekusi kode jika tombol diklik
+if st.session_state.button_clicked:
         st.cache_data.clear()
         st.cache_resource.clear()
         directory = f'Merge'
