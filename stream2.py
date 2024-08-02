@@ -162,7 +162,7 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
         for cab in all_cab:
             df_merge2 = df_merge[df_merge['CAB'] == cab]
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
-                
+            st.write(df_breakdown2.head())
             df_merge2 = df_merge2.groupby(['SOURCE','KAT'])[['NOM']].sum().reset_index()
             for i in ['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY']:
                 if i not in df_merge2['KAT'].values:
