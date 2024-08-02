@@ -93,7 +93,9 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
                 filepath = os.path.join(directory, filename)
                 try:
                     # Read each CSV file into a DataFrame and append to the list
-                    dfs.append(pd.read_csv(filepath))
+                    df = pd.read_csv(filepath)
+                    df.columns = [x.strip() for x in df.columns]
+                    dfs.append(df)
                 except Exception as e:
                     print(f"Error reading {filepath}: {e}")
         if dfs:
@@ -117,6 +119,15 @@ if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
         
         #df_merge = df_merge[df_merge['CAB'].isin(all_cab)]
         #df_breakdown = df_breakdown[df_breakdown['CAB'].isin(all_cab)]
+        
+        df_merge['NOM'] = df_merge['NOM'].fillna(0)
+        df_merge['NOM'] = df_merge['NOM'].apply(lambda x: str(x).strip())
+        df_merge = df_merge[(df_merge['NOM']!='Cek')]
+        df_merge['NOM'] = df_merge['NOM'].apply(lambda x :x.strip().replace('Rp','').replace(',','') if 'Rp' in str(x) else x)
+        df_merge['NOM'] = df_merge['NOM'].apply(lambda x: -int(x.replace('(', '').replace(')', '')) if '(' in str(x) and ')' in str(x) else x)
+        df_merge['NOM'] = df_merge['NOM'].apply(lambda x :x.strip().replace(',','') if ',' in str(x) else x)
+        df_merge = df_merge[(df_merge['NOM']!='-')]
+        df_merge['NOM'] = df_merge['NOM'].astype(float)
         
         df_merge['DATE'] = pd.to_datetime(df_merge['DATE'],format='%d/%m/%Y')
         df_breakdown['DATE'] = pd.to_datetime(df_breakdown['DATE'],format='%d/%m/%Y')
