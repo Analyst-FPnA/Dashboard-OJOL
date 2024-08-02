@@ -74,6 +74,8 @@ def callback():
   st.session_state.button_clicked = True
 
 if (st.button("Show", on_click=callback) or st.session_state.button_clicked):
+    st.cache_data.clear()
+    st.cache_resource.clear()
     with tempfile.TemporaryDirectory() as tmpdirname:
         def download_file_from_google_drive(file_id, dest_path):
             if not os.path.exists(dest_path):
