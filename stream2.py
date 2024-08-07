@@ -178,7 +178,6 @@ if st.session_state.button_clicked:
                         df_merge2.loc[len(df_merge2)] = [bulan,'WEB',i,0]
             df_merge3 = df_merge2[df_merge2['KAT'].isin(['QRIS ESB','QRIS TELKOM'])].groupby(['MONTH','SOURCE'])[['NOM']].sum().reset_index()
             df_merge3['KAT']='QRIS TELKOM/ESB'
-            df_merge3
             for bulan in all_bulan:
                 if df_merge3[df_merge3['MONTH']==bulan].empty:
                     df_merge3.loc[len(df_merge3)] = [bulan,'INVOICE',0,'QRIS TELKOM/ESB']
