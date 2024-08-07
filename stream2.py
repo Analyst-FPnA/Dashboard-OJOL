@@ -61,13 +61,15 @@ with col[0]:
     all_cab = list(all_cab)
 
 with col[1]:
-    all_bulan = [
+    list_bulan = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
     ]
     
-    bulan = st.selectbox('Pilih Bulan', all_bulan, on_change=reset_button_state)
-
+    bulan_awal = st.selectbox('Pilih Bulan Awal', list_bulan, on_change=reset_button_state)
+    bulan_akhir = st.selectbox('Pilih Bulan Akhir', list_bulan, on_change=reset_button_state)
+    
+all_bulan = list_bulan[list_bulan.index(bulan_awal):list_bulan.index(bulan_akhir)+1]
     
 def download_file_from_google_drive(file_id, dest_path):
     if not os.path.exists(dest_path):
@@ -138,8 +140,8 @@ if st.session_state.button_clicked:
 
         df_merge['MONTH'] = df_merge['DATE'].dt.month_name()
         df_breakdown['MONTH'] = df_breakdown['DATE'].dt.month_name()
-        df_merge = df_merge[df_merge['MONTH']==bulan]
-        df_breakdown = df_breakdown[df_breakdown['MONTH']==bulan]
+        df_merge = df_merge[df_merge['MONTH'].isin(all_bulan)]
+        df_breakdown = df_breakdown[df_breakdown['MONTH'].isin(all_bulan)]
         df_merge['KAT'] = df_merge['KAT'].str.upper()
 
         kat_pengurang = ['Invoice Beda Hari',
@@ -167,31 +169,25 @@ if st.session_state.button_clicked:
         
 
         for cab in all_cab:
-            df_merge2 = df_merge[df_merge['CAB'] == cab]
-            df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
-
-            df_merge2 = df_merge2.groupby(['SOURCE','KAT'])[['NOM']].sum().reset_index()
-            for i in ['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY']:
-                if i not in df_merge2['KAT'].values:
-                    df_merge2.loc[len(df_merge2)] = ['INVOICE',i,0]
-                    df_merge2.loc[len(df_merge2)] = ['WEB',i,0]
-                
-            df_merge3 = df_merge2[df_merge2['KAT'].isin(['QRIS ESB','QRIS TELKOM'])].groupby('SOURCE')[['NOM']].sum().reset_index()
+            df_merge2 = df_merge[(df_merge['CAB'] == cab)]
+            df_merge2 = df_merge2.groupby(['MONTH','SOURCE','KAT'])[['NOM']].sum().reset_index()
+            for bulan in all_bulan:
+                for i in ['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY']:
+                    if i not in df_merge2[df_merge2['MONTH']==bulan]['KAT'].values:
+                        df_merge2.loc[len(df_merge2)] = [bulan,'INVOICE',i,0]
+                        df_merge2.loc[len(df_merge2)] = [bulan,'WEB',i,0]
+            df_merge3 = df_merge2[df_merge2['KAT'].isin(['QRIS ESB','QRIS TELKOM'])].groupby(['MONTH','SOURCE'])[['NOM']].sum().reset_index()
             df_merge3['KAT']='QRIS TELKOM/ESB'
-            
-            if df_merge3.empty:
-                df_merge3.loc[len(df_merge3)] = ['INVOICE',0,'QRIS TELKOM/ESB']
-                df_merge3.loc[len(df_merge3)] = ['WEB',0,'QRIS TELKOM/ESB']
-    
-            df_merge_final = pd.pivot(data=pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]), 
-                     index='SOURCE', columns='KAT', values='NOM')
-            df_merge_final = df_merge_final.reset_index().fillna(0)
-            df_merge_final.loc[len(df_merge_final)] = ['SELISIH',
-                                           df_merge_final.iloc[0,1] - df_merge_final.iloc[1,1],
-                                          df_merge_final.iloc[0,2] - df_merge_final.iloc[1,2],
-                                          df_merge_final.iloc[0,3] - df_merge_final.iloc[1,3],
-                                          df_merge_final.iloc[0,4] - df_merge_final.iloc[1,4],
-                                          df_merge_final.iloc[0,5] - df_merge_final.iloc[1,5]]
+            df_merge3
+            for bulan in all_bulan:
+                if df_merge3[df_merge3['MONTH']==bulan].empty:
+                    df_merge3.loc[len(df_merge3)] = [bulan,'INVOICE',0,'QRIS TELKOM/ESB']
+                    df_merge3.loc[len(df_merge3)] = [bulan, 'WEB',0,'QRIS TELKOM/ESB']
+            df_merge_final = pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]).sort_values('MONTH')
+            df_merge_final['MONTH'] = pd.Categorical(df_merge_final['MONTH'], categories=list_bulan, ordered=True)
+            df_merge_final = pd.pivot(data=df_merge_final.sort_values('MONTH'), 
+                        index='SOURCE', columns=['MONTH','KAT'], values='NOM').reset_index().fillna(0)
+            df_merge_final.loc[len(df_merge_final)] =['SELISIH']+list(df_merge_final.iloc[0,].values[1:] - df_merge_final.iloc[1,].values[1:])
             def highlight_last_row(x):
                 font_color = 'color: white;'
                 background_color = 'background-color: #FF4B4B;'  # Warna yang ingin digunakan
@@ -220,6 +216,7 @@ if st.session_state.button_clicked:
             st.dataframe(df_merge_final, use_container_width=True, hide_index=True)
             
             st.markdown('#### KATEGORI PENGURANG')
+            df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
             df_breakdown_pengurang = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_pengurang])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
             df_breakdown_pengurang.loc[len(df_breakdown_pengurang)] = ['TOTAL',
                                                                       df_breakdown_pengurang.iloc[:,1].sum(),
