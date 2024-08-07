@@ -204,7 +204,7 @@ if st.session_state.button_clicked:
             
             # Terapkan format pada seluruh DataFrame
             df_merge_final = df_merge_final.applymap(format_number)
-            
+            df_merge_final
             st.markdown(f'## {cab}')
             st.markdown('#### SELISIH PER-PAYMENT')
             
