@@ -83,7 +83,7 @@ with col[1]:
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
     ]
-    all_bulan = st.multiselect('Pilih Bulan Awal', list_bulan, on_change=reset_button_state)
+    all_bulan = st.multiselect('Pilih Bulan', list_bulan, on_change=reset_button_state)
     
 def download_file_from_google_drive(file_id, dest_path):
     if not os.path.exists(dest_path):
