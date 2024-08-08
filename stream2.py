@@ -103,8 +103,8 @@ def download_file_from_google_drive(file_id, dest_path):
                     df = pd.read_csv(filepath)
                     df.columns = [x.strip() for x in df.columns]
                     dfs.append(df)
-                    empty_df = pd.DataFrame()
-                    empty_df.to_csv(file_path, index=False)
+                    #empty_df = pd.DataFrame()
+                    #empty_df.to_csv(file_path, index=False)
                 except Exception as e:
                     print(f"Error reading {filepath}: {e}")
         if dfs:
@@ -120,8 +120,8 @@ def download_file_from_google_drive(file_id, dest_path):
                 try:
                     # Read each CSV file into a DataFrame and append to the list
                     dfs.append(pd.read_csv(filepath))
-                    empty_df = pd.DataFrame()
-                    empty_df.to_csv(file_path, index=False)
+                    #empty_df = pd.DataFrame()
+                    #empty_df.to_csv(file_path, index=False)
                 except Exception as e:
                     print(f"Error reading {filepath}: {e}")
         if dfs:
@@ -178,6 +178,7 @@ file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
 dest_path = f'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
 
+st.write(os.listdir())
 df_line = pd.read_csv('grafik.csv')
 df_line.set_index('MONTH', inplace=True)
 
