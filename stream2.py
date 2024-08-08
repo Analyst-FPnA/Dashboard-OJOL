@@ -37,25 +37,6 @@ def add_horizontal_scroll_css():
 # Tambahkan CSS untuk horizontal scroll
 add_horizontal_scroll_css()
 
-# Konten halaman dengan gulir horizontal
-st.markdown(
-    """
-    <div class="horizontal-scroll-container">
-        <div class="horizontal-scroll-item">Item 1</div>
-        <div class="horizontal-scroll-item">Item 2</div>
-        <div class="horizontal-scroll-item">Item 3</div>
-        <div class="horizontal-scroll-item">Item 4</div>
-        <div class="horizontal-scroll-item">Item 5</div>
-        <div class="horizontal-scroll-item">Item 6</div>
-        <div class="horizontal-scroll-item">Item 7</div>
-        <div class="horizontal-scroll-item">Item 8</div>
-        <div class="horizontal-scroll-item">Item 9</div>
-        <div class="horizontal-scroll-item">Item 10</div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
 def download_file_from_github(url, save_path):
     response = requests.get(url)
     if response.status_code == 200:
