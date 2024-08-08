@@ -15,7 +15,7 @@ def add_min_width_css():
         <style>
         /* Set a minimum width for the app */
         .css-1d391kg {
-            min-width: 5000px; /* Set the minimum width */
+            min-width: 3000px; /* Set the minimum width */
         }
         </style>
         """,
