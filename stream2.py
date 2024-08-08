@@ -109,11 +109,18 @@ with col[1]:
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
     ]
+
+    # Dictionary untuk menyimpan status checkbox
+    selected_options = {}
     
-    bulan_awal = st.selectbox('Pilih Bulan Awal', list_bulan, on_change=reset_button_state)
-    bulan_akhir = st.selectbox('Pilih Bulan Akhir', list_bulan, on_change=reset_button_state)
+    # Menampilkan checkbox untuk setiap opsi
+    st.write("Select options:")
+    for option in list_bulan:
+        selected_options[option] = st.checkbox(option)
     
-all_bulan = list_bulan[list_bulan.index(bulan_awal):list_bulan.index(bulan_akhir)+1]
+    # Menampilkan opsi yang dipilih
+    all_bulan = [option for option, is_selected in selected_options.items() if is_selected]
+    #all_bulan = st.multiselect('Pilih Bulan Awal', list_bulan, on_change=reset_button_state)
     
 def download_file_from_google_drive(file_id, dest_path):
     if not os.path.exists(dest_path):
