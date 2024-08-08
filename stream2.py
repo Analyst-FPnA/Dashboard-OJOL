@@ -178,15 +178,12 @@ if st.session_state.button_clicked:
                         df_merge2.loc[len(df_merge2)] = [bulan,'WEB',i,0]
             df_merge3 = df_merge2[df_merge2['KAT'].isin(['QRIS ESB','QRIS TELKOM'])].groupby(['MONTH','SOURCE'])[['NOM']].sum().reset_index()
             df_merge3['KAT']='QRIS TELKOM/ESB'
+            df_merge3
             for bulan in all_bulan:
                 if df_merge3[df_merge3['MONTH']==bulan].empty:
                     df_merge3.loc[len(df_merge3)] = [bulan,'INVOICE',0,'QRIS TELKOM/ESB']
                     df_merge3.loc[len(df_merge3)] = [bulan, 'WEB',0,'QRIS TELKOM/ESB']
             df_merge_final = pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]).sort_values('MONTH')
-            df_merge_final['MONTH'] = pd.Categorical(df_merge_final['MONTH'], categories=list_bulan, ordered=True)
-            df_merge_final = pd.pivot(data=df_merge_final.sort_values('MONTH'), 
-                        index='SOURCE', columns=['MONTH','KAT'], values='NOM').reset_index().fillna(0)
-            df_merge_final.loc[len(df_merge_final)] =['SELISIH']+list(df_merge_final.iloc[0,].values[1:] - df_merge_final.iloc[1,].values[1:])
             def highlight_last_row(x):
                 font_color = 'color: white;'
                 background_color = 'background-color: #FF4B4B;'  # Warna yang ingin digunakan
@@ -201,18 +198,28 @@ if st.session_state.button_clicked:
                 if isinstance(x, (int, float)):
                     return "{:,.0f}".format(x)
                 return x
-            
-            # Terapkan format pada seluruh DataFrame
-            df_merge_final = df_merge_final.applymap(format_number)
-            
+
+            col = st.columns(len(all_bulan))
+
+
             st.markdown(f'## {cab}')
             st.markdown('#### SELISIH PER-PAYMENT')
+            for i, bulan in enumerate(all_bulan):
+                with col[i]:
+                    st.write(f'bulan')
+                    df_merge_bln = pd.pivot(data=df_merge_final[df_merge_final['MONTH']==bulan], 
+                                index='SOURCE', columns=['KAT'], values='NOM').reset_index().fillna(0)
+                    df_merge_bln.loc[len(df_merge_bln)] =['SELISIH']+list(df_merge_bln.iloc[0,].values[1:] - df_merge_bln.iloc[1,].values[1:])
+                    # Terapkan format pada seluruh DataFrame
+                    df_merge_bln = df_merge_bln.applymap(format_number)
+                    # Menerapkan styling pada DataFrame
+                    df_merge_bln = df_merge_bln.style.apply(highlight_last_row, axis=None)
+                    
+                    # Menampilkan DataFrame di Streamlit
+                    st.dataframe(df_merge_bln, use_container_width=True, hide_index=True)            
+
             
-            # Menerapkan styling pada DataFrame
-            df_merge_final = df_merge_final.style.apply(highlight_last_row, axis=None)
-            
-            # Menampilkan DataFrame di Streamlit
-            st.dataframe(df_merge_final, use_container_width=True, hide_index=True)
+
             
             st.markdown('#### KATEGORI PENGURANG')
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
