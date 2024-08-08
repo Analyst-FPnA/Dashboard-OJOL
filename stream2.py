@@ -17,6 +17,9 @@ def set_scrollable_page_width():
             align-items: stretch;
             overflow-x: auto;
         }
+        .streamlit-expanderHeader {
+            font-size: 1.5rem;
+        }
         </style>
         """,
         unsafe_allow_html=True,
