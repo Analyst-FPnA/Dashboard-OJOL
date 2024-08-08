@@ -109,8 +109,8 @@ if not os.path.exists('merge.csv'):
                     df = pd.read_csv(filepath)
                     df.columns = [x.strip() for x in df.columns]
                     dfs.append(df)
-                    #empty_df = pd.DataFrame()
-                    #empty_df.to_csv(file_path, index=False)
+                    empty_df = pd.DataFrame()
+                    empty_df.to_csv(file_path, index=False)
                 except Exception as e:
                     print(f"Error reading {filepath}: {e}")
         if dfs:
@@ -126,8 +126,8 @@ if not os.path.exists('merge.csv'):
                 try:
                     # Read each CSV file into a DataFrame and append to the list
                     dfs.append(pd.read_csv(filepath))
-                    #empty_df = pd.DataFrame()
-                    #empty_df.to_csv(file_path, index=False)
+                    empty_df = pd.DataFrame()
+                    empty_df.to_csv(file_path, index=False)
                 except Exception as e:
                     print(f"Error reading {filepath}: {e}")
         if dfs:
