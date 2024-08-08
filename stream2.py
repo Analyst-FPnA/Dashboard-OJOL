@@ -7,6 +7,8 @@ import os
 import gdown
 import tempfile
 
+st.set_page_config(layout="wide")
+
 def set_page_width():
     st.markdown(
         """
