@@ -9,36 +9,51 @@ import tempfile
 
 st.set_page_config(layout="wide")
 
-def set_page_width():
+def add_horizontal_scroll_css():
     st.markdown(
         """
         <style>
-        .reportview-container .main .block-container {
-            max-width: 4800px;
-            padding-top: 1rem;
-            padding-right: 1rem;
-            padding-left: 1rem;
-            padding-bottom: 1rem;
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 20px;
+        }
+        .horizontal-scroll-item {
+            display: inline-block;
+            width: 300px; /* Lebar setiap item */
+            height: 200px; /* Tinggi setiap item */
+            margin-right: 20px; /* Jarak antar item */
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            text-align: center;
+            line-height: 200px;
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-# Memanggil fungsi untuk mengatur lebar halaman
-set_page_width()
+# Tambahkan CSS untuk horizontal scroll
+add_horizontal_scroll_css()
 
+# Konten halaman dengan gulir horizontal
 st.markdown(
     """
-    <style>
-    .reportview-container .main .block-container {
-        max-width: 100%;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    </style>
+    <div class="horizontal-scroll-container">
+        <div class="horizontal-scroll-item">Item 1</div>
+        <div class="horizontal-scroll-item">Item 2</div>
+        <div class="horizontal-scroll-item">Item 3</div>
+        <div class="horizontal-scroll-item">Item 4</div>
+        <div class="horizontal-scroll-item">Item 5</div>
+        <div class="horizontal-scroll-item">Item 6</div>
+        <div class="horizontal-scroll-item">Item 7</div>
+        <div class="horizontal-scroll-item">Item 8</div>
+        <div class="horizontal-scroll-item">Item 9</div>
+        <div class="horizontal-scroll-item">Item 10</div>
+    </div>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 def download_file_from_github(url, save_path):
