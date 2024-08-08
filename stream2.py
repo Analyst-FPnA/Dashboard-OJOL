@@ -91,8 +91,8 @@ def download_file_from_google_drive(file_id, dest_path):
         gdown.download(url, dest_path, quiet=False)
         with zipfile.ZipFile(f'downloaded_file.zip', 'r') as zip_ref:
             zip_ref.extractall()
-                directory = f'Merge'
             
+        directory = f'Merge'    
         dfs = []
         # Iterate over each file in the directory
         for filename in os.listdir(directory):
