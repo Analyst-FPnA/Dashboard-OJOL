@@ -190,7 +190,7 @@ st.line_chart(df_line)
 # Tombol untuk mengeksekusi aksi
 if st.button('Process'):
     st.session_state.button_clicked = True
-
+st.write(pd.read_csv('merge.csv').head())
 # Eksekusi kode jika tombol diklik
 if st.session_state.button_clicked:
         df_merge = pd.read_csv('merge.csv')
