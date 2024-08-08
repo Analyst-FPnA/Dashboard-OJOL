@@ -9,6 +9,23 @@ import tempfile
 
 st.set_page_config(layout="wide")
 
+def add_max_width_css():
+    st.markdown(
+        """
+        <style>
+        /* Set max-width for DataFrame container */
+        .max-width-container {
+            max-width: 1000px; /* Set your desired maximum width */
+            overflow-x: auto; /* Enable horizontal scrolling if content overflows */
+            margin: 0 auto; /* Center align the container */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Add CSS styling to the app
+add_max_width_css()
 
 def download_file_from_github(url, save_path):
     response = requests.get(url)
@@ -213,8 +230,10 @@ if st.session_state.button_clicked:
                     # Menerapkan styling pada DataFrame
                     df_merge_bln = df_merge_bln.style.apply(highlight_last_row, axis=None)
                     
+                    st.markdown('<div class="max-width-container">', unsafe_allow_html=True)    
                     # Menampilkan DataFrame di Streamlit
-                    st.dataframe(df_merge_bln, use_container_width=False, hide_index=True)            
+                    st.dataframe(df_merge_bln, use_container_width=True, hide_index=True)
+                    st.markdown('</div>', unsafe_allow_html=True)            
                     
             st.markdown('#### KATEGORI PENGURANG')
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
