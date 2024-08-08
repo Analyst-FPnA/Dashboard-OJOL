@@ -7,6 +7,25 @@ import os
 import gdown
 import tempfile
 
+def set_page_width():
+    st.markdown(
+        """
+        <style>
+        .reportview-container .main .block-container {
+            max-width: 2400px;
+            padding-top: 1rem;
+            padding-right: 1rem;
+            padding-left: 1rem;
+            padding-bottom: 1rem;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# Memanggil fungsi untuk mengatur lebar halaman
+set_page_width()
+
 def set_scrollable_page_width():
     st.markdown(
         """
