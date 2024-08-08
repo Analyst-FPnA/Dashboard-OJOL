@@ -7,6 +7,25 @@ import os
 import gdown
 import tempfile
 
+def set_page_width():
+    st.markdown(
+        """
+        <style>
+        .reportview-container .main .block-container {
+            max-width: 1200px;
+            padding-top: 1rem;
+            padding-right: 1rem;
+            padding-left: 1rem;
+            padding-bottom: 1rem;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# Memanggil fungsi untuk mengatur lebar halaman
+set_page_width()
+
 def download_file_from_github(url, save_path):
     response = requests.get(url)
     if response.status_code == 200:
@@ -178,7 +197,7 @@ if st.session_state.button_clicked:
                         df_merge2.loc[len(df_merge2)] = [bulan,'WEB',i,0]
             df_merge3 = df_merge2[df_merge2['KAT'].isin(['QRIS ESB','QRIS TELKOM'])].groupby(['MONTH','SOURCE'])[['NOM']].sum().reset_index()
             df_merge3['KAT']='QRIS TELKOM/ESB'
-            df_merge3
+            
             for bulan in all_bulan:
                 if df_merge3[df_merge3['MONTH']==bulan].empty:
                     df_merge3.loc[len(df_merge3)] = [bulan,'INVOICE',0,'QRIS TELKOM/ESB']
@@ -201,12 +220,11 @@ if st.session_state.button_clicked:
 
             col = st.columns(len(all_bulan))
 
-
             st.markdown(f'## {cab}')
             st.markdown('#### SELISIH PER-PAYMENT')
             for i, bulan in enumerate(all_bulan):
                 with col[i]:
-                    st.write(f'bulan')
+                    st.write(f'{bulan}')
                     df_merge_bln = pd.pivot(data=df_merge_final[df_merge_final['MONTH']==bulan], 
                                 index='SOURCE', columns=['KAT'], values='NOM').reset_index().fillna(0)
                     df_merge_bln.loc[len(df_merge_bln)] =['SELISIH']+list(df_merge_bln.iloc[0,].values[1:] - df_merge_bln.iloc[1,].values[1:])
@@ -218,9 +236,6 @@ if st.session_state.button_clicked:
                     # Menampilkan DataFrame di Streamlit
                     st.dataframe(df_merge_bln, use_container_width=True, hide_index=True)            
 
-            
-
-            
             st.markdown('#### KATEGORI PENGURANG')
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
             df_breakdown_pengurang = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_pengurang])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
