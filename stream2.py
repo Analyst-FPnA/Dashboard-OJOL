@@ -195,9 +195,7 @@ if st.button('Process'):
 if st.session_state.button_clicked:
         df_merge = pd.read_csv('merge.csv')
         df_breakdown = pd.read_csv('breakdown.csv')
-    
-        st.cache_data.clear()
-        st.cache_resource.clear()        
+         
         kat_pengurang = ['Invoice Beda Hari',
                          'Transaksi Kemarin',
                          'Selisih IT',
