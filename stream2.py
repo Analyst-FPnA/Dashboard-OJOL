@@ -9,16 +9,15 @@ import tempfile
 
 st.set_page_config(layout="wide")
 
-def add_css_styling():
+def add_horizontal_scroll_css():
     st.markdown(
         """
         <style>
-        .dataframe-container {
-            overflow-x: auto; /* Allow horizontal scrolling if needed */
-            width: 100%; /* Make the container full width */
+        body {
+            overflow-x: auto; /* Enable horizontal scroll for the entire page */
         }
-        .dataframe-container table {
-            width: 100% !important; /* Ensure table takes full width */
+        .dataframe-container {
+            min-width: 1200px; /* Ensure the container has a minimum width */
         }
         </style>
         """,
@@ -26,34 +25,6 @@ def add_css_styling():
     )
 
 # Add CSS styling to the app
-add_css_styling()
-
-def add_horizontal_scroll_css():
-    st.markdown(
-        """
-        <style>
-        .horizontal-scroll-container {
-            display: flex;
-            overflow-x: auto;
-            white-space: nowrap;
-            padding: 20px;
-        }
-        .horizontal-scroll-item {
-            display: inline-block;
-            width: 300px; /* Lebar setiap item */
-            height: 200px; /* Tinggi setiap item */
-            margin-right: 20px; /* Jarak antar item */
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            text-align: center;
-            line-height: 200px;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
-# Tambahkan CSS untuk horizontal scroll
 add_horizontal_scroll_css()
 
 def download_file_from_github(url, save_path):
