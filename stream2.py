@@ -214,7 +214,7 @@ if st.session_state.button_clicked:
                     df_merge_bln = df_merge_bln.style.apply(highlight_last_row, axis=None)
                     
                     # Menampilkan DataFrame di Streamlit
-                    st.dataframe(df_merge_bln, hide_index=True)            
+                    st.dataframe(df_merge_bln, use_container_width=False, hide_index=True)            
                     
             st.markdown('#### KATEGORI PENGURANG')
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
