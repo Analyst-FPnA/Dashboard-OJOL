@@ -92,6 +92,12 @@ def download_file_from_google_drive(file_id, dest_path):
         with zipfile.ZipFile(f'downloaded_file.zip', 'r') as zip_ref:
             zip_ref.extractall()
             
+        
+file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
+dest_path = f'downloaded_file.zip'
+download_file_from_google_drive(file_id, dest_path)
+
+if not os.path.exists('merge.csv'):          
         directory = f'Merge'    
         dfs = []
         # Iterate over each file in the directory
@@ -173,11 +179,7 @@ def download_file_from_google_drive(file_id, dest_path):
         df_merge = None
         df_breakdown = None
         df_line = None
-        
-file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
-dest_path = f'downloaded_file.zip'
-download_file_from_google_drive(file_id, dest_path)
-
+      
 st.write(os.listdir())
 df_line = pd.read_csv('grafik.csv')
 df_line.set_index('MONTH', inplace=True)
