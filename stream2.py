@@ -216,11 +216,11 @@ if st.session_state.button_clicked:
                 if isinstance(x, (int, float)):
                     return "{:,.0f}".format(x)
                 return x
-
-            col = st.columns(len(all_bulan))
-
+                
             st.markdown(f'## {cab}')
             st.markdown('#### SELISIH PER-PAYMENT')
+            
+            col = st.columns(len(all_bulan))
             for i, bulan in enumerate(all_bulan):
                 with col[i]:
                     st.write(f'{bulan}')
