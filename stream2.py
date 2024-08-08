@@ -15,7 +15,7 @@ def add_max_width_css():
         <style>
         /* Set max-width for DataFrame container */
         .max-width-container {
-            max-width: 1000px; /* Set your desired maximum width */
+            min-width: 1500px; /* Set your desired maximum width */
             overflow-x: auto; /* Enable horizontal scrolling if content overflows */
             margin: 0 auto; /* Center align the container */
         }
