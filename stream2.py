@@ -9,6 +9,25 @@ import tempfile
 
 st.set_page_config(layout="wide")
 
+def add_css_styling():
+    st.markdown(
+        """
+        <style>
+        .dataframe-container {
+            overflow-x: auto; /* Allow horizontal scrolling if needed */
+            width: 100%; /* Make the container full width */
+        }
+        .dataframe-container table {
+            width: 100% !important; /* Ensure table takes full width */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Add CSS styling to the app
+add_css_styling()
+
 def add_horizontal_scroll_css():
     st.markdown(
         """
@@ -240,9 +259,11 @@ if st.session_state.button_clicked:
                     # Menerapkan styling pada DataFrame
                     df_merge_bln = df_merge_bln.style.apply(highlight_last_row, axis=None)
                     
+                    st.markdown('<div class="dataframe-container">', unsafe_allow_html=True)
                     # Menampilkan DataFrame di Streamlit
                     st.dataframe(df_merge_bln, use_container_width=True, hide_index=True)            
-
+                    st.markdown('</div>', unsafe_allow_html=True)
+                    
             st.markdown('#### KATEGORI PENGURANG')
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
             df_breakdown_pengurang = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_pengurang])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
