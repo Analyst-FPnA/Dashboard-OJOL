@@ -7,24 +7,23 @@ import os
 import gdown
 import tempfile
 
-def set_page_width():
+def set_scrollable_page_width():
     st.markdown(
         """
         <style>
         .reportview-container .main .block-container {
-            max-width: 1200px;
-            padding-top: 1rem;
-            padding-right: 1rem;
-            padding-left: 1rem;
-            padding-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            overflow-x: auto;
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-# Memanggil fungsi untuk mengatur lebar halaman
-set_page_width()
+# Memanggil fungsi untuk mengatur lebar halaman dan overflow
+set_scrollable_page_width()
 
 def download_file_from_github(url, save_path):
     response = requests.get(url)
