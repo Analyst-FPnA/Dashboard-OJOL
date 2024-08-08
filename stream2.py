@@ -251,16 +251,22 @@ if st.session_state.button_clicked:
                     st.dataframe(df_breakdown_pengurang_bln, use_container_width=True, hide_index=True)
     
             st.markdown('#### KATEGORI DIPERIKSA')
-            df_breakdown_diperiksa = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby('Kategori')[df_breakdown.columns[-7:-2]].sum().reset_index()
-            df_breakdown_diperiksa.loc[len(df_breakdown_diperiksa)] = ['TOTAL',
-                                                                      df_breakdown_diperiksa.iloc[:,1].sum(),
-                                                                      df_breakdown_diperiksa.iloc[:,2].sum(),
-                                                                      df_breakdown_diperiksa.iloc[:,3].sum(),
-                                                                      df_breakdown_diperiksa.iloc[:,4].sum(),
-                                                                      df_breakdown_diperiksa.iloc[:,5].sum()]
-            df_breakdown_diperiksa = df_breakdown_diperiksa.applymap(format_number)
-            df_breakdown_diperiksa = df_breakdown_diperiksa.style.apply(highlight_last_row, axis=None)
-            st.dataframe(df_breakdown_diperiksa, use_container_width=True, hide_index=True)
+            df_breakdown_diperiksa = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby(['MONTH','Kategori'])[df_breakdown.columns[-7:-2]].sum().reset_index()
+            col = st.columns(len(all_bulan))
+            for i, bulan in enumerate(all_bulan):
+                with col[i]:
+                    st.write(f'{bulan}')
+                    df_breakdown_diperiksa_bln = df_breakdown_diperiksa[df_breakdown_diperiksa['MONTH']==bulan].iloc[:,1:]
+                    df_breakdown_diperiksa_bln.loc[len(df_breakdown_diperiksa_bln)] = ['TOTAL',
+                                                                              df_breakdown_diperiksa_bln.iloc[:,1].sum(),
+                                                                              df_breakdown_diperiksa_bln.iloc[:,2].sum(),
+                                                                              df_breakdown_diperiksa_bln.iloc[:,3].sum(),
+                                                                              df_breakdown_diperiksa_bln.iloc[:,4].sum(),
+                                                                              df_breakdown_diperiksa_bln.iloc[:,5].sum()]
+                    df_breakdown_diperiksa_bln = df_breakdown_diperiksa_bln.applymap(format_number)
+                    df_breakdown_diperiksa_bln = df_breakdown_diperiksa_bln.style.apply(highlight_last_row, axis=None)
+                    st.dataframe(df_breakdown_diperiksa_bln, use_container_width=True, hide_index=True)
+                    
             st.markdown('---')
         df = None
         dfs = None
