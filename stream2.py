@@ -12,7 +12,7 @@ def set_page_width():
         """
         <style>
         .reportview-container .main .block-container {
-            max-width: 2400px;
+            max-width: 4800px;
             padding-top: 1rem;
             padding-right: 1rem;
             padding-left: 1rem;
