@@ -9,15 +9,14 @@ import tempfile
 
 st.set_page_config(layout="wide")
 
-def add_max_width_css():
+def add_min_width_css():
     st.markdown(
         """
         <style>
-        /* Set max-width for DataFrame container */
-        .max-width-container {
-            min-width: 1500px; /* Set your desired maximum width */
+        /* Set min-width for DataFrame container */
+        .min-width-container {
+            min-width: 1800px; /* Set your desired minimum width */
             overflow-x: auto; /* Enable horizontal scrolling if content overflows */
-            margin: 0 auto; /* Center align the container */
         }
         </style>
         """,
@@ -25,7 +24,7 @@ def add_max_width_css():
     )
 
 # Add CSS styling to the app
-add_max_width_css()
+add_min_width_css()
 
 def download_file_from_github(url, save_path):
     response = requests.get(url)
