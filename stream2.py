@@ -13,10 +13,9 @@ def add_min_width_css():
     st.markdown(
         """
         <style>
-        /* Set min-width for DataFrame container */
-        .min-width-container {
-            min-width: 1800px; /* Set your desired minimum width */
-            overflow-x: auto; /* Enable horizontal scrolling if content overflows */
+        /* Set a minimum width for the app */
+        .css-1d391kg {
+            min-width: 5000px; /* Set the minimum width */
         }
         </style>
         """,
@@ -228,11 +227,10 @@ if st.session_state.button_clicked:
                     df_merge_bln = df_merge_bln.applymap(format_number)
                     # Menerapkan styling pada DataFrame
                     df_merge_bln = df_merge_bln.style.apply(highlight_last_row, axis=None)
-                    
-                    st.markdown('<div class="max-width-container">', unsafe_allow_html=True)    
+
                     # Menampilkan DataFrame di Streamlit
                     st.dataframe(df_merge_bln, use_container_width=True, hide_index=True)
-                    st.markdown('</div>', unsafe_allow_html=True)            
+           
                     
             st.markdown('#### KATEGORI PENGURANG')
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
