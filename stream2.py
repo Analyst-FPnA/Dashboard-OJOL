@@ -13,11 +13,24 @@ def add_horizontal_scroll_css():
     st.markdown(
         """
         <style>
+        /* Ensure body allows horizontal scrolling */
         body {
             overflow-x: auto; /* Enable horizontal scroll for the entire page */
+            overflow-y: hidden; /* Disable vertical scroll */
         }
-        .dataframe-container {
-            min-width: 1200px; /* Ensure the container has a minimum width */
+        
+        /* Ensure container with content takes full width */
+        .container {
+            width: 2000px; /* Set a fixed width for horizontal scrolling */
+        }
+
+        /* Styling for horizontal scroll bar */
+        ::-webkit-scrollbar {
+            height: 12px; /* Width of the horizontal scroll bar */
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 6px;
         }
         </style>
         """,
@@ -26,6 +39,9 @@ def add_horizontal_scroll_css():
 
 # Add CSS styling to the app
 add_horizontal_scroll_css()
+
+# Create a container for horizontal scroll
+st.markdown('<div class="container">', unsafe_allow_html=True)
 
 def download_file_from_github(url, save_path):
     response = requests.get(url)
@@ -230,10 +246,10 @@ if st.session_state.button_clicked:
                     # Menerapkan styling pada DataFrame
                     df_merge_bln = df_merge_bln.style.apply(highlight_last_row, axis=None)
                     
-                    st.markdown('<div class="dataframe-container">', unsafe_allow_html=True)
+                    #st.markdown('<div class="dataframe-container">', unsafe_allow_html=True)
                     # Menampilkan DataFrame di Streamlit
                     st.dataframe(df_merge_bln, use_container_width=True, hide_index=True)            
-                    st.markdown('</div>', unsafe_allow_html=True)
+                    #st.markdown('</div>', unsafe_allow_html=True)
                     
             st.markdown('#### KATEGORI PENGURANG')
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
@@ -260,6 +276,7 @@ if st.session_state.button_clicked:
             df_breakdown_diperiksa = df_breakdown_diperiksa.style.apply(highlight_last_row, axis=None)
             st.dataframe(df_breakdown_diperiksa, use_container_width=True, hide_index=True)
             st.markdown('---')
+        st.markdown('</div>', unsafe_allow_html=True)
         df = None
         dfs = None
         df_merge = None
