@@ -151,8 +151,7 @@ if not os.path.exists('merge.csv'):
 
         df_merge['MONTH'] = df_merge['DATE'].dt.month_name()
         df_breakdown['MONTH'] = df_breakdown['DATE'].dt.month_name()
-        df_merge = df_merge[df_merge['MONTH'].isin(all_bulan)]
-        df_breakdown = df_breakdown[df_breakdown['MONTH'].isin(all_bulan)]
+
         df_merge['KAT'] = df_merge['KAT'].str.upper()
 
         df_breakdown['Kategori'] = df_breakdown['Kategori'].str.upper()
@@ -190,12 +189,13 @@ st.line_chart(df_line)
 # Tombol untuk mengeksekusi aksi
 if st.button('Process'):
     st.session_state.button_clicked = True
-st.write(pd.read_csv('merge.csv').head())
+    
 # Eksekusi kode jika tombol diklik
 if st.session_state.button_clicked:
         df_merge = pd.read_csv('merge.csv')
         df_breakdown = pd.read_csv('breakdown.csv')
-         
+        df_merge = df_merge[df_merge['MONTH'].isin(all_bulan)]
+        df_breakdown = df_breakdown[df_breakdown['MONTH'].isin(all_bulan)]
         kat_pengurang = ['Invoice Beda Hari',
                          'Transaksi Kemarin',
                          'Selisih IT',
