@@ -150,7 +150,7 @@ if 'df_merge' not in locals():
             df_breakdown = pd.read_csv(f)
             
 all_cab_selisih = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().unique().tolist()+['All'],default=['All'])
-all_cab_selisih = list(all_cab)
+all_cab_selisih = list(all_cab_selisih)
 
 if 'All' in all_cab_selisih:
     create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
