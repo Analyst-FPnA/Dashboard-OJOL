@@ -99,21 +99,17 @@ if 'df_selisih' not in locals():
     with zipfile.ZipFile(f'downloaded_file.zip', 'r') as z:
         with z.open('df_selisih.csv') as f:
             df_selisih = pd.read_csv(f)
-        
+        with z.open('all_merge.csv') as f:
+            df_merge = pd.read_csv(f)
+        with z.open('all_breakdown.csv') as f:
+            df_breakdown = pd.read_csv(f)
+            
 # Tombol untuk mengeksekusi aksi
 if st.button('Process'):
     st.session_state.button_clicked = True
     
 # Eksekusi kode jika tombol diklik
 if st.session_state.button_clicked:
-        if 'df_merge' not in locals():
-            with zipfile.ZipFile(f'downloaded_file.zip', 'r') as z:
-                with z.open('all_merge.csv') as f:
-                    df_merge = pd.read_csv(f)
-                with z.open('all_breakdown.csv') as f:
-                    df_breakdown = pd.read_csv(f)
-        df_merge['MONTH'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d').dt.month_name()
-        df_breakdown['MONTH'] = pd.to_datetime(df_breakdown['DATE'],format='%Y-%m-%d').dt.month_name()
         df_merge = df_merge[df_merge['MONTH'].isin(all_bulan)]
         df_breakdown = df_breakdown[df_breakdown['MONTH'].isin(all_bulan)]
         kat_pengurang = ['Invoice Beda Hari',
