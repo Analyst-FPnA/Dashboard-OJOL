@@ -159,8 +159,7 @@ if 'All' in all_cab_selisih:
     df_selisih['%_TIDAK ADA INVOICE QRIS'] = df_selisih['TIDAK ADA INVOICE QRIS']/df_selisih['TOTAL']
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
-    #df_selisih['%_CANCEL NOTA'] = -df_selisih['%_CANCEL NOTA']
-    create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
+    st.write(create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage"))
 
 st.title('Data - Selisih Ojol')
 col = st.columns(2)
