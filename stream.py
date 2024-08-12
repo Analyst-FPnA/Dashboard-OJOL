@@ -178,9 +178,6 @@ if 'All' in all_cab_selisih:
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
     create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
     df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).applymap(format_number)
-    # Menerapkan styling pada DataFrame
-    df_selisih2 = df_selisih2.style.apply(highlight_last_row, axis=None)
-    # Menampilkan DataFrame di Streamlit
     st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
 else:
     df_selisih = df_selisih[df_selisih['CAB'].isin(all_cab_selisih)]
@@ -194,9 +191,6 @@ else:
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
     create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
     df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).applymap(format_number)
-    # Menerapkan styling pada DataFrame
-    df_selisih2 = df_selisih2.style.apply(highlight_last_row, axis=None)
-    # Menampilkan DataFrame di Streamlit
     st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
     
 st.title('Data - Selisih Ojol')
@@ -288,7 +282,7 @@ if st.session_state.button_clicked:
             for i, bulan in enumerate(all_bulan):
                 with col[i]:
                     st.write(f'{bulan}')
-                    df_breakdown_pengurang_bln = df_breakdown_pengurang[df_breakdown_pengurang['MONTH']==bulan].iloc[:,1:]
+                    df_breakdown_pengurang_bln = df_breakdown_pengurang[df_breakdown_pengurang['MONTH']==bulan].iloc[:,1:].reset_index(drop=True)
                     df_breakdown_pengurang_bln.loc[len(df_breakdown_pengurang_bln)] = ['TOTAL',
                                                                               df_breakdown_pengurang_bln.iloc[:,1].sum(),
                                                                               df_breakdown_pengurang_bln.iloc[:,2].sum(),
@@ -305,7 +299,7 @@ if st.session_state.button_clicked:
             for i, bulan in enumerate(all_bulan):
                 with col[i]:
                     st.write(f'{bulan}')
-                    df_breakdown_diperiksa_bln = df_breakdown_diperiksa[df_breakdown_diperiksa['MONTH']==bulan].iloc[:,1:]
+                    df_breakdown_diperiksa_bln = df_breakdown_diperiksa[df_breakdown_diperiksa['MONTH']==bulan].iloc[:,1:].reset_index(drop=True)
                     df_breakdown_diperiksa_bln.loc[len(df_breakdown_diperiksa_bln)] = ['TOTAL',
                                                                               df_breakdown_diperiksa_bln.iloc[:,1].sum(),
                                                                               df_breakdown_diperiksa_bln.iloc[:,2].sum(),
