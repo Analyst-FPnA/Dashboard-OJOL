@@ -108,7 +108,7 @@ if st.button('Process'):
     st.session_state.button_clicked = True
     
 # Eksekusi kode jika tombol diklik
-if st.session_state.button_clicked & df_merge != None:
+if st.session_state.button_clicked:
         df_merge = pd.read_csv('all_merge.csv')
         df_breakdown = pd.read_csv('all_breakdown.csv')
         df_merge['MONTH'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d').dt.month_name()
