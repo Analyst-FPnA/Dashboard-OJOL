@@ -95,7 +95,7 @@ file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
 dest_path = f'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
 
-if if 'df_merge' not in locals():
+if 'df_merge' not in locals():
     with zipfile.ZipFile(f'downloaded_file.zip', 'r') as z:
         with z.open('df_selisih.csv') as f:
             df_selisih = pd.read_csv(f)
