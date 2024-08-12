@@ -97,7 +97,7 @@ file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
 dest_path = f'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
 
-if df_merge == None:
+if 'df_merge' not in locals():
         df_merge = pd.read_csv('merge.csv')
         df_breakdown = pd.read_csv('breakdown.csv')
         df_selisih = pd.read_csv('selisih.csv')
