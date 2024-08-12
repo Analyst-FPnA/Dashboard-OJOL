@@ -90,18 +90,16 @@ def download_file_from_google_drive(file_id, dest_path):
         url = f"https://drive.google.com/uc?id={file_id}"
         gdown.download(url, dest_path, quiet=False)
         with zipfile.ZipFile(f'downloaded_file.zip', 'r') as zip_ref:
-            zip_ref.extractall()
-            
+            with z.open('df_selisih.csv') as f:
+                df_selisih = pd.read_csv(f)
+            with z.open('all_merge.csv') as f:
+                df_merge = pd.read_csv(f)
+            with z.open('all_breakdown.csv') as f:
+                df_breakdown = pd.read_csv(f)
         
 file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
 dest_path = f'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
-
-if 'df_selisih' not in locals():
-        df_selisih = pd.read_csv('df_selisih.csv')
-    
-# Display line chart
-
 
 # Tombol untuk mengeksekusi aksi
 if st.button('Process'):
@@ -109,8 +107,7 @@ if st.button('Process'):
     
 # Eksekusi kode jika tombol diklik
 if st.session_state.button_clicked:
-        df_merge = pd.read_csv('all_merge.csv')
-        df_breakdown = pd.read_csv('all_breakdown.csv')
+
         df_merge['MONTH'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d').dt.month_name()
         df_breakdown['MONTH'] = pd.to_datetime(df_breakdown['DATE'],format='%Y-%m-%d').dt.month_name()
         df_merge = df_merge[df_merge['MONTH'].isin(all_bulan)]
