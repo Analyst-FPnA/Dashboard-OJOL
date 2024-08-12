@@ -27,7 +27,7 @@ def create_stylish_line_plot(df, x_col, y1_col, y2_col, title="Stylish Line Plot
     sns.set(style="whitegrid")
 
     # Membuat figure dan axis
-    fig, ax = plt.subplots(figsize=(12, 8))
+    fig, ax = plt.subplots(figsize=(9, 6))
 
     # Plotting kolom y1
     ax.plot(df[x_col], df[y1_col], label='SELISIH', marker='o', markersize=8, linewidth=2, color='dodgerblue')
@@ -161,7 +161,7 @@ if 'All' in all_cab_selisih:
     df_selisih['%_TIDAK ADA INVOICE QRIS'] = df_selisih['TIDAK ADA INVOICE QRIS']/df_selisih['TOTAL']
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
-    st.write(create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage"))
+    create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
 else:
     df_selisih = df_selisih[df_selisih['CAB'].isin(all_cab_selisih)]
     df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
@@ -172,7 +172,7 @@ else:
     df_selisih['%_TIDAK ADA INVOICE QRIS'] = df_selisih['TIDAK ADA INVOICE QRIS']/df_selisih['TOTAL']
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
-    st.write(create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage"))
+    create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
 
 st.title('Data - Selisih Ojol')
 col = st.columns(2)
