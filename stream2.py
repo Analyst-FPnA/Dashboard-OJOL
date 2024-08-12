@@ -63,7 +63,7 @@ def create_stylish_line_plot(df, x_col, y1_col, y2_col, title="Stylish Line Plot
 
 
     # Menampilkan plot
-    plt.show()
+    st.pyplot(plt)
     
 st.set_page_config(layout="wide")
 
