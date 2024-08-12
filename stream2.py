@@ -97,91 +97,9 @@ file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
 dest_path = f'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
 
-if not os.path.exists('merge.csv'):          
-        directory = f'Merge'    
-        dfs = []
-        # Iterate over each file in the directory
-        for filename in os.listdir(directory):
-            if filename.endswith('.csv'):
-                filepath = os.path.join(directory, filename)
-                try:
-                    # Read each CSV file into a DataFrame and append to the list
-                    df = pd.read_csv(filepath)
-                    df.columns = [x.strip() for x in df.columns]
-                    dfs.append(df)
-                    empty_df = pd.DataFrame()
-                    empty_df.to_csv(file_path, index=False)
-                except Exception as e:
-                    print(f"Error reading {filepath}: {e}")
-        if dfs:
-            # Concatenate all DataFrames in the list along axis 0 (rows)
-            df_merge = pd.concat(dfs, ignore_index=True)
-         
-        directory = f'Breakdown'
-        dfs = []
-        # Iterate over each file in the directory
-        for filename in os.listdir(directory):
-            if filename.endswith('.csv'):
-                filepath = os.path.join(directory, filename)
-                try:
-                    # Read each CSV file into a DataFrame and append to the list
-                    dfs.append(pd.read_csv(filepath))
-                    empty_df = pd.DataFrame()
-                    empty_df.to_csv(file_path, index=False)
-                except Exception as e:
-                    print(f"Error reading {filepath}: {e}")
-        if dfs:
-            # Concatenate all DataFrames in the list along axis 0 (rows)
-            df_breakdown = pd.concat(dfs, ignore_index=True)
-        
-        #df_merge = df_merge[df_merge['CAB'].isin(all_cab)]
-        #df_breakdown = df_breakdown[df_breakdown['CAB'].isin(all_cab)]
-        
-        df_merge['NOM'] = df_merge['NOM'].fillna(0)
-        df_merge['NOM'] = df_merge['NOM'].apply(lambda x: str(x).strip())
-        df_merge = df_merge[(df_merge['NOM']!='Cek')]
-        df_merge['NOM'] = df_merge['NOM'].apply(lambda x :x.strip().replace('Rp','').replace(',','') if 'Rp' in str(x) else x)
-        df_merge['NOM'] = df_merge['NOM'].apply(lambda x: -int(x.replace('(', '').replace(')', '')) if '(' in str(x) and ')' in str(x) else x)
-        df_merge['NOM'] = df_merge['NOM'].apply(lambda x :x.strip().replace(',','') if ',' in str(x) else x)
-        df_merge = df_merge[(df_merge['NOM']!='-')]
-        df_merge['NOM'] = df_merge['NOM'].astype(float)
-        
-        df_merge['DATE'] = pd.to_datetime(df_merge['DATE'],format='%d/%m/%Y')
-        df_breakdown['DATE'] = pd.to_datetime(df_breakdown['DATE'],format='%d/%m/%Y')
-
-        df_merge['MONTH'] = df_merge['DATE'].dt.month_name()
-        df_breakdown['MONTH'] = df_breakdown['DATE'].dt.month_name()
-
-        df_merge['KAT'] = df_merge['KAT'].str.upper()
-
-        df_breakdown['Kategori'] = df_breakdown['Kategori'].str.upper()
-
-        df_breakdown.columns = df_breakdown.columns[:-7].to_list() + ['GO RESTO','GRAB FOOD','QRIS SHOPEE','QRIS TELKOM/ESB','SHOPEEPAY'] + df_breakdown.columns[-2:].to_list()
-        df_breakdown.iloc[:,9:14] = df_breakdown.iloc[:,9:14].applymap(lambda x: str(x).replace(',', '')).astype('float')
-
-        df_selisih = df_breakdown[df_breakdown['Kategori'].isin(['DOUBLE INPUT','TIDAK ADA INVOICE OJOL','TIDAK ADA INVOICE QRIS'])].groupby(['MONTH','CAB'])[df_breakdown.columns[9:14]].sum().reset_index()
-        df_selisih['SELISIH'] = df_selisih.iloc[:,2:].sum(axis=1)
-        df_selisih = df_selisih.groupby('MONTH')[['SELISIH']].mean().reset_index()
-        
-        df_cancelnota = df_breakdown[df_breakdown['Kategori'].isin(['CANCEL NOTA'])].groupby(['MONTH','CAB'])[df_breakdown.columns[9:14]].sum().reset_index()
-        df_cancelnota['CANCEL NOTA'] = df_cancelnota.iloc[:,2:].sum(axis=1)
-        df_cancelnota = df_cancelnota.groupby('MONTH')[['CANCEL NOTA']].mean().reset_index()
-        
-        df_line = df_selisih.merge(df_cancelnota)
-        df_line.iloc[:,1:] = abs(df_line.iloc[:,1:])
-        df_line['MONTH'] = pd.Categorical(df_line['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
-        df_line = df_line.sort_values('MONTH')
-        
-        df_merge.to_csv('merge.csv',index=False)
-        df_breakdown.to_csv('breakdown.csv',index=False)
-        df_line.to_csv('grafik.csv',index=False)
-        df_merge = None
-        df_breakdown = None
-        df_line = None
-      
-st.write(os.listdir())
-df_line = pd.read_csv('grafik.csv')
-df_line.set_index('MONTH', inplace=True)
+if df_merge == None:
+        df_merge = pd.read_csv('merge.csv')
+        df_breakdown = pd.read_csv('breakdown.csv')
 
 # Display line chart
 st.line_chart(df_line)
@@ -191,9 +109,11 @@ if st.button('Process'):
     st.session_state.button_clicked = True
     
 # Eksekusi kode jika tombol diklik
-if st.session_state.button_clicked:
-        df_merge = pd.read_csv('merge.csv')
-        df_breakdown = pd.read_csv('breakdown.csv')
+if st.session_state.button_clicked & df_merge != None:
+        #df_merge = pd.read_csv('merge.csv')
+        #df_breakdown = pd.read_csv('breakdown.csv')
+        df_merge['MONTH'] = pd.to_datetime(df_merge['DATE'],format='%Y-%m-%d').dt.month_name()
+        df_breakdown['MONTH'] = pd.to_datetime(df_breakdown['DATE'],format='%Y-%m-%d').dt.month_name()
         df_merge = df_merge[df_merge['MONTH'].isin(all_bulan)]
         df_breakdown = df_breakdown[df_breakdown['MONTH'].isin(all_bulan)]
         kat_pengurang = ['Invoice Beda Hari',
