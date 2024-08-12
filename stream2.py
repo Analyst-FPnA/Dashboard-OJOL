@@ -6,7 +6,65 @@ import pandas as pd
 import os
 import gdown
 import tempfile
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+def create_stylish_line_plot(df, x_col, y1_col, y2_col, title="Stylish Line Plot", x_label="X", y_label="Values"):
+    """
+    Membuat line plot yang menarik dengan dua kolom y berbeda dan kolom x sebagai sumbu x.
+
+    Parameters:
+    - df: DataFrame yang berisi data.
+    - x_col: Nama kolom yang akan digunakan sebagai sumbu x.
+    - y1_col: Nama kolom yang akan digunakan sebagai garis pertama.
+    - y2_col: Nama kolom yang akan digunakan sebagai garis kedua.
+    - title: Judul plot.
+    - x_label: Label untuk sumbu x.
+    - y_label: Label untuk sumbu y.
+    """
+    
+    # Menggunakan seaborn style untuk plot yang lebih menarik
+    sns.set(style="whitegrid")
+
+    # Membuat figure dan axis
+    fig, ax = plt.subplots(figsize=(12, 8))
+
+    # Plotting kolom y1
+    ax.plot(df[x_col], df[y1_col], label='SELISIH', marker='o', markersize=8, linewidth=2, color='dodgerblue')
+
+    # Plotting kolom y2
+    ax.plot(df[x_col], df[y2_col], label='CANCEL NOTA', marker='o', markersize=8, linewidth=2, color='orange')
+    # Menambahkan judul dengan font lebih besar dan bold
+    ax.set_title(title, fontsize=20, fontweight='bold', color='darkblue', pad=20)
+
+    # Menambahkan label sumbu dengan font lebih besar
+    ax.set_xlabel(x_label, fontsize=15, fontweight='bold')
+    ax.set_ylabel(y_label, fontsize=15, fontweight='bold')
+
+    # Menambahkan anotasi pada titik tertinggi di Y1
+
+    # Menambahkan legenda dengan pengaturan posisi dan font
+    ax.legend(title_fontsize='13', fontsize='12', loc='upper left', frameon=True, shadow=True)
+
+    # Menambahkan grid lebih halus dan tampak lebih rapi
+    ax.grid(True, which='both', linestyle='--', linewidth=0.5, color='gray', alpha=0.7)
+
+    # Menambahkan batasan sumbu untuk sedikit ruang di sekitar garis
+    #ax.set_xlim([df[x_col].min() - 0.5, df[x_col].max() + 0.5])
+    #ax.set_ylim([df[[y1_col, y2_col]].min().min() - 0.05, df[[y1_col, y2_col]].max().max()])
+
+    # Menghilangkan garis di bagian atas dan kanan
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    # Mengubah warna dan ukuran tick labels
+    ax.tick_params(axis='x', colors='darkblue', size=10)
+    ax.tick_params(axis='y', colors='darkblue', size=10)
+
+
+    # Menampilkan plot
+    plt.show()
+    
 st.set_page_config(layout="wide")
 
 def add_min_width_css():
@@ -71,20 +129,7 @@ if 'button_clicked' not in st.session_state:
 # Fungsi untuk mereset state button
 def reset_button_state():
     st.session_state.button_clicked = False
-    
-col = st.columns(2)
 
-with col[0]:
-    all_cab = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().unique(), on_change=reset_button_state)
-    all_cab = list(all_cab)
-
-with col[1]:
-    list_bulan = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ]
-    all_bulan = st.multiselect('Pilih Bulan', list_bulan, on_change=reset_button_state)
-    
 def download_file_from_google_drive(file_id, dest_path):
     if not os.path.exists(dest_path):
         url = f"https://drive.google.com/uc?id={file_id}"
@@ -103,6 +148,28 @@ if 'df_merge' not in locals():
             df_merge = pd.read_csv(f)
         with z.open('breakdown_clean.csv') as f:
             df_breakdown = pd.read_csv(f)
+            
+all_cab_selisih = st.multiselect('Pilih Cabang', ['All'] + list_cab['CAB'].sort_values().unique(),default=['All'])
+all_cab_selisih = list(all_cab)
+
+if 'All' in all_cab_selisih:
+    create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
+
+st.title('Data - Selisih Ojol')
+col = st.columns(2)
+
+with col[0]:
+    all_cab = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().unique(), on_change=reset_button_state)
+    all_cab = list(all_cab)
+
+with col[1]:
+    list_bulan = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ]
+    all_bulan = st.multiselect('Pilih Bulan', list_bulan, on_change=reset_button_state)
+    
+
             
 # Tombol untuk mengeksekusi aksi
 if st.button('Process'):
