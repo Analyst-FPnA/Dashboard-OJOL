@@ -152,6 +152,21 @@ if 'df_merge' not in locals():
 all_cab_selisih = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().unique().tolist()+['All'],default=['All'])
 all_cab_selisih = list(all_cab_selisih)
 
+def highlight_last_row(x):
+    font_color = 'color: white;'
+    background_color = 'background-color: #FF4B4B;'  # Warna yang ingin digunakan
+    df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
+    
+    # Memberikan warna khusus pada baris terakhir yang bernama 'SELISIH'
+    df_styles.iloc[-1, :] = font_color + background_color
+
+    return df_styles
+               
+def format_number(x):
+    if isinstance(x, (int, float)):
+        return "{:,.0f}".format(x)
+    return x
+    
 if 'All' in all_cab_selisih:
     df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
     df_selisih = df_selisih.sort_values('MONTH')
@@ -162,6 +177,8 @@ if 'All' in all_cab_selisih:
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
     create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
+    df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).applymap(format_number)
+    st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
 else:
     df_selisih = df_selisih[df_selisih['CAB'].isin(all_cab_selisih)]
     df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
@@ -173,7 +190,9 @@ else:
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
     create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
-
+    df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).applymap(format_number)
+    st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
+    
 st.title('Data - Selisih Ojol')
 col = st.columns(2)
 
@@ -191,7 +210,7 @@ with col[1]:
 
             
 # Tombol untuk mengeksekusi aksi
-if st.button('Process'):
+if st.button('Show'):
     st.session_state.button_clicked = True
     
 # Eksekusi kode jika tombol diklik
@@ -232,20 +251,8 @@ if st.session_state.button_clicked:
                     df_merge3.loc[len(df_merge3)] = [bulan,'INVOICE',0,'QRIS TELKOM/ESB']
                     df_merge3.loc[len(df_merge3)] = [bulan, 'WEB',0,'QRIS TELKOM/ESB']
             df_merge_final = pd.concat([df_merge2[df_merge2['KAT'].isin(['GO RESTO','GRAB FOOD','QRIS SHOPEE','SHOPEEPAY'])],df_merge3]).sort_values('MONTH')
-            def highlight_last_row(x):
-                font_color = 'color: white;'
-                background_color = 'background-color: #FF4B4B;'  # Warna yang ingin digunakan
-                df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
-                
-                # Memberikan warna khusus pada baris terakhir yang bernama 'SELISIH'
-                df_styles.iloc[-1, :] = font_color + background_color
+ 
             
-                return df_styles
-                
-            def format_number(x):
-                if isinstance(x, (int, float)):
-                    return "{:,.0f}".format(x)
-                return x
                 
             st.markdown(f'## {cab}')
             st.markdown('#### SELISIH PER-PAYMENT')
@@ -275,7 +282,7 @@ if st.session_state.button_clicked:
             for i, bulan in enumerate(all_bulan):
                 with col[i]:
                     st.write(f'{bulan}')
-                    df_breakdown_pengurang_bln = df_breakdown_pengurang[df_breakdown_pengurang['MONTH']==bulan].iloc[:,1:]
+                    df_breakdown_pengurang_bln = df_breakdown_pengurang[df_breakdown_pengurang['MONTH']==bulan].iloc[:,1:].reset_index(drop=True)
                     df_breakdown_pengurang_bln.loc[len(df_breakdown_pengurang_bln)] = ['TOTAL',
                                                                               df_breakdown_pengurang_bln.iloc[:,1].sum(),
                                                                               df_breakdown_pengurang_bln.iloc[:,2].sum(),
@@ -292,7 +299,7 @@ if st.session_state.button_clicked:
             for i, bulan in enumerate(all_bulan):
                 with col[i]:
                     st.write(f'{bulan}')
-                    df_breakdown_diperiksa_bln = df_breakdown_diperiksa[df_breakdown_diperiksa['MONTH']==bulan].iloc[:,1:]
+                    df_breakdown_diperiksa_bln = df_breakdown_diperiksa[df_breakdown_diperiksa['MONTH']==bulan].iloc[:,1:].reset_index(drop=True)
                     df_breakdown_diperiksa_bln.loc[len(df_breakdown_diperiksa_bln)] = ['TOTAL',
                                                                               df_breakdown_diperiksa_bln.iloc[:,1].sum(),
                                                                               df_breakdown_diperiksa_bln.iloc[:,2].sum(),
