@@ -201,7 +201,7 @@ if st.session_state.button_clicked:
                     st.dataframe(df_breakdown_pengurang_bln, use_container_width=True, hide_index=True)
     
             st.markdown('#### KATEGORI DIPERIKSA')
-            df_breakdown_diperiksa = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby(['MONTH','Kategori'])[df_breakdown.columns[-7:-2]].sum().reset_index()
+            df_breakdown_diperiksa = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby(['MONTH','Kategori'])[df_breakdown.columns[-5:]].sum().reset_index()
             col = st.columns(len(all_bulan))
             for i, bulan in enumerate(all_bulan):
                 with col[i]:
