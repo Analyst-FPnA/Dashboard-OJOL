@@ -163,6 +163,8 @@ if st.session_state.button_clicked:
                 
             st.markdown(f'## {cab}')
             st.markdown('#### SELISIH PER-PAYMENT')
+
+
             
             col = st.columns(len(all_bulan))
             for i, bulan in enumerate(all_bulan):
@@ -182,7 +184,7 @@ if st.session_state.button_clicked:
                     
             st.markdown('#### KATEGORI PENGURANG')
             df_breakdown2 = df_breakdown[df_breakdown['CAB'] == cab]
-            df_breakdown_pengurang = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_pengurang])].groupby(['MONTH','Kategori'])[df_breakdown.columns[-7:-2]].sum().reset_index()
+            df_breakdown_pengurang = df_breakdown2[df_breakdown2['Kategori'].isin([x.upper() for x in kat_pengurang])].groupby(['MONTH','Kategori'])[df_breakdown.columns[-5:]].sum().reset_index()
             col = st.columns(len(all_bulan))
             for i, bulan in enumerate(all_bulan):
                 with col[i]:
