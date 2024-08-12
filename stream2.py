@@ -89,7 +89,7 @@ def download_file_from_google_drive(file_id, dest_path):
     if not os.path.exists(dest_path):
         url = f"https://drive.google.com/uc?id={file_id}"
         gdown.download(url, dest_path, quiet=False)
-        with zipfile.ZipFile(f'downloaded_file.zip', 'r') as zip_ref:
+        with zipfile.ZipFile(f'downloaded_file.zip', 'r') as Z:
             with z.open('df_selisih.csv') as f:
                 df_selisih = pd.read_csv(f)
             with z.open('all_merge.csv') as f:
