@@ -210,7 +210,7 @@ with col[1]:
 
             
 # Tombol untuk mengeksekusi aksi
-if st.button('Process'):
+if st.button('Show'):
     st.session_state.button_clicked = True
     
 # Eksekusi kode jika tombol diklik
