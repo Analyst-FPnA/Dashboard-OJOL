@@ -100,9 +100,10 @@ download_file_from_google_drive(file_id, dest_path)
 if df_merge == None:
         df_merge = pd.read_csv('merge.csv')
         df_breakdown = pd.read_csv('breakdown.csv')
-
+        df_selisih = pd.read_csv('selisih.csv')
+    
 # Display line chart
-st.line_chart(df_line)
+
 
 # Tombol untuk mengeksekusi aksi
 if st.button('Process'):
