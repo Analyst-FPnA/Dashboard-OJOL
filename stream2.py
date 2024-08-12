@@ -27,7 +27,7 @@ def create_stylish_line_plot(df, x_col, y1_col, y2_col, title="Stylish Line Plot
     sns.set(style="whitegrid")
 
     # Membuat figure dan axis
-    fig, ax = plt.subplots(figsize=(9, 6))
+    fig, ax = plt.subplots(figsize=(12, 6))
 
     # Plotting kolom y1
     ax.plot(df[x_col], df[y1_col], label='SELISIH', marker='o', markersize=8, linewidth=2, color='dodgerblue')
@@ -35,16 +35,16 @@ def create_stylish_line_plot(df, x_col, y1_col, y2_col, title="Stylish Line Plot
     # Plotting kolom y2
     ax.plot(df[x_col], df[y2_col], label='CANCEL NOTA', marker='o', markersize=8, linewidth=2, color='orange')
     # Menambahkan judul dengan font lebih besar dan bold
-    ax.set_title(title, fontsize=20, fontweight='bold', color='darkblue', pad=20)
+    ax.set_title(title, fontsize=12, fontweight='bold', color='darkblue', pad=20)
 
     # Menambahkan label sumbu dengan font lebih besar
-    ax.set_xlabel(x_label, fontsize=15, fontweight='bold')
-    ax.set_ylabel(y_label, fontsize=15, fontweight='bold')
+    ax.set_xlabel(x_label, fontsize=12, fontweight='bold')
+    ax.set_ylabel(y_label, fontsize=12, fontweight='bold')
 
     # Menambahkan anotasi pada titik tertinggi di Y1
 
     # Menambahkan legenda dengan pengaturan posisi dan font
-    ax.legend(title_fontsize='13', fontsize='12', loc='upper left', frameon=True, shadow=True)
+    ax.legend(title_fontsize='11', fontsize='10', loc='upper left', frameon=True, shadow=True)
 
     # Menambahkan grid lebih halus dan tampak lebih rapi
     ax.grid(True, which='both', linestyle='--', linewidth=0.5, color='gray', alpha=0.7)
@@ -58,8 +58,8 @@ def create_stylish_line_plot(df, x_col, y1_col, y2_col, title="Stylish Line Plot
     ax.spines['right'].set_visible(False)
 
     # Mengubah warna dan ukuran tick labels
-    ax.tick_params(axis='x', colors='darkblue', size=10)
-    ax.tick_params(axis='y', colors='darkblue', size=10)
+    ax.tick_params(axis='x', colors='darkblue', size=8)
+    ax.tick_params(axis='y', colors='darkblue', size=8)
 
 
     # Menampilkan plot
