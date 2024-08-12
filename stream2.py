@@ -149,7 +149,7 @@ if 'df_merge' not in locals():
         with z.open('breakdown_clean.csv') as f:
             df_breakdown = pd.read_csv(f)
             
-all_cab_selisih = st.multiselect('Pilih Cabang', ['All'] + list_cab['CAB'].sort_values().unique(),default=['All'])
+all_cab_selisih = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().unique().tolist()+['All'],default=['All'])
 all_cab_selisih = list(all_cab)
 
 if 'All' in all_cab_selisih:
