@@ -89,18 +89,21 @@ def download_file_from_google_drive(file_id, dest_path):
     if not os.path.exists(dest_path):
         url = f"https://drive.google.com/uc?id={file_id}"
         gdown.download(url, dest_path, quiet=False)
-        with zipfile.ZipFile(f'downloaded_file.zip', 'r') as z:
-            with z.open('df_selisih.csv') as f:
-                df_selisih = pd.read_csv(f)
-            with z.open('all_merge.csv') as f:
-                df_merge = pd.read_csv(f)
-            with z.open('all_breakdown.csv') as f:
-                df_breakdown = pd.read_csv(f)
+
         
 file_id = '1BP3-98cKLKgY3flpsyuhjbE7zXWNSN3V'
 dest_path = f'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
 
+if if 'df_merge' not in locals():
+    with zipfile.ZipFile(f'downloaded_file.zip', 'r') as z:
+        with z.open('df_selisih.csv') as f:
+            df_selisih = pd.read_csv(f)
+        with z.open('all_merge.csv') as f:
+            df_merge = pd.read_csv(f)
+        with z.open('all_breakdown.csv') as f:
+            df_breakdown = pd.read_csv(f)
+        
 # Tombol untuk mengeksekusi aksi
 if st.button('Process'):
     st.session_state.button_clicked = True
