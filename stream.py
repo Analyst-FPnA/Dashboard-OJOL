@@ -177,8 +177,7 @@ if 'All' in all_cab_selisih:
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
     create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
-    df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).applymap(format_number)
-    df_selisih2 = df_selisih2.dropna(axis=1, how='all')
+    df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).dropna(axis=1, how='all').applymap(format_number)
     st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
 else:
     df_selisih = df_selisih[df_selisih['CAB'].isin(all_cab_selisih)]
@@ -191,8 +190,7 @@ else:
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
     create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
-    df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).applymap(format_number)
-    df_selisih2 = df_selisih2.dropna(axis=1, how='all')
+    df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).dropna(axis=1, how='all').applymap(format_number)
     st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
     
 st.title('Data - Selisih Ojol')
