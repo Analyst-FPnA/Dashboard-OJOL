@@ -31,7 +31,7 @@ def create_stylish_line_plot(df, x_col, y1_col, y2_col, title="Stylish Line Plot
         x=df[x_col],
         y=df[y1_col],
         mode='lines+markers',
-        name=y1_col,
+        name='CANCEL NOTA',
         line=dict(color='dodgerblue', width=2),
         marker=dict(size=8)
     )
@@ -41,7 +41,7 @@ def create_stylish_line_plot(df, x_col, y1_col, y2_col, title="Stylish Line Plot
         x=df[x_col],
         y=df[y2_col],
         mode='lines+markers',
-        name=y2_col,
+        name='SELISIH',
         line=dict(color='orange', width=2),
         marker=dict(size=8)
     )
