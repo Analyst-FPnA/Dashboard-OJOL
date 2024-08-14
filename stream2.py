@@ -52,7 +52,7 @@ def create_stylish_line_plot(df, x_col, y1_col, y2_col, title="Stylish Line Plot
         xaxis=dict(title=x_label, titlefont=dict(size=16, color='darkblue')),
         yaxis=dict(title=y_label, titlefont=dict(size=16, color='darkblue')),
         showlegend=True,
-        legend=dict(font=dict(size=12), x=1, y=1, xanchor='left', yanchor='top'),
+        legend=dict(font=dict(size=12), x=0, y=1, xanchor='left', yanchor='top'),
         margin=dict(l=50, r=50, t=50, b=50),
         hovermode='closest',
         plot_bgcolor='white',
