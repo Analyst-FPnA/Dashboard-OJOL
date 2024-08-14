@@ -3,4 +3,5 @@ openpyxl
 gdown
 matplotlib
 seaborn
+plotly
 
