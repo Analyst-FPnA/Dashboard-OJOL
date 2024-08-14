@@ -9,6 +9,9 @@ import tempfile
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import plotly.graph_objs as go
+import streamlit as st
+
 def create_stylish_line_plot(df, x_col, y1_col, y2_col, title="Stylish Line Plot", x_label="X", y_label="Values"):
     """
     Membuat line plot yang menarik dengan dua kolom y berbeda dan kolom x sebagai sumbu x.
@@ -23,47 +26,46 @@ def create_stylish_line_plot(df, x_col, y1_col, y2_col, title="Stylish Line Plot
     - y_label: Label untuk sumbu y.
     """
     
-    # Menggunakan seaborn style untuk plot yang lebih menarik
-    sns.set(style="whitegrid")
+    # Membuat trace untuk y1
+    trace1 = go.Scatter(
+        x=df[x_col],
+        y=df[y1_col],
+        mode='lines+markers',
+        name='SELISIH',
+        line=dict(color='dodgerblue', width=2),
+        marker=dict(size=8)
+    )
 
-    # Membuat figure dan axis
-    fig, ax = plt.subplots(figsize=(12, 6))
+    # Membuat trace untuk y2
+    trace2 = go.Scatter(
+        x=df[x_col],
+        y=df[y2_col],
+        mode='lines+markers',
+        name='CANCEL NOTA',
+        line=dict(color='orange', width=2),
+        marker=dict(size=8)
+    )
 
-    # Plotting kolom y1
-    ax.plot(df[x_col], df[y1_col], label='SELISIH', marker='o', markersize=8, linewidth=2, color='dodgerblue')
+    # Membuat layout untuk plot
+    layout = go.Layout(
+        title=dict(text=title, x=0.5, font=dict(size=20, color='darkblue')),
+        xaxis=dict(title=x_label, titlefont=dict(size=16, color='darkblue')),
+        yaxis=dict(title=y_label, titlefont=dict(size=16, color='darkblue')),
+        showlegend=True,
+        legend=dict(font=dict(size=12), x=0, y=1),
+        margin=dict(l=50, r=50, t=50, b=50),
+        hovermode='closest',
+        plot_bgcolor='white',
+        xaxis_gridcolor='lightgray',
+        yaxis_gridcolor='lightgray'
+    )
 
-    # Plotting kolom y2
-    ax.plot(df[x_col], df[y2_col], label='CANCEL NOTA', marker='o', markersize=8, linewidth=2, color='orange')
-    # Menambahkan judul dengan font lebih besar dan bold
-    ax.set_title(title, fontsize=12, fontweight='bold', color='darkblue', pad=20)
+    # Membuat figure dari trace dan layout
+    fig = go.Figure(data=[trace1, trace2], layout=layout)
 
-    # Menambahkan label sumbu dengan font lebih besar
-    ax.set_xlabel(x_label, fontsize=12, fontweight='bold')
-    ax.set_ylabel(y_label, fontsize=12, fontweight='bold')
+    # Menampilkan plot di Streamlit
+    st.plotly_chart(fig, use_container_width=True)
 
-    # Menambahkan anotasi pada titik tertinggi di Y1
-
-    # Menambahkan legenda dengan pengaturan posisi dan font
-    ax.legend(title_fontsize='11', fontsize='10', loc='upper left', frameon=True, shadow=True)
-
-    # Menambahkan grid lebih halus dan tampak lebih rapi
-    ax.grid(True, which='both', linestyle='--', linewidth=0.5, color='gray', alpha=0.7)
-
-    # Menambahkan batasan sumbu untuk sedikit ruang di sekitar garis
-    #ax.set_xlim([df[x_col].min() - 0.5, df[x_col].max() + 0.5])
-    #ax.set_ylim([df[[y1_col, y2_col]].min().min() - 0.05, df[[y1_col, y2_col]].max().max()])
-
-    # Menghilangkan garis di bagian atas dan kanan
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-
-    # Mengubah warna dan ukuran tick labels
-    ax.tick_params(axis='x', colors='darkblue', size=8)
-    ax.tick_params(axis='y', colors='darkblue', size=8)
-
-
-    # Menampilkan plot
-    st.pyplot(plt)
     
 st.set_page_config(layout="wide")
 
@@ -167,6 +169,7 @@ def format_number(x):
         return "{:,.0f}".format(x)
     return x
     
+
 if 'All' in all_cab_selisih:
     df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
     df_selisih = df_selisih.sort_values('MONTH')
@@ -176,8 +179,9 @@ if 'All' in all_cab_selisih:
     df_selisih['%_TIDAK ADA INVOICE QRIS'] = df_selisih['TIDAK ADA INVOICE QRIS']/df_selisih['TOTAL']
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
+    df_selisih = df_selisih.dropna(axis=0,subset=df_selisih.columns[1:])
     create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
-    df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).dropna(axis=1, how='all').applymap(format_number)
+    df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).applymap(format_number)
     st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
 else:
     df_selisih = df_selisih[df_selisih['CAB'].isin(all_cab_selisih)]
@@ -189,6 +193,7 @@ else:
     df_selisih['%_TIDAK ADA INVOICE QRIS'] = df_selisih['TIDAK ADA INVOICE QRIS']/df_selisih['TOTAL']
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
+    df_selisih = df_selisih.dropna(axis=0,subset=df_selisih.columns[1:])
     create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
     df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).dropna(axis=1, how='all').applymap(format_number)
     st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
