@@ -57,7 +57,16 @@ def create_stylish_line_plot(df, x_col, y1_col, y2_col, title="Stylish Line Plot
         hovermode='closest',
         plot_bgcolor='white',
         xaxis_gridcolor='lightgray',
-        yaxis_gridcolor='lightgray'
+        yaxis_gridcolor='lightgray',
+        shapes=[
+            # Garis putus-putus merah di y=0.5
+            dict(
+                type="line",
+                x0=df[x_col].min(), x1=df[x_col].max(),
+                y0=0.5, y1=0.5,
+                line=dict(color="red", width=1, dash="dash")
+            )
+        ]
     )
 
     # Membuat figure dari trace dan layout
