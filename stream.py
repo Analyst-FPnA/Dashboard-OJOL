@@ -130,7 +130,7 @@ st.markdown(
 )
 
 # Menampilkan tabel di Streamlit
-st.markdown(df_4101_1.to_html(classes='styled-table'), unsafe_allow_html=True)
+st.markdown(df_4101_1.to_html(index=False, classes='styled-table'), unsafe_allow_html=True)
 
 # Mengaplikasikan style ke DataFrame
 st.dataframe(pd.concat([df_4101_1,total])[:-1], use_container_width=True, hide_index=True)
