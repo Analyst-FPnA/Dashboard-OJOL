@@ -16,22 +16,24 @@ import plotly.express as px
 import plotly.graph_objs as go
 
 st.set_page_config(layout="wide")
-def highlight_header(df):
+def highlight_header(x):
     """
     Meng-highlight header tabel dengan warna merah.
     
     Parameters:
-    - df: DataFrame yang akan diterapkan styling
+    - x: DataFrame yang akan diterapkan styling
     
     Returns:
     - DataFrame dengan styling untuk header
     """
-    return df.style.set_table_styles(
-        [{'selector': 'thead th',
-          'props': [('background-color', '#FF4B4B'),
-                    ('color', 'white'),
-                    ('font-weight', 'bold')]}]
-    )
+    # CSS styling untuk header
+    header_color = 'background-color: #FF4B4B; color: white;'  # Warna merah dengan teks putih
+    df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
+    
+    # Memberikan warna khusus pada header
+    df_styles.loc[x.columns, :] = header_color
+
+    return df_styles
     
 if 'button_clicked' not in st.session_state:
     st.session_state.button_clicked = False
@@ -96,12 +98,21 @@ df_4101_1['Month'] = pd.Categorical(df_4101_1['Month'], categories=list_bulan, o
 df_4101_1 = df_4101_1.sort_values('Month')
 df_4101_1 = df_4101_1.pivot(index='Nama Barang', columns='Month',values=f'{qty_nom}').reset_index().fillna(0)
 #df_4101_1.iloc[:,1:] = df_4101_1.iloc[:,1:].applymap(lambda x: '' if x=='' else f'{x:.0f}')
-df_4101_1['Total']=df_4101_1.iloc[:,2:].sum(axis=1)
+df_4101_1.iloc[:,1:] = df_4101_1.iloc[:,1:].astype(int)
+total = pd.DataFrame((df_4101_1.iloc[:,1:].sum(axis=0).values).reshape(1,len(df_4101_1.columns)-1),columns=df_4101_1.columns[1:])
+total['Nama Barang']='TOTAL'+(df_4101_1['Nama Barang'].str.len().max()+8)*' '
 
 pd.options.display.float_format = '{:,.0f}'.format
 df_4101_2 = df_4101.groupby(['Nama Cabang','Nomor #','Kode Barang','Nama Barang','Tipe Penyesuaian'])[['Kuantitas','Total Biaya']].sum().reset_index()
-df_4101_2 = df_4101_2.pivot(index=['Nama Cabang','Nomor #','Kode Barang','Nama Barang'],columns=['Tipe Penyesuaian'],values=['Kuantitas','Total Biaya']).reset_index().fillna('')
-st.dataframe(highlight_header(df_4101_1), use_container_width=True, hide_index=True)
+df_4101_2 = df_4101_2.pivot(index=['Nama Cabang','Nomor #','Kode Barang','Nama Barang'],columns=['Tipe Penyesuaian'],values=['Kuantitas','Total Biaya']).reset_index().fillna(0)
+
+def highlight_header(s):
+    return ['background-color: red; color: white;' for _ in s]
+
+# Mengaplikasikan style ke DataFrame
+st.dataframe(pd.concat([df_4101_1,total])[:-1], use_container_width=True, hide_index=True)
+st.dataframe(pd.concat([df_4101_1,total])[-1:], use_container_width=True, hide_index=True)
+
 
 all_month = []
 for i in month:
@@ -111,11 +122,19 @@ for i, x in enumerate(month):
     df_ia = df_ia.rename(columns={i:x})
 df_ia['Nama Cabang'] = cabang
 df_ia = df_ia[[df_ia.columns[-1]]+list(df_ia.columns[:-1])].fillna('')
+st.markdown('### Daftar Nomor IA')
 st.dataframe(df_ia, use_container_width=True, hide_index=True)
 
+st.markdown('### Detail Nomor IA')
 list_ia = sorted(df_4101_2['Nomor #'].unique().tolist())
 ia = st.selectbox("NOMOR IA:",list_ia ,index=len(list_ia)-1, on_change=reset_button_state)
 df_4101_2 = df_4101_2[df_4101_2['Nomor #'] == ia].drop(columns='Nomor #')
 df_4101_2.columns = ['_'.join(col).strip() for col in df_4101_2.columns.values]
-df_4101_2.iloc[:,3:] = df_4101_2.iloc[:,3:].applymap(lambda x: '' if x=='' else f'{x:,.0f}')
-st.dataframe(df_4101_2, use_container_width=True, hide_index=True)
+
+df_4101_2.iloc[:,3:] = df_4101_2.iloc[:,3:].astype(int)
+total = pd.DataFrame((df_4101_2.iloc[:,3:].sum(axis=0).values).reshape(1,len(df_4101_2.columns)-3),columns=df_4101_2.columns[3:])
+total['Nama Barang_']='TOTAL'+(df_4101_2['Nama Barang_'].str.len().max()+8)*' '
+
+#df_4101_2.iloc[:,3:] = df_4101_2.iloc[:,3:].applymap(lambda x: '' if x=='' else f'{x:,.0f}')
+st.dataframe(pd.concat([df_4101_2,total])[:-1].fillna(''), use_container_width=True, hide_index=True)
+st.dataframe(pd.concat([df_4101_2,total])[-1:].fillna(''), use_container_width=True, hide_index=True)
