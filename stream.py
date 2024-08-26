@@ -120,12 +120,23 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
+st.dataframe(
+    """
+    <style>
+    .styled-table th {
+        background-color: red;
+        color: white;
+        text-align: center;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 # Menampilkan tabel di Streamlit
 st.markdown(df_4101_1.to_html(classes='styled-table'), unsafe_allow_html=True)
 
 # Mengaplikasikan style ke DataFrame
-st.dataframe(pd.concat([df_4101_1,total])[:-1].to_html(classes='styled-table'), use_container_width=True, hide_index=True,, unsafe_allow_html=True)
+st.dataframe(pd.concat([df_4101_1,total])[:-1].to_html(classes='styled-table'), use_container_width=True, hide_index=True, unsafe_allow_html=True)
 st.dataframe(pd.concat([df_4101_1,total])[-1:], use_container_width=True, hide_index=True)
 
 
