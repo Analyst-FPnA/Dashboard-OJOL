@@ -106,8 +106,23 @@ pd.options.display.float_format = '{:,.0f}'.format
 df_4101_2 = df_4101.groupby(['Nama Cabang','Nomor #','Kode Barang','Nama Barang','Tipe Penyesuaian'])[['Kuantitas','Total Biaya']].sum().reset_index()
 df_4101_2 = df_4101_2.pivot(index=['Nama Cabang','Nomor #','Kode Barang','Nama Barang'],columns=['Tipe Penyesuaian'],values=['Kuantitas','Total Biaya']).reset_index().fillna(0)
 
-def highlight_header(s):
-    return ['background-color: red; color: white;' for _ in s]
+
+# Menambahkan CSS untuk mengubah warna header
+st.markdown(
+    """
+    <style>
+    .styled-table th {
+        background-color: red;
+        color: white;
+        text-align: center;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Menampilkan tabel di Streamlit
+st.markdown(df_4101_1.to_html(classes='styled-table'), unsafe_allow_html=True)
 
 # Mengaplikasikan style ke DataFrame
 st.dataframe(pd.concat([df_4101_1,total])[:-1], use_container_width=True, hide_index=True)
