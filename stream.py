@@ -111,10 +111,18 @@ df_4101_2 = df_4101_2.pivot(index=['Nama Cabang','Nomor #','Kode Barang','Nama B
 st.markdown(
     """
     <style>
+    .styled-table {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
     .styled-table th {
         background-color: red;
         color: white;
         text-align: center;
+    }
+    .styled-table td, .styled-table th {
+        padding: 8px;
     }
     </style>
     """,
@@ -122,7 +130,7 @@ st.markdown(
 )
 
 # Menampilkan tabel di Streamlit
-st.markdown(df_4101_1.to_html(classes='styled-table'), unsafe_allow_html=True, use_container_width=True, hide_index=True)
+st.markdown(df_4101_1.to_html(classes='styled-table'), unsafe_allow_html=True)
 
 # Mengaplikasikan style ke DataFrame
 st.dataframe(pd.concat([df_4101_1,total])[:-1], use_container_width=True, hide_index=True)
