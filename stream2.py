@@ -179,7 +179,7 @@ def format_number(x):
     if x==0:
         return ''
     if isinstance(x, (int, float)):
-        return "{:,.0f}".format(-(x))
+        return "{:,.0f}".format(x)
     return x
 
 kat_pengurang = ['Invoice Beda Hari',
@@ -209,6 +209,7 @@ df_pic = df_pic.merge(pic,how='left',left_on=['MONTH','CAB'],right_on =['BULAN',
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH'])
 df_pic = df_pic.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
+df_pic.iloc[:,2:] = -(df_pic.iloc[:,2:])
 df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 st.dataframe(df_pic, use_container_width=True, hide_index=True) 
 
