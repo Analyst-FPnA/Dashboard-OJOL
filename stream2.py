@@ -184,7 +184,7 @@ df_pic = df_selisih.merge(pic,how='left',left_on=['MONTH','CAB'],right_on =['BUL
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH'])
 df_pic = df_pic.pivot(index='NAMA PIC',columns='MONTH',values='SELISIH').reset_index()
-df_pic = df_pic.fillna(0).style.format(lambda x: '' if x==0 else x).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[1:])
+df_pic = df_pic.fillna(0).style.format(lambda x: '' if x==0 else f'{x:,.0f}').background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[1:])
 st.dataframe(df_pic, use_container_width=True, hide_index=True) 
 
 if 'All' in all_cab_selisih:
