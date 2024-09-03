@@ -179,7 +179,7 @@ def format_number(x):
     if x==0:
         return ''
     if isinstance(x, (int, float)):
-        return "{:,.0f}".format(x)
+        return "{:,.0f}".format(-(x))
     return x
 
 kat_pengurang = ['Invoice Beda Hari',
