@@ -183,7 +183,7 @@ def format_number(x):
     return x
 
 
-df_pic = df_selisih.merge(pic,how='left',left_on=['MONTH','CAB'],right_on =['BULAN','NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB')[['SELISIH']].sum().reset_index()
+df_pic = df_selisih.merge(pic,how='left',left_on=['MONTH','CAB'],right_on =['BULAN','NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB'])[['SELISIH']].sum().reset_index()
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH'])
 df_pic = df_pic.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
