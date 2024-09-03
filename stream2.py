@@ -183,11 +183,14 @@ def format_number(x):
     return x
 
 
-df_pic = df_selisih.merge(pic,how='left',left_on=['MONTH','CAB'],right_on =['BULAN','NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB'])[['SELISIH']].sum().reset_index()
+df_pic = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby(['MONTH','CAB'])[df_breakdown.columns[-5:]].sum().sum(axis=1).reset_index().rename(columns={0:'SELISIH'})
+df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
+df_pic = df_pic.sort_values('MONTH')
+
+df_pic = df_pic.merge(pic,how='left',left_on=['MONTH','CAB'],right_on =['BULAN','NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB'])[['SELISIH']].sum().reset_index()
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH'])
 df_pic = df_pic.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
-#df_pic.iloc[:,2:] = df_pic.iloc[:,2:].applymap(lambda x: f'{x:.0f}')
 df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 st.dataframe(df_pic, use_container_width=True, hide_index=True) 
 
