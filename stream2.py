@@ -182,6 +182,24 @@ def format_number(x):
         return "{:,.0f}".format(x)
     return x
 
+kat_pengurang = ['Invoice Beda Hari',
+                 'Transaksi Kemarin',
+                 'Selisih IT',
+                 'Promo Marketing/Adjustment',
+                 'Cancel Nota',
+                 'Tidak Ada Transaksi di Web',
+                 'Selisih Lebih Bayar QRIS',
+                 'Selisih Lebih Bayar Ojol',
+                 'Salah Slot Pembayaran']
+kat_diperiksa = ['Tidak Ada Invoice QRIS',
+                 'Tidak Ada Invoice Ojol',
+                 'Double Input',
+                 'Selisih Kurang Bayar QRIS',
+                 'Selisih Kurang Bayar Ojol',
+                 'Bayar Lebih dari 1 Kali - 1 Struk (QRIS)',
+                 'Bayar 1 Kali - Banyak Struk (QRIS)',
+                 'Bayar Lebih dari 1 Kali - Banyak Struk (QRIS)',
+                 'Kurang Input (Ojol)']
 
 df_pic = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby(['MONTH','CAB'])[df_breakdown.columns[-5:]].sum().sum(axis=1).reset_index().rename(columns={0:'SELISIH'})
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
@@ -246,24 +264,7 @@ if st.button('Show'):
 if st.session_state.button_clicked:
         df_merge = df_merge[df_merge['MONTH'].isin(all_bulan)]
         df_breakdown = df_breakdown[df_breakdown['MONTH'].isin(all_bulan)]
-        kat_pengurang = ['Invoice Beda Hari',
-                         'Transaksi Kemarin',
-                         'Selisih IT',
-                         'Promo Marketing/Adjustment',
-                         'Cancel Nota',
-                         'Tidak Ada Transaksi di Web',
-                         'Selisih Lebih Bayar QRIS',
-                         'Selisih Lebih Bayar Ojol',
-                         'Salah Slot Pembayaran']
-        kat_diperiksa = ['Tidak Ada Invoice QRIS',
-                         'Tidak Ada Invoice Ojol',
-                         'Double Input',
-                         'Selisih Kurang Bayar QRIS',
-                         'Selisih Kurang Bayar Ojol',
-                         'Bayar Lebih dari 1 Kali - 1 Struk (QRIS)',
-                         'Bayar 1 Kali - Banyak Struk (QRIS)',
-                         'Bayar Lebih dari 1 Kali - Banyak Struk (QRIS)',
-                         'Kurang Input (Ojol)']
+
         for cab in all_cab:
             df_merge2 = df_merge[(df_merge['CAB'] == cab)]
             df_merge2 = df_merge2.groupby(['MONTH','SOURCE','KAT'])[['NOM']].sum().reset_index()
