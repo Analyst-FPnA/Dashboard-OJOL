@@ -176,10 +176,10 @@ def highlight_last_row(x):
     return df_styles
                
 def format_number(x):
-    if isinstance(x, (int, float)):
-        return "{:,.0f}".format(x)
     if x==0:
         return ''
+    if isinstance(x, (int, float)):
+        return "{:,.0f}".format(x)
     return x
 
 
