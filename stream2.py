@@ -253,7 +253,7 @@ def highlight_cells(x, df_pic2.drop(columns=['NAMA PIC','SELISIH'])):
     
 styled_pivot_df = pivot_df.style.apply(highlight_cells, highlight_info=df_pic2.drop(columns=['NAMA PIC','SELISIH']), axis=None)
 
-st.dataframe(df_pic, use_container_width=True, hide_index=True) 
+st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
 
 if 'All' in all_cab_selisih:
     df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
