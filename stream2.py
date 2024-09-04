@@ -226,7 +226,7 @@ df_pic = df_pic[df_pic['SELISIH']!=0]
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH'])
 df_pic = df_pic.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index().reset_index()
-df_pic = df_pic.melt(id_vars=['NAMA PIC','CAB'])
+df_pic = df_pic.melt(id_vars=['index','NAMA PIC','CAB'])
 
 df_pic2 = df_pic[(df_pic['value'].isna())]
 df_pic = df_pic[~(df_pic['value'].isna())].rename(columns={'value':'SELISIH'})
