@@ -216,11 +216,23 @@ df_pic = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_dipe
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
 df_pic = df_pic.sort_values('MONTH')
 
-df_pic = df_pic.merge(pic,how='left',left_on=['MONTH','CAB'],right_on =['BULAN','NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB'])[['SELISIH']].sum().reset_index()
+pic['BULAN'] = pd.Categorical(pic['BULAN'], categories=['January','February','March','April','May','June','July'], ordered=True)
+pic = pic.sort_values('BULAN')
+pic = pic.groupby('NAMA RESTO')[['BULAN']].max().reset_index().merge(pic).drop(columns='BULAN')
+df_pic = df_pic.merge(pic,how='left',left_on=['CAB'],right_on =['NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB'])[['SELISIH']].sum().reset_index()
+df_pic['SELISIH'] = abs(df_pic['SELISIH'])
+#df_pic = pd.concat([df_pic,df_pic2],ignore_index=True)
+df_pic = df_pic[df_pic['SELISIH']!=0]
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH'])
 df_pic = df_pic.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
-df_pic.iloc[:,2:] = -(df_pic.iloc[:,2:])
+df_pic = df_pic.melt(id_vars=['NAMA PIC','CAB'])
+
+df_pic2 = df_pic[(df_pic['value'].isna())]
+df_pic = df_pic[~(df_pic['value'].isna())].rename(columns={'value':'SELISIH'})
+df_pic2 = df_pic2.merge(s_nas,how='left').fillna(0).drop(columns='value')
+
+df_pic = pd.concat([df_pic,df_pic2],ignore_index=True).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
 df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 st.dataframe(df_pic, use_container_width=True, hide_index=True) 
 
