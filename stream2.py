@@ -159,8 +159,17 @@ if 'df_merge' not in locals():
             df_merge = pd.read_csv(f)
         with z.open('breakdown_clean.csv') as f:
             df_breakdown = pd.read_csv(f)
-        with z.open('PIC Ojol.xlsx') as f:
-            pic = pd.read_excel(f)
+        with z.open('CNS_NASIONAL.xlsx') as f:
+            s_nas = pd.read_excel('CNS_NASIONAL.xlsx',sheet_name='SELISIH')
+            cn_nas = pd.read_excel('CNS_NASIONAL.xlsx',sheet_name='CANCELNOTA')
+
+s_nas['MONTH'] = s_nas['MONTH'].replace({'JAN':'January','FEB':'February','MAR':'March','APR':'April','JUN':'June','JUL':'July','AUG':'August','SEP':'September'})
+s_nas['CAB'] = s_nas['CAB'].str.split('.').str[-1]
+s_nas['SELISIH'] = abs(s_nas['SELISIH'])
+
+cn_nas['MONTH'] = cn_nas['MONTH'].replace({'Jan':'January','Feb':'February','Mar':'March','Apr':'April','Jun':'June','Jul':'July','Aug':'August','Sep':'September'})
+cn_nas['CAB'] = cn_nas['CAB'].str.extract(r'\((.*?)\)')[0].values
+cn_nas['CANCEL NOTA'] = abs(cn_nas['CANCEL NOTA'])
             
 all_cab_selisih = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().unique().tolist()+['All'],default=['All'])
 all_cab_selisih = list(all_cab_selisih)
