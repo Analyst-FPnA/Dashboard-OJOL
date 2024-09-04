@@ -259,7 +259,6 @@ st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True)
 
 df_snas = df_pic1.groupby(['MONTH'])[['SELISIH']].sum().reset_index()
 df_snas['SELISIH NASIONAL'] = 0
-df_snas
 
 for b in df_snas['MONTH']:
     df_snas.loc[df_snas[df_snas['MONTH']==b].index,'SELISIH NASIONAL'] = s_nas[(s_nas['MONTH']==b)&~(s_nas['CAB'].isin(df_pic1[(df_pic1['MONTH']==b)]['CAB'].values))]['SELISIH'].sum()
