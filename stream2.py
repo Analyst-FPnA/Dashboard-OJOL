@@ -265,7 +265,7 @@ for b in df_snas['MONTH']:
 
 df_snas['%_SELISIH'] =df_snas['SELISIH']/(df_snas['SELISIH'] + df_snas['SELISIH NASIONAL'])
 df_snas['%_SELISIH NASIONAL'] = df_snas['SELISIH NASIONAL']/(df_snas['SELISIH'] + df_snas['SELISIH NASIONAL'])
-st.dataframe(df_snas)
+create_stylish_line_plot(df_snas, 'MONTH', '%_SELISIH', '%_SELISIH NASIONAL', title="", x_label="Month", y_label="Percentage")
 
 
 if 'All' in all_cab_selisih:
