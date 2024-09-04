@@ -233,7 +233,7 @@ df_pic = df_pic[~(df_pic['value'].isna())].rename(columns={'value':'SELISIH'})
 df_pic2 = df_pic2.merge(s_nas,how='left').fillna(0).drop(columns='value')
 
 df_pic = pd.concat([df_pic,df_pic2],ignore_index=True).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
-df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
+#df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
 def highlight_cells(x, df_pic2.drop(columns=['NAMA PIC','SELISIH'])):
     # Membuat DataFrame kosong dengan warna default (tidak ada warna)
