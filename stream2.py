@@ -264,7 +264,28 @@ df_snas['%_SELISIH'] =df_snas['SELISIH']/(df_snas['SELISIH'] + df_snas['SELISIH 
 df_snas['%_SELISIH NASIONAL'] = df_snas['SELISIH NASIONAL']/(df_snas['SELISIH'] + df_snas['SELISIH NASIONAL'])
 df_snas['MONTH'] = pd.Categorical(df_snas['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
 df_snas = df_snas.sort_values(['MONTH'])
-create_stylish_line_plot(df_snas, 'MONTH', '%_SELISIH', '%_SELISIH NASIONAL', title="SELISIH vs SELISIH NASIONAL", x_label="Month", y_label="Percentage")
+st.markdown("### SELISIH BREAKDOWN vs SELISIH NASIONAL")
+create_stylish_line_plot(df_snas, 'MONTH', '%_SELISIH', '%_SELISIH NASIONAL', title="", x_label="Month", y_label="Percentage")
+
+df_cn = df_breakdown[df_breakdown['Kategori']=='CANCEL NOTA'].groupby(['MONTH','CAB'])[df_breakdown.columns[-5:]].sum().sum(axis=1).reset_index().rename(columns={0:'CANCEL NOTA'})
+df_cn['MONTH'] = pd.Categorical(df_cn['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
+df_cn = df_cn.sort_values('MONTH')
+df_cn['CANCEL NOTA'] = abs(df_cn['CANCEL NOTA'])
+df_cn = df_breakdown.groupby(['MONTH','CAB'])[['Kategori']].count().reset_index().drop(columns='Kategori').merge(df_cn,how='left').fillna(0)
+
+df_cnnas = df_cn.groupby(['MONTH'])[['CANCEL NOTA']].sum().reset_index()
+df_cnnas['CANCEL NOTA NASIONAL'] = 0
+df_cnnas
+
+for b in df_cnnas['MONTH']:
+    df_cnnas.loc[df_cnnas[df_cnnas['MONTH']==b].index,'CANCEL NOTA NASIONAL'] = cn_nas[(cn_nas['MONTH']==b)&~(cn_nas['CAB'].isin(df_pic1[(df_pic1['MONTH']==b)]['CAB'].values))]['CANCEL NOTA'].sum()
+
+df_cnnas['%_CANCEL NOTA'] =df_cnnas['CANCEL NOTA']/(df_cnnas['CANCEL NOTA'] + df_cnnas['CANCEL NOTA NASIONAL'])
+df_cnnas['%_CANCEL NOTA NASIONAL'] = df_cnnas['CANCEL NOTA NASIONAL']/(df_cnnas['CANCEL NOTA'] + df_cnnas['CANCEL NOTA NASIONAL'])
+df_cnnas['MONTH'] = pd.Categorical(df_cnnas['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
+df_cnnas = df_cnnas.sort_values(['MONTH'])
+st.markdown("### CANCEL NOTA BREAKDOWN vs CANCEL NOTA NASIONAL")
+create_stylish_line_plot(df_cnnas, 'MONTH', '%_CANCEL NOTA', '%_CANCEL NOTA NASIONAL', title="", x_label="Month", y_label="Percentage")
 
 all_cab_selisih = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().unique().tolist()+['All'],default=['All'])
 all_cab_selisih = list(all_cab_selisih)
@@ -279,7 +300,8 @@ if 'All' in all_cab_selisih:
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
     df_selisih = df_selisih.dropna(axis=0,subset=df_selisih.columns[1:])
-    create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="SELISIH vs CANCEL NOTA", x_label="Month", y_label="Percentage")
+    st.markdown("### SELISIH BREAKDOWN vs CANCEL NOTA BREAKDOWN")
+    create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
     df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).applymap(format_number)
     st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
 else:
@@ -293,7 +315,8 @@ else:
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
     df_selisih = df_selisih.dropna(axis=0,subset=df_selisih.columns[1:])
-    create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="SELISIH vs CANCEL NOTA", x_label="Month", y_label="Percentage")
+    st.markdown("### SELISIH BREAKDOWN vs CANCEL NOTA BREAKDOWN")
+    create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
     df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).dropna(axis=1, how='all').applymap(format_number)
     st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
     
