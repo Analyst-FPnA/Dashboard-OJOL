@@ -234,6 +234,25 @@ df_pic2 = df_pic2.merge(s_nas,how='left').fillna(0).drop(columns='value')
 
 df_pic = pd.concat([df_pic,df_pic2],ignore_index=True).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
 df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
+
+def highlight_cells(x, df_pic2.drop(columns=['NAMA PIC','SELISIH'])):
+    # Membuat DataFrame kosong dengan warna default (tidak ada warna)
+    df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
+    
+    # Iterasi melalui highlight_info untuk mengisi DataFrame styles dengan warna
+    for idx, row in highlight_info.iterrows():
+        # Menentukan warna untuk sel yang dipilih
+        row_index = row['CAB']
+        col_name = row['MONTH']
+        
+        # Memeriksa apakah row_index dan col_name ada di DataFrame
+        if row_index in df_styles.index and col_name in df_styles.columns:
+            df_styles.at[row_index, col_name] = 'background-color: yellow;'
+    
+    return df_styles
+    
+styled_pivot_df = pivot_df.style.apply(highlight_cells, highlight_info=df_pic2.drop(columns=['NAMA PIC','SELISIH']), axis=None)
+
 st.dataframe(df_pic, use_container_width=True, hide_index=True) 
 
 if 'All' in all_cab_selisih:
