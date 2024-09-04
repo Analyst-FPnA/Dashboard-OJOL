@@ -229,10 +229,10 @@ df_pic = df_pic.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH')
 df_pic = df_pic.melt(id_vars=['index','NAMA PIC','CAB'])
 
 df_pic2 = df_pic[(df_pic['value'].isna())]
-df_pic = df_pic[~(df_pic['value'].isna())].rename(columns={'value':'SELISIH'})
+df_pic1 = df_pic[~(df_pic['value'].isna())].rename(columns={'value':'SELISIH'})
 df_pic2 = df_pic2.merge(s_nas,how='left').fillna(0).drop(columns='value')
 
-df_pic = pd.concat([df_pic,df_pic2],ignore_index=True)
+df_pic = pd.concat([df_pic1,df_pic2],ignore_index=True)
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
 #df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
@@ -256,6 +256,18 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
 styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None).set_properties(**{'color': 'black'})
 
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
+
+df_snas = df_pic1.groupby(['MONTH'])[['SELISIH']].sum().reset_index()
+df_snas['SELISIH NASIONAL'] = 0
+df_snas
+
+for b in df_snas['MONTH']:
+    df_snas.loc[df_snas[df_snas['MONTH']==b].index,'SELISIH NASIONAL'] = s_nas[(s_nas['MONTH']==b)&~(s_nas['CAB'].isin(df_pic1[(df_pic1['MONTH']==b)]['CAB'].values))]['SELISIH'].sum()
+
+df_snas['%_SELISIH'] =df_snas['SELISIH']/(df_snas['SELISIH'] + df_snas['SELISIH NASIONAL'])
+df_snas['%_SELISIH NASIONAL'] = df_snas['SELISIH NASIONAL']/(df_snas['SELISIH'] + df_snas['SELISIH NASIONAL'])
+st.dataframe(df_snas)
+
 
 if 'All' in all_cab_selisih:
     df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
