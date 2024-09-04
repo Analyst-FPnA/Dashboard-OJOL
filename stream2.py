@@ -172,9 +172,6 @@ s_nas['SELISIH'] = abs(s_nas['SELISIH'])
 cn_nas['MONTH'] = cn_nas['MONTH'].replace({'Jan':'January','Feb':'February','Mar':'March','Apr':'April','Jun':'June','Jul':'July','Aug':'August','Sep':'September'})
 cn_nas['CAB'] = cn_nas['CAB'].str.extract(r'\((.*?)\)')[0].values
 cn_nas['CANCEL NOTA'] = abs(cn_nas['CANCEL NOTA'])
-            
-all_cab_selisih = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().unique().tolist()+['All'],default=['All'])
-all_cab_selisih = list(all_cab_selisih)
 
 def highlight_last_row(x):
     font_color = 'color: white;'
@@ -265,8 +262,10 @@ for b in df_snas['MONTH']:
 
 df_snas['%_SELISIH'] =df_snas['SELISIH']/(df_snas['SELISIH'] + df_snas['SELISIH NASIONAL'])
 df_snas['%_SELISIH NASIONAL'] = df_snas['SELISIH NASIONAL']/(df_snas['SELISIH'] + df_snas['SELISIH NASIONAL'])
-create_stylish_line_plot(df_snas, 'MONTH', '%_SELISIH', '%_SELISIH NASIONAL', title="", x_label="Month", y_label="Percentage")
+create_stylish_line_plot(df_snas, 'MONTH', '%_SELISIH', '%_SELISIH NASIONAL', title="SELISIH vs SELISIH NASIONAL", x_label="Month", y_label="Percentage")
 
+all_cab_selisih = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().unique().tolist()+['All'],default=['All'])
+all_cab_selisih = list(all_cab_selisih)
 
 if 'All' in all_cab_selisih:
     df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
@@ -278,7 +277,7 @@ if 'All' in all_cab_selisih:
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
     df_selisih = df_selisih.dropna(axis=0,subset=df_selisih.columns[1:])
-    create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
+    create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="SELISIH vs CANCEL NOTA", x_label="Month", y_label="Percentage")
     df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).applymap(format_number)
     st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
 else:
@@ -292,7 +291,7 @@ else:
     df_selisih['%_SELISIH'] = df_selisih['SELISIH']/df_selisih['TOTAL']
     df_selisih = df_selisih.groupby(['MONTH'])[df_selisih.columns[2:]].mean().reset_index()
     df_selisih = df_selisih.dropna(axis=0,subset=df_selisih.columns[1:])
-    create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="", x_label="Month", y_label="Percentage")
+    create_stylish_line_plot(df_selisih, 'MONTH', '%_SELISIH', '%_CANCEL NOTA', title="SELISIH vs CANCEL NOTA", x_label="Month", y_label="Percentage")
     df_selisih2 = pd.DataFrame(df_selisih.iloc[:,:-7].T.reset_index().values[1:], columns=df_selisih.iloc[:,:-7].T.reset_index().values[0]).dropna(axis=1, how='all').applymap(format_number)
     st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
     
