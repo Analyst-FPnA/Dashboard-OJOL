@@ -165,7 +165,7 @@ if 'df_merge' not in locals():
             s_nas = pd.read_excel(f,sheet_name='SELISIH')
             cn_nas = pd.read_excel(f,sheet_name='CANCELNOTA')
 
-s_nas['MONTH'] = s_nas['MONTH'].replace({'JAN':'January','FEB':'February','MAR':'March','APR':'April','JUN':'June','JUL':'July','AUG':'August','SEP':'September'})
+s_nas['MONTH'] = s_nas['MONTH'].replace({'JAN':'January','FEB':'February','MAR':'March','APR':'April','MAY':'May','JUN':'June','JUL':'July','AUG':'August','SEP':'September'})
 s_nas['CAB'] = s_nas['CAB'].str.split('.').str[-1]
 s_nas['SELISIH'] = abs(s_nas['SELISIH'])
 
