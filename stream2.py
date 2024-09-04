@@ -160,8 +160,8 @@ if 'df_merge' not in locals():
         with z.open('breakdown_clean.csv') as f:
             df_breakdown = pd.read_csv(f)
         with z.open('CNS_NASIONAL.xlsx') as f:
-            s_nas = pd.read_excel('CNS_NASIONAL.xlsx',sheet_name='SELISIH')
-            cn_nas = pd.read_excel('CNS_NASIONAL.xlsx',sheet_name='CANCELNOTA')
+            s_nas = pd.read_excel(f,sheet_name='SELISIH')
+            cn_nas = pd.read_excel(f,sheet_name='CANCELNOTA')
 
 s_nas['MONTH'] = s_nas['MONTH'].replace({'JAN':'January','FEB':'February','MAR':'March','APR':'April','JUN':'June','JUL':'July','AUG':'August','SEP':'September'})
 s_nas['CAB'] = s_nas['CAB'].str.split('.').str[-1]
