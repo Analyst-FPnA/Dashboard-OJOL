@@ -232,7 +232,9 @@ df_pic2 = df_pic[(df_pic['value'].isna())]
 df_pic = df_pic[~(df_pic['value'].isna())].rename(columns={'value':'SELISIH'})
 df_pic2 = df_pic2.merge(s_nas,how='left').fillna(0).drop(columns='value')
 
-df_pic = pd.concat([df_pic,df_pic2],ignore_index=True).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
+df_pic = pd.concat([df_pic,df_pic2],ignore_index=True)
+df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
+df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
 #df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
 def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH'])):
