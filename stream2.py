@@ -263,7 +263,7 @@ for b in df_snas['MONTH']:
 df_snas['%_SELISIH'] =df_snas['SELISIH']/(df_snas['SELISIH'] + df_snas['SELISIH NASIONAL'])
 df_snas['%_SELISIH NASIONAL'] = df_snas['SELISIH NASIONAL']/(df_snas['SELISIH'] + df_snas['SELISIH NASIONAL'])
 df_snas['MONTH'] = pd.Categorical(df_snas['MONTH'], categories=['January','February','March','April','May','June','July'], ordered=True)
-df_snas = df_snas.sort_values(['MONTH']).
+df_snas = df_snas.sort_values(['MONTH'])
 create_stylish_line_plot(df_snas, 'MONTH', '%_SELISIH', '%_SELISIH NASIONAL', title="SELISIH vs SELISIH NASIONAL", x_label="Month", y_label="Percentage")
 
 all_cab_selisih = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().unique().tolist()+['All'],default=['All'])
