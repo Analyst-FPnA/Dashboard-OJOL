@@ -164,10 +164,15 @@ if 'df_merge' not in locals():
         with z.open('CNS_NASIONAL.xlsx') as f:
             s_nas = pd.read_excel(f,sheet_name='SELISIH')
             cn_nas = pd.read_excel(f,sheet_name='CANCELNOTA')
+            oms_nas = pd.read_excel(f,sheet_name='OMSET')
 
 s_nas['MONTH'] = s_nas['MONTH'].replace({'JAN':'January','FEB':'February','MAR':'March','APR':'April','MAY':'May','JUN':'June','JUL':'July','AUG':'August','SEP':'September'})
 s_nas['CAB'] = s_nas['CAB'].str.split('.').str[-1]
 s_nas['SELISIH'] = abs(s_nas['SELISIH'])
+
+oms_nas['MONTH'] = oms_nas['MONTH'].replace({'JAN':'January','FEB':'February','MAR':'March','APR':'April','MAY':'May','JUN':'June','JUL':'July','AUG':'August','SEP':'September'})
+oms_nas['CAB'] = oms_nas['CAB'].str.split('.').str[-1]
+oms_nas['OMSET'] = abs(oms_nas['OMSET'])
 
 cn_nas['MONTH'] = cn_nas['MONTH'].replace({'Jan':'January','Feb':'February','Mar':'March','Apr':'April','Jun':'June','Jul':'July','Aug':'August','Sep':'September'})
 cn_nas['CAB'] = cn_nas['CAB'].str.extract(r'\((.*?)\)')[0].values
@@ -208,6 +213,21 @@ kat_diperiksa = ['Tidak Ada Invoice QRIS',
                  'Bayar 1 Kali - Banyak Struk (QRIS)',
                  'Bayar Lebih dari 1 Kali - Banyak Struk (QRIS)',
                  'Kurang Input (Ojol)']
+df_pic_oms = oms_nas.rename(columns={'BULAN':'MONTH'}).groupby(['MONTH','CAB'])[['OMSET']].sum().reset_index()
+df_pic_oms['MONTH'] = pd.Categorical(df_pic_oms['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+df_pic_oms = df_pic_oms.sort_values('MONTH')
+
+pic['BULAN'] = pd.Categorical(pic['BULAN'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+pic = pic.sort_values('BULAN')
+pic = pic.groupby('NAMA RESTO')[['BULAN']].max().reset_index().merge(pic).drop(columns='BULAN')
+df_pic_oms = df_pic_oms.merge(pic,how='left',left_on=['CAB'],right_on =['NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB'])[['OMSET']].sum().reset_index()
+df_pic_oms['OMSET'] = abs(df_pic_oms['OMSET'])
+#df_pic_oms = pd.concat([df_pic_oms,df_pic_oms2],ignore_index=True)
+df_pic_oms = df_pic_oms[df_pic_oms['OMSET']!=0]
+df_pic_oms['MONTH'] = pd.Categorical(df_pic_oms['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+df_pic_oms = df_pic_oms.sort_values(['NAMA PIC','MONTH'])
+df_pic_oms = df_pic_oms.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='OMSET').reset_index().reset_index()
+
 
 df_pic = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby(['MONTH','CAB'])[df_breakdown.columns[-5:]].sum().sum(axis=1).reset_index().rename(columns={0:'SELISIH'})
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
@@ -249,10 +269,13 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
             df_styles.at[row_index, col_name] = 'background-color: yellow;'
     
     return df_styles
-    
+styled_pivot_df = df_pic_oms.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None).set_properties(**{'color': 'black'})
+
+st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
 styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None).set_properties(**{'color': 'black'})
 
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
+
 
 df_snas = df_pic1.groupby(['MONTH'])[['SELISIH']].sum().reset_index()
 df_snas['SELISIH NASIONAL'] = 0
