@@ -233,9 +233,6 @@ df_pic = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_dipe
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
 df_pic = df_pic.sort_values('MONTH')
 
-pic['BULAN'] = pd.Categorical(pic['BULAN'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
-pic = pic.sort_values('BULAN')
-pic = pic.groupby('NAMA RESTO')[['BULAN']].max().reset_index().merge(pic).drop(columns='BULAN')
 df_pic = df_pic.merge(pic,how='left',left_on=['CAB'],right_on =['NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB'])[['SELISIH']].sum().reset_index()
 df_pic['SELISIH'] = abs(df_pic['SELISIH'])
 #df_pic = pd.concat([df_pic,df_pic2],ignore_index=True)
