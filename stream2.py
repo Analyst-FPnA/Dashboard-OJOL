@@ -213,6 +213,7 @@ kat_diperiksa = ['Tidak Ada Invoice QRIS',
                  'Bayar 1 Kali - Banyak Struk (QRIS)',
                  'Bayar Lebih dari 1 Kali - Banyak Struk (QRIS)',
                  'Kurang Input (Ojol)']
+
 df_pic_oms = oms_nas.rename(columns={'BULAN':'MONTH'}).groupby(['MONTH','CAB'])[['OMSET']].sum().reset_index()
 df_pic_oms['MONTH'] = pd.Categorical(df_pic_oms['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
 df_pic_oms = df_pic_oms.sort_values('MONTH')
@@ -266,6 +267,7 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
             df_styles.at[row_index, col_name] = 'background-color: yellow;'
     
     return df_styles
+    
 styled_pivot_df = df_pic_oms.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
