@@ -271,7 +271,7 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
 styled_pivot_df = df_pic_oms.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 st.markdown('### OMSET')
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
-styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None).set_properties(**{'color': 'black'})
+styled_pivot_df = df_pic.drop(columns='index').style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None).set_properties(**{'color': 'black'})
 st.markdown('### SELISIH')
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
 
