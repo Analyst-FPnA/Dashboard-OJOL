@@ -215,30 +215,30 @@ kat_diperiksa = ['Tidak Ada Invoice QRIS',
                  'Kurang Input (Ojol)']
 
 df_pic_oms = oms_nas.rename(columns={'BULAN':'MONTH'}).groupby(['MONTH','CAB'])[['OMSET']].sum().reset_index()
-df_pic_oms['MONTH'] = pd.Categorical(df_pic_oms['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+df_pic_oms['MONTH'] = pd.Categorical(df_pic_oms['MONTH'], categories=['January','February','March','April','May','June','July','August','September'], ordered=True)
 df_pic_oms = df_pic_oms.sort_values('MONTH')
 
-pic['BULAN'] = pd.Categorical(pic['BULAN'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+pic['BULAN'] = pd.Categorical(pic['BULAN'], categories=['January','February','March','April','May','June','July','August','September'], ordered=True)
 pic = pic.sort_values('BULAN')
 pic = pic.groupby('NAMA RESTO')[['BULAN']].max().reset_index().merge(pic).drop(columns='BULAN')
 df_pic_oms = df_pic_oms.merge(pic,how='left',left_on=['CAB'],right_on =['NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB'])[['OMSET']].sum().reset_index()
 df_pic_oms['OMSET'] = abs(df_pic_oms['OMSET'])
 #df_pic_oms = pd.concat([df_pic_oms,df_pic_oms2],ignore_index=True)
 df_pic_oms = df_pic_oms[df_pic_oms['OMSET']!=0]
-df_pic_oms['MONTH'] = pd.Categorical(df_pic_oms['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+df_pic_oms['MONTH'] = pd.Categorical(df_pic_oms['MONTH'], categories=['January','February','March','April','May','June','July','August','September'], ordered=True)
 df_pic_oms = df_pic_oms.sort_values(['NAMA PIC','MONTH'])
 df_pic_oms = df_pic_oms.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='OMSET').reset_index().reset_index()
 
 
 df_pic = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby(['MONTH','CAB'])[df_breakdown.columns[-5:]].sum().sum(axis=1).reset_index().rename(columns={0:'SELISIH'})
-df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July','August','September'], ordered=True)
 df_pic = df_pic.sort_values('MONTH')
 
 df_pic = df_pic.merge(pic,how='left',left_on=['CAB'],right_on =['NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB'])[['SELISIH']].sum().reset_index()
 df_pic['SELISIH'] = abs(df_pic['SELISIH'])
 #df_pic = pd.concat([df_pic,df_pic2],ignore_index=True)
 df_pic = df_pic[df_pic['SELISIH']!=0]
-df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July','August','September'], ordered=True)
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH'])
 df_pic = df_pic.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index().reset_index()
 df_pic = df_pic.melt(id_vars=['index','NAMA PIC','CAB'])
@@ -248,7 +248,7 @@ df_pic1 = df_pic[~(df_pic['value'].isna())].rename(columns={'value':'SELISIH'})
 df_pic2 = df_pic2.merge(s_nas,how='left').fillna(0).drop(columns='value')
 
 df_pic = pd.concat([df_pic1,df_pic2],ignore_index=True)
-df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July','August','September'], ordered=True)
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
 #df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
@@ -284,13 +284,13 @@ for b in df_snas['MONTH']:
 
 df_snas['%_SELISIH'] =df_snas['SELISIH']/(df_snas['SELISIH'] + df_snas['SELISIH NASIONAL'])
 df_snas['%_SELISIH NASIONAL'] = df_snas['SELISIH NASIONAL']/(df_snas['SELISIH'] + df_snas['SELISIH NASIONAL'])
-df_snas['MONTH'] = pd.Categorical(df_snas['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+df_snas['MONTH'] = pd.Categorical(df_snas['MONTH'], categories=['January','February','March','April','May','June','July','August','September'], ordered=True)
 df_snas = df_snas.sort_values(['MONTH'])
 st.markdown("#### SELISIH BREAKDOWN vs SELISIH NASIONAL")
 create_stylish_line_plot(df_snas, 'MONTH', '%_SELISIH', '%_SELISIH NASIONAL', title="", x_label="Month", y_label="Percentage")
 
 df_cn = df_breakdown[df_breakdown['Kategori']=='CANCEL NOTA'].groupby(['MONTH','CAB'])[df_breakdown.columns[-5:]].sum().sum(axis=1).reset_index().rename(columns={0:'CANCEL NOTA'})
-df_cn['MONTH'] = pd.Categorical(df_cn['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+df_cn['MONTH'] = pd.Categorical(df_cn['MONTH'], categories=['January','February','March','April','May','June','July','August','September'], ordered=True)
 df_cn = df_cn.sort_values('MONTH')
 df_cn['CANCEL NOTA'] = abs(df_cn['CANCEL NOTA'])
 df_cn = df_breakdown.groupby(['MONTH','CAB'])[['Kategori']].count().reset_index().drop(columns='Kategori').merge(df_cn,how='left').fillna(0)
@@ -303,7 +303,7 @@ for b in df_cnnas['MONTH']:
 
 df_cnnas['%_CANCEL NOTA'] =df_cnnas['CANCEL NOTA']/(df_cnnas['CANCEL NOTA'] + df_cnnas['CANCEL NOTA NASIONAL'])
 df_cnnas['%_CANCEL NOTA NASIONAL'] = df_cnnas['CANCEL NOTA NASIONAL']/(df_cnnas['CANCEL NOTA'] + df_cnnas['CANCEL NOTA NASIONAL'])
-df_cnnas['MONTH'] = pd.Categorical(df_cnnas['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+df_cnnas['MONTH'] = pd.Categorical(df_cnnas['MONTH'], categories=['January','February','March','April','May','June','July','August','September'], ordered=True)
 df_cnnas = df_cnnas.sort_values(['MONTH'])
 st.markdown("#### CANCEL NOTA BREAKDOWN vs CANCEL NOTA NASIONAL")
 create_stylish_line_plot(df_cnnas, 'MONTH', '%_CANCEL NOTA', '%_CANCEL NOTA NASIONAL', title="", x_label="Month", y_label="Percentage")
@@ -312,7 +312,7 @@ all_cab_selisih = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().u
 all_cab_selisih = list(all_cab_selisih)
 
 if 'All' in all_cab_selisih:
-    df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+    df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July','August',September'], ordered=True)
     df_selisih = df_selisih.sort_values('MONTH')
     df_selisih['%_CANCEL NOTA'] = df_selisih['CANCEL NOTA']/df_selisih['TOTAL']
     df_selisih['%_DOUBLE INPUT'] = df_selisih['DOUBLE INPUT']/df_selisih['TOTAL']
@@ -327,7 +327,7 @@ if 'All' in all_cab_selisih:
     st.dataframe(df_selisih2, use_container_width=True, hide_index=True)
 else:
     df_selisih = df_selisih[df_selisih['CAB'].isin(all_cab_selisih)]
-    df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July','August'], ordered=True)
+    df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July','August','September'], ordered=True)
     df_selisih = df_selisih.sort_values('MONTH')
     df_selisih['%_CANCEL NOTA'] = df_selisih['CANCEL NOTA']/df_selisih['TOTAL']
     df_selisih['%_DOUBLE INPUT'] = df_selisih['DOUBLE INPUT']/df_selisih['TOTAL']
