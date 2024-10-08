@@ -312,7 +312,7 @@ all_cab_selisih = st.multiselect('Pilih Cabang', list_cab['CAB'].sort_values().u
 all_cab_selisih = list(all_cab_selisih)
 
 if 'All' in all_cab_selisih:
-    df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July','August',September'], ordered=True)
+    df_selisih['MONTH'] = pd.Categorical(df_selisih['MONTH'], categories=['January','February','March','April','May','June','July','August','September'], ordered=True)
     df_selisih = df_selisih.sort_values('MONTH')
     df_selisih['%_CANCEL NOTA'] = df_selisih['CANCEL NOTA']/df_selisih['TOTAL']
     df_selisih['%_DOUBLE INPUT'] = df_selisih['DOUBLE INPUT']/df_selisih['TOTAL']
