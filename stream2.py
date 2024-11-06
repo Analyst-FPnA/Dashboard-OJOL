@@ -175,7 +175,7 @@ oms_nas['CAB'] = oms_nas['CAB'].str.split('.').str[-1]
 oms_nas['OMSET'] = abs(oms_nas['OMSET'])
 
 cn_nas['MONTH'] = cn_nas['MONTH'].replace({'Jan':'January','Feb':'February','Mar':'March','Apr':'April','Jun':'June','Jul':'July','Aug':'August','Sep':'September','Oct':'October'})
-cn_nas['CAB'] = cn_nas['CAB'].str.extract(r'\((.*?)\)')[0].values
+cn_nas['CAB'] = cn_nas['CAB'].str.extract(r'\((.*?)\)')[0].fillna(cn_nas['CAB'])
 cn_nas['CANCEL NOTA'] = abs(cn_nas['CANCEL NOTA'])
 
 def highlight_last_row(x):
