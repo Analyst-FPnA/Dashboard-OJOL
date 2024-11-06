@@ -220,8 +220,8 @@ df_pic_oms = df_pic_oms.sort_values('MONTH')
 
 pic['BULAN'] = pd.Categorical(pic['BULAN'], categories=['January','February','March','April','May','June','July','August','September','October'], ordered=True)
 pic = pic.sort_values('BULAN')
-pic = pic.groupby('NAMA RESTO')[['BULAN']].max().reset_index().merge(pic).drop(columns='BULAN')
-df_pic_oms = df_pic_oms.merge(pic,how='left',left_on=['CAB'],right_on =['NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB'])[['OMSET']].sum().reset_index()
+pic2 = pic.groupby('NAMA RESTO')[['BULAN']].max().reset_index().merge(pic).drop(columns='BULAN')
+df_pic_oms = df_pic_oms.merge(pic2,how='left',left_on=['CAB'],right_on =['NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB'])[['OMSET']].sum().reset_index()
 df_pic_oms['OMSET'] = abs(df_pic_oms['OMSET'])
 #df_pic_oms = pd.concat([df_pic_oms,df_pic_oms2],ignore_index=True)
 df_pic_oms = df_pic_oms[df_pic_oms['OMSET']!=0]
@@ -229,12 +229,11 @@ df_pic_oms['MONTH'] = pd.Categorical(df_pic_oms['MONTH'], categories=['January',
 df_pic_oms = df_pic_oms.sort_values(['NAMA PIC','MONTH'])
 df_pic_oms = df_pic_oms.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='OMSET').reset_index().reset_index()
 
-
 df_pic = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby(['MONTH','CAB'])[df_breakdown.columns[-5:]].sum().sum(axis=1).reset_index().rename(columns={0:'SELISIH'})
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July','August','September','October'], ordered=True)
 df_pic = df_pic.sort_values('MONTH')
 
-df_pic = df_pic.merge(pic,how='left',left_on=['CAB'],right_on =['NAMA RESTO']).groupby(['NAMA PIC','MONTH','CAB'])[['SELISIH']].sum().reset_index()
+df_pic = df_pic.merge(pic,how='left',left_on=['CAB','MONTH'],right_on =['NAMA RESTO','BULAN']).groupby(['NAMA PIC','MONTH','CAB'])[['SELISIH']].sum().reset_index()
 df_pic['SELISIH'] = abs(df_pic['SELISIH'])
 #df_pic = pd.concat([df_pic,df_pic2],ignore_index=True)
 df_pic = df_pic[df_pic['SELISIH']!=0]
