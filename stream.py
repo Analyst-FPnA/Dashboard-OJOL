@@ -151,6 +151,43 @@ file_id = '1SPwhedLNXLpsqXL3TsoIkxFEzmqK2P5y'
 dest_path = f'downloaded_file.zip'
 download_file_from_google_drive(file_id, dest_path)
 
+
+def highlight_last_row(x):
+    font_color = 'color: white;'
+    background_color = 'background-color: #FF4B4B;'  # Warna yang ingin digunakan
+    df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
+    
+    # Memberikan warna khusus pada baris terakhir yang bernama 'SELISIH'
+    df_styles.iloc[-1, :] = font_color + background_color
+
+    return df_styles
+               
+def format_number(x):
+    if x==0:
+        return ''
+    if isinstance(x, (int, float)):
+        return "{:,.0f}".format(x)
+    return x
+
+kat_pengurang = ['Invoice Beda Hari',
+                 'Transaksi Kemarin',
+                 'Selisih IT',
+                 'Promo Marketing/Adjustment',
+                 'Cancel Nota',
+                 'Tidak Ada Transaksi di Web',
+                 'Selisih Lebih Bayar QRIS',
+                 'Selisih Lebih Bayar Ojol',
+                 'Salah Slot Pembayaran']
+kat_diperiksa = ['Tidak Ada Invoice QRIS',
+                 'Tidak Ada Invoice Ojol',
+                 'Double Input',
+                 'Selisih Kurang Bayar QRIS',
+                 'Selisih Kurang Bayar Ojol',
+                 'Bayar Lebih dari 1 Kali - 1 Struk (QRIS)',
+                 'Bayar 1 Kali - Banyak Struk (QRIS)',
+                 'Bayar Lebih dari 1 Kali - Banyak Struk (QRIS)',
+                 'Kurang Input (Ojol)']
+
 if 'df_merge' not in locals():
     with zipfile.ZipFile(f'downloaded_file.zip', 'r') as z:
         with z.open('df_selisih_agustus.csv') as f:
@@ -174,4 +211,47 @@ s_nas['SELISIH'] = abs(s_nas['SELISIH'])
 
 cn_nas['CAB'] = cn_nas['CAB'].str.extract(r'\((.*?)\)')[0].fillna(cn_nas['CAB'])
 cn_nas['CANCEL NOTA'] = abs(cn_nas['CANCEL NOTA'])
+pic['BULAN'] = pd.Categorical(pic['BULAN'], categories=['January','February','March','April','May','June','July','August','September','October'], ordered=True)
+pic = pic.sort_values('BULAN')
 
+df_pic = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby(['MONTH','CAB'])[df_breakdown.columns[-5:]].sum().sum(axis=1).reset_index().rename(columns={0:'SELISIH'})
+
+df_pic = df_pic.merge(pic,how='left',left_on=['CAB','MONTH'],right_on =['NAMA RESTO','BULAN']).groupby(['NAMA PIC','MONTH','CAB'])[['SELISIH']].sum().reset_index()
+df_pic['SELISIH'] = abs(df_pic['SELISIH'])
+#df_pic = pd.concat([df_pic,df_pic2],ignore_index=True)
+df_pic = df_pic[df_pic['SELISIH']!=0]
+
+df_pic['Tanggal'] = pd.to_datetime(df_pic['MONTH'])
+df_pic['MONTH'] = pd.Categorical(df_all['Month']df_pic['MONTH'], categories=df_pic.sort_values('Tanggal')['MONTH'].unique(), ordered=True)
+df_pic = df_pic.sort_values(['NAMA PIC','MONTH'])
+df_pic = df_pic.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index().reset_index()
+df_pic = df_pic.melt(id_vars=['index','NAMA PIC','CAB'])
+
+df_pic2 = df_pic[(df_pic['value'].isna())]
+df_pic1 = df_pic[~(df_pic['value'].isna())].rename(columns={'value':'SELISIH'})
+df_pic2 = df_pic2.merge(s_nas,how='left').fillna(0).drop(columns='value')
+
+df_pic = pd.concat([df_pic1,df_pic2],ignore_index=True)
+df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July','August','September','October'], ordered=True)
+df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
+#df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
+
+def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH'])):
+    # Membuat DataFrame kosong dengan warna default (tidak ada warna)
+    df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
+    
+    # Iterasi melalui highlight_info untuk mengisi DataFrame styles dengan warna
+    for idx, row in highlight_info.iterrows():
+        # Menentukan warna untuk sel yang dipilih
+        row_index = row['index']
+        col_name = row['MONTH']
+        
+        # Memeriksa apakah row_index dan col_name ada di DataFrame
+        if row_index in df_styles.index and col_name in df_styles.columns:
+            df_styles.at[row_index, col_name] = 'background-color: yellow;'
+    
+    return df_styles
+    
+styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None).set_properties(**{'color': 'black'})
+st.markdown('### SELISIH')
+st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
