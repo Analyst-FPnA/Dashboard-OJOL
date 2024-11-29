@@ -237,7 +237,41 @@ df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB']
 for idx, col in zip(df_pic2['index'], df_pic2['MONTH']):
     df_pic.at[idx, col] = f'🔴 {df_pic.at[idx, col]}'
 
-styled_pivot_df = df_pic.style.background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
-  
-st.dataframe(styled_pivot_df.to_html(escape=False), use_container_width=True, hide_index=True) 
+# DataFrame dengan angka float
+data = {
+    'Nama': ['Alice', 'Bob', 'Charlie', 'David'],
+    'Nilai': [85.5, 92.3, 78.4, 88.7],
+    'Usia': [25, 30, 35, 40]
+}
+df_pic = pd.DataFrame(data)
+
+# Mengonversi data ke float (pastikan data numerik bertipe float)
+df_pic['Nilai'] = df_pic['Nilai'].astype(float)
+df_pic['Usia'] = df_pic['Usia'].astype(float)
+
+# DataFrame referensi untuk cell yang ingin diberi simbol merah
+df_referensi = pd.DataFrame({
+    'Indeks': [1, 3],  # Baris ke-2 dan ke-4
+    'Kolom': ['Nilai', 'Nilai']  # Kolom 'Nilai' pada baris ke-2 dan ke-4
+})
+
+# Menyalin DataFrame asli untuk tampilan
+df_display = df_pic.copy()
+
+# 1. Tambahkan simbol merah 🔴 hanya untuk tampilan (tidak mengubah data asli)
+for idx, col in zip(df_referensi['Indeks'], df_referensi['Kolom']):
+    df_display.at[idx, col] = f'🔴 {df_display.at[idx, col]}'
+
+# 2. Menerapkan format tampilan accounting setelah menambahkan simbol
+df_styled = df_display.style.format({
+    'Nilai': '${:,.2f}',  # Format accounting dengan 2 desimal
+    'Usia': '{:,.0f}'      # Format angka bulat untuk Usia
+})
+
+# 3. Menerapkan gradient warna pada kolom 'Nilai' dan 'Usia' menggunakan cmap 'Reds' dan axis=1
+df_styled = df_styled.background_gradient(cmap='Reds', axis=1, subset=df_display.columns[1:])
+
+# Menampilkan DataFrame yang sudah di-styling dan ditambahkan simbol menggunakan Streamlit
+st.dataframe(df_styled)
+
 
