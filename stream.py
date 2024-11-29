@@ -234,7 +234,7 @@ df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=df_pic.sort_values(
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
 #df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
-styled_pivot_df = df_pic.style.format(lambda x: format_number(x)+"🔴").background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
+styled_pivot_df = df_pic.style.format(lambda x: f"{format_number(x)}🔴k").background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
 def add_red_symbol(val, row, col):
     # Menambahkan simbol merah di cell sesuai dengan indeks dan nama kolom yang ada di df_referensi
