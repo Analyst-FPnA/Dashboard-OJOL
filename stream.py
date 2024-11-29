@@ -238,7 +238,7 @@ df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB']
 styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
 for idx, col in zip(df_pic2['index'], df_pic2['MONTH']):
-    styled_pivot_df.data.iloc[idx, df_pic2.columns.get_loc(col)] = f'🔴 {styled_pivot_df.data.iloc[idx, df_pic2.columns.get_loc(col)]}'
+    styled_pivot_df.data.iloc[idx, col] = f'🔴 {styled_pivot_df.data.iloc[idx, col]}'
     
 st.dataframe(styled_pivot_df.to_html(escape=False), use_container_width=True, hide_index=True) 
 
