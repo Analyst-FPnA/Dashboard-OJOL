@@ -249,11 +249,11 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
         if row_index in df_styles.index and col_name in df_styles.columns:
             
             # Berikan warna latar belakang kuning pada cell yang dipilih
-            df_styles.at[row_index, col_name] = f"<u>{x.at[row_index, col_name]}</u>"
+            df_styles.at[row_index, col_name] = 'font-weight: bold;'
 
-    return df_styles.format(na_rep="", escape="html")
+    return df_styles
 
 
-styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None)
+styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).applymap(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None).set_properties(**{'color': 'black'})
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
 
