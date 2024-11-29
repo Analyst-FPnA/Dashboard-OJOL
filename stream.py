@@ -252,7 +252,7 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
 
     return df_styles
 
-for idx, col in zip(df_pic2['index'], df_pic['MONTH']):
+for idx, col in zip(df_pic2['index'], df_pic2['MONTH']):
     df_pic.at[idx, col] = f'🔴 {df_pic.at[idx, col]}'
     
 df_pic
