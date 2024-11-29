@@ -208,6 +208,7 @@ st.caption('Selisih atas kategori diperiksa')
 
 s_nas['CAB'] = s_nas['CAB'].str.split('.').str[-1]
 s_nas['SELISIH'] = abs(s_nas['SELISIH'])
+s_nas['MONTH'] = s_nas['MONTH'].dt.strftime('%B %Y')
 
 cn_nas['CAB'] = cn_nas['CAB'].str.extract(r'\((.*?)\)')[0].fillna(cn_nas['CAB'])
 cn_nas['CANCEL NOTA'] = abs(cn_nas['CANCEL NOTA'])
@@ -232,7 +233,7 @@ df_pic1 = df_pic[~(df_pic['value'].isna())].rename(columns={'value':'SELISIH'})
 df_pic2 = df_pic2.merge(s_nas,how='left').fillna(0).drop(columns='value')
 
 df_pic = pd.concat([df_pic1,df_pic2],ignore_index=True)
-df_pic['Tanggal'] = pd.to_datetime(df_pic['MONTH'])
+df_pic['Tanggal'] = pd.to_datetime(df_pic['MONTH'], format='%B %Y')
 df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=df_pic.sort_values('Tanggal')['MONTH'].unique(), ordered=True)
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
 #df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
