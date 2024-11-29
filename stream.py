@@ -238,5 +238,5 @@ styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gra
 
 for idx, col in zip(df_pic2['index'], df_pic2['MONTH']):
     styled_pivot_df.data.loc[idx, col] = f'🔴 {styled_pivot_df.data.loc[idx, col]}'
-styled_pivot_df
+styled_pivot_df.to_html(escape=False)
 #st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
