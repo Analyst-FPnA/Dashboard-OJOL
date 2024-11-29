@@ -248,12 +248,11 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
         # Memeriksa apakah row_index dan col_name ada di DataFrame
         if row_index in df_styles.index and col_name in df_styles.columns:
             # Berikan warna latar belakang kuning pada cell yang dipilih
-            df_styles.at[row_index, col_name] = '::before { content: "\\1F534"; color: red; padding-right: 5px; font-size: 16px; attr: x.at[row_index, col_name] }'
+            df_styles.at[row_index, col_name] = 'color: red; padding-right: 5px; font-size: 16px; attr: x.at[row_index, col_name] ❗}'
 
     return df_styles
 
 
-
 styled_pivot_df = df_pic.style.apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None)
-st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
+st.dataframe(styled_pivot_df.to_html(escape=False), use_container_width=True, hide_index=True) 
 
