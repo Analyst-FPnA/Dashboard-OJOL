@@ -261,7 +261,7 @@ def add_red_symbol(val, row, col):
 
 # Styling untuk menambahkan simbol merah pada cell tertentu
 def apply_red_symbol(row):
-    for col in df_main.columns:
+    for col in df_pic.columns[1:]:
         # Menambahkan simbol merah berdasarkan referensi
         row[col] = add_red_symbol(row[col], row, col)
     return row
