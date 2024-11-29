@@ -262,7 +262,7 @@ zip_condition = list(zip(df_pic2['index'], df_pic2['MONTH']))
 
 # Jika kamu ingin menambahkan gradien latar belakang atau format lainnya
 styled_pivot_df = styled_pivot_df.set_table_styles({
-    (row_index, col_name): {'props': [('content', '"🔴"')] }
+    (row_index, col_name): {'props': [('content', '2')] }
     for (row_index, col_name) in zip_condition
 })
 
