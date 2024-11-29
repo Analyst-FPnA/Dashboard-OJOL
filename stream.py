@@ -254,8 +254,8 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
             # Tambahkan ikon merah di belakang angka
             df_styled.at[row_index, col_name] = f"{original_value} 🔴"
     
-    return df_styled
+    return df_styled.format(na_rep="", escape="html")
 
 
-styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None).format(na_rep="", escape="html")
+styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None)
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
