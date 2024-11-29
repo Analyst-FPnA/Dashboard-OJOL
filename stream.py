@@ -252,7 +252,10 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
 
     return df_styles
 
-
-styled_pivot_df = df_pic.apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None)
-st.dataframe(styled_pivot_df.to_html(escape=False), use_container_width=True, hide_index=True) 
+for idx, col in zip(df_pic2['index'], df_pic['MONTH']):
+    df_pic.at[idx, col] = f'🔴 {df_pic.at[idx, col]}'
+    
+df_pic
+#styled_pivot_df = df_pic.applymap(lambda x: highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None)
+#st.dataframe(styled_pivot_df.to_html(escape=False), use_container_width=True, hide_index=True) 
 
