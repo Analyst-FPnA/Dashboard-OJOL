@@ -222,7 +222,7 @@ df_pic['SELISIH'] = abs(df_pic['SELISIH'])
 df_pic = df_pic[df_pic['SELISIH']!=0]
 
 df_pic['Tanggal'] = pd.to_datetime(df_pic['MONTH'])
-df_pic['MONTH'] = pd.Categorical(df_all['Month']df_pic['MONTH'], categories=df_pic.sort_values('Tanggal')['MONTH'].unique(), ordered=True)
+df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=df_pic.sort_values('Tanggal')['MONTH'].unique(), ordered=True)
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH'])
 df_pic = df_pic.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index().reset_index()
 df_pic = df_pic.melt(id_vars=['index','NAMA PIC','CAB'])
