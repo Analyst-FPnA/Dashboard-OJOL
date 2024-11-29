@@ -247,7 +247,7 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
         
         # Memeriksa apakah row_index dan col_name ada di DataFrame
         if row_index in df_styles.index and col_name in df_styles.columns:
-            x.at[row_index, col_name] = f"{x.at[row_index, col_name]} ❗"
+            df_styles.at[row_index, col_name] = f"{x.at[row_index, col_name]} ❗"
             
             # Berikan warna latar belakang kuning pada cell yang dipilih
             df_styles.at[row_index, col_name] = 'background-color: yellow;'
