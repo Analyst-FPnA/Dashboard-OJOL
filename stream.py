@@ -272,7 +272,7 @@ styled_pivot_df = styled_pivot_df.apply(
 cell_styles = [
     {
         'selector': f'td[data-colname="{col_name}"][data-rowindex="{row_index}"]',
-        'props': [('content', '"🔴"')]  # Menambahkan simbol 🔴 pada cell yang sesuai
+        'props': [('content', '"\U0001F534"')]  # Menambahkan simbol 🔴 pada cell yang sesuai
     }
     for row_index, col_name in zip_condition
 ]
