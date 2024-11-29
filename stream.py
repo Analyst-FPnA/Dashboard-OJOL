@@ -236,7 +236,17 @@ df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB']
 
 styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
-for idx, col in zip(df_pic2['index'], df_pic2['MONTH']):
-    styled_pivot_df.data.loc[idx, col] = f'🔴 {styled_pivot_df.data.loc[idx, col]}'
-styled_pivot_df.to_html(escape=False)
+def add_red_symbol(val, row, col):
+    # Menambahkan simbol merah di cell sesuai dengan indeks dan nama kolom yang ada di df_referensi
+    if (row.name, col) in zip(df_pic2['index'], df_pic2['MONTH']):
+        return f'🔴 {val}'  # Menambahkan simbol merah jika kondisinya sesuai
+    return val
+
+def apply_red_symbol(row):
+    for col in df_main.columns:
+        # Menambahkan simbol merah berdasarkan referensi
+        row[col] = add_red_symbol(row[col], row, col)
+    return row
+    
+styled_pivot_df.apply(apply_red_symbol, axis=1)
 #st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
