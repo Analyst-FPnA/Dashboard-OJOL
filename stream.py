@@ -268,8 +268,15 @@ styled_pivot_df = styled_pivot_df.apply(
     ],
     axis=1
 )
-styled_pivot_df = styled_pivot_df.set_table_styles({
-    (row_index, col_name): {'props': [('content', '"🔴"')] }
-    for (row_index, col_name) in zip_condition
-})
+
+cell_styles = [
+    {
+        'selector': f'td[data-colname="{col_name}"][data-rowindex="{row_index}"]',
+        'props': [('content', '"🔴"')]  # Menambahkan simbol 🔴 pada cell yang sesuai
+    }
+    for row_index, col_name in zip_condition
+]
+
+# Terapkan gaya CSS ke DataFrame
+styled_pivot_df = styled_pivot_df.set_table_styles(cell_styles)
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
