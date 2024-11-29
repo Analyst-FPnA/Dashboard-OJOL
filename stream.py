@@ -247,6 +247,7 @@ def apply_red_symbol(row):
         # Menambahkan simbol merah berdasarkan referensi
         row[col] = add_red_symbol(row[col], row, col)
     return row
-    
+
 styled_pivot_df = styled_pivot_df.apply(apply_red_symbol, axis=1)
+styled_pivot_df.data.loc['Feri Firmansah','April 2024']
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
