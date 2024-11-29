@@ -237,4 +237,4 @@ df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB']
 styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
 for idx, col in zip(df_pic2['index'], df_pic2['MONTH']):
-    styled_pivot_df.at[idx, col] = f'🔴 {styled_pivot_df.at[idx, col]}'
+    styled_pivot_df.data.loc[idx, col] = f'🔴 {styled_pivot_df.data.loc[idx, col]}'
