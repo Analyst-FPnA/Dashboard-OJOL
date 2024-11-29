@@ -235,7 +235,7 @@ df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB']
 #df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
 
-def highlight_cells_with_icon(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH'])):
+def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH'])):
     """
     Menambahkan ikon merah pada cell tertentu berdasarkan informasi highlight.
     """
