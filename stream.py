@@ -221,8 +221,7 @@ df_pic['SELISIH'] = abs(df_pic['SELISIH'])
 #df_pic = pd.concat([df_pic,df_pic2],ignore_index=True)
 df_pic = df_pic[df_pic['SELISIH']!=0]
 
-df_pic['Tanggal'] = pd.to_datetime(df_pic['MONTH'])
-df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=df_pic.sort_values('Tanggal')['MONTH'].unique(), ordered=True)
+
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH'])
 df_pic = df_pic.pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index().reset_index()
 df_pic = df_pic.melt(id_vars=['index','NAMA PIC','CAB'])
@@ -232,7 +231,8 @@ df_pic1 = df_pic[~(df_pic['value'].isna())].rename(columns={'value':'SELISIH'})
 df_pic2 = df_pic2.merge(s_nas,how='left').fillna(0).drop(columns='value')
 
 df_pic = pd.concat([df_pic1,df_pic2],ignore_index=True)
-df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=['January','February','March','April','May','June','July','August','September','October'], ordered=True)
+df_pic['Tanggal'] = pd.to_datetime(df_pic['MONTH'])
+df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=df_pic.sort_values('Tanggal')['MONTH'].unique(), ordered=True)
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
 #df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
