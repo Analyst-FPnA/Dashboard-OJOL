@@ -240,7 +240,7 @@ def add_red_symbol(val, row, col):
     # Menambahkan simbol merah di cell sesuai dengan indeks dan nama kolom yang ada di df_referensi
     if (row.name, col) in zip(df_pic2['index'], df_pic2['MONTH']):
         return f'attr: {val}🔴;'  # Menambahkan simbol merah jika kondisinya sesuai
-    return val
+    return f'attr: {val};'
 
 def apply_red_symbol(row):
     for col in df_pic.columns:
