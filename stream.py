@@ -249,5 +249,5 @@ def apply_red_symbol(row):
     return row
 
 styled_pivot_df = styled_pivot_df.apply(apply_red_symbol, axis=1)
-styled_pivot_df.data.loc[3,'April 2024']
+styled_pivot_df.data.loc[3,'April 2024'] = "🔴"
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
