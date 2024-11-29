@@ -235,21 +235,22 @@ df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB']
 #df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
 
-def highlight_cells(df, highlight_info):
-    """
-    Menambahkan ikon merah pada cell tertentu berdasarkan informasi highlight.
-    """
-    def add_icon(value, row_idx, col_name):
-        # Cek apakah cell perlu ditambahkan ikon
-        if highlight_info[(highlight_info['index'] == row_idx) & (highlight_info['MONTH'] == col_name)].shape[0] > 0:
-            return f"{value} 🔴"
-        return value
+def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH'])):
+    # Membuat DataFrame kosong dengan warna default (tidak ada warna)
+    df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
+    
+    # Iterasi melalui highlight_info untuk mengisi DataFrame styles dengan warna
+    for idx, row in highlight_info.iterrows():
+        # Menentukan warna untuk sel yang dipilih
+        row_index = row['index']
+        col_name = row['MONTH']
+        
+        # Memeriksa apakah row_index dan col_name ada di DataFrame
+        if row_index in df_styles.index and col_name in df_styles.columns:
+            df_styled.at[row_index, col_name] = f"{original_value} 🔴"
+    
+    return df_styles
 
-    # Terapkan styling ke DataFrame
-    styled_df = df.style.format(
-        lambda value, row_idx=df.index, col_name=df.columns: add_icon(value, row_idx[row_idx.index(value)], col_name)
-    )
-    return styled_df
 
 
 styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None)
