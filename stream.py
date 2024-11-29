@@ -249,28 +249,12 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
         if row_index in df_styles.index and col_name in df_styles.columns:
             
             # Berikan warna latar belakang kuning pada cell yang dipilih
-            df_styles.at[row_index, col_name] = f'🔴 {x.at[row_index, col_name]}'
+            df_styles.at[row_index, col_name] = '::before { content: "\\1F534"; color: red; padding-right: 5px; }'
 
     return df_styles
-    
-def add_red_symbol(val, row, col):
-    # Menambahkan simbol merah di cell sesuai dengan indeks dan nama kolom yang ada di df_referensi
-    if (row.name, col) in zip(df_pic2['index'], df_pic2['MONTH']):
-        return f'🔴 {val}'  # Menambahkan simbol merah jika kondisinya sesuai
-    return val
 
-# Styling untuk menambahkan simbol merah pada cell tertentu
-def apply_red_symbol(row):
-    for col in df_pic.columns[2:]:
-        # Menambahkan simbol merah berdasarkan referensi
-        row[col] = add_red_symbol(row[col], row, col)
-    return row
 
-for idx, col in zip(df_pic2['index'], df_pic2['MONTH']):
-    # Menambahkan simbol merah (🔴) pada nilai cell
-    df_pic.loc[idx, col] = f'🔴 {df_pic.loc[idx, col]}'
 
-df_pic
-#styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(apply_red_symbol, axis=1)
+styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None)
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
 
