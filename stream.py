@@ -247,8 +247,8 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
         
         # Memeriksa apakah row_index dan col_name ada di DataFrame
         if row_index in df_styles.index and col_name in df_styles.columns:
-            original_value = df_styled.at[row_index, col_name]
-            df_styled.at[row_index, col_name] = f"{original_value} 🔴"
+            original_value = df_styles.at[row_index, col_name]
+            df_styles.at[row_index, col_name] = f"{original_value} 🔴"
     
     return df_styled.style.format(na_rep="", escape="html")  
 
