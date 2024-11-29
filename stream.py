@@ -266,6 +266,11 @@ def apply_red_symbol(row):
         row[col] = add_red_symbol(row[col], row, col)
     return row
 
-styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(apply_red_symbol, axis=1)
+for idx, col in zip(df_pic2['index'], df_pic2['MONTH']):
+    # Menambahkan simbol merah (🔴) pada nilai cell
+    df_pic.at[idx, col] = f'🔴 {df_pic.at[idx, col]}'
+
+df_pic
+#styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(apply_red_symbol, axis=1)
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
 
