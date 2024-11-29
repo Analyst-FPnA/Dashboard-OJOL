@@ -251,7 +251,7 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
             # Berikan warna latar belakang kuning pada cell yang dipilih
             df_styles.at[row_index, col_name] = f"<u>{x.at[row_index, col_name]}</u>"
 
-    return df_styles
+    return df_styles.format(na_rep="", escape="html")
 
 
 styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None)
