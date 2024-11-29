@@ -254,7 +254,7 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
             # Tambahkan ikon merah di belakang angka
             df_styled.at[row_index, col_name] = f"{original_value} 🔴"
     
-    return df_styled.style.format(na_rep="", escape="html")  # Memastikan format HTML didukung
+    return df_styled
 
 
 styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None)
