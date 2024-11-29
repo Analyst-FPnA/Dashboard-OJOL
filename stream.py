@@ -235,27 +235,11 @@ df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB']
 #df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
 
-def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH'])):
-    # Membuat DataFrame kosong dengan warna default (tidak ada warna)
-    df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
-    
-    # Iterasi melalui highlight_info untuk mengisi DataFrame styles dengan warna
-    for idx, row in highlight_info.iterrows():
-        # Menentukan warna untuk sel yang dipilih
-        row_index = row['index']
-        col_name = row['MONTH']
-        
-        # Memeriksa apakah row_index dan col_name ada di DataFrame
-        if row_index in df_styles.index and col_name in df_styles.columns:
-            # Berikan warna latar belakang kuning pada cell yang dipilih
-            df_styles.at[row_index, col_name] = f"{x.at[row_index, col_name]} 🔴"
-
-    return df_styles
+styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
 for idx, col in zip(df_pic2['index'], df_pic2['MONTH']):
-    df_pic.at[idx, col] = f'🔴 {df_pic.at[idx, col]}'
+    styled_pivot_df.at[idx, col] = f'🔴 {df_pic.at[idx, col]}'
     
 df_pic
-#styled_pivot_df = df_pic.applymap(lambda x: highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None)
-#st.dataframe(styled_pivot_df.to_html(escape=False), use_container_width=True, hide_index=True) 
+st.dataframe(styled_pivot_df.to_html(escape=False), use_container_width=True, hide_index=True) 
 
