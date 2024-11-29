@@ -255,13 +255,13 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
     
 def add_red_symbol(val, row, col):
     # Menambahkan simbol merah di cell sesuai dengan indeks dan nama kolom yang ada di df_referensi
-    if (row.name, col) in zip(df_pic2['Index'], df_pic2['MONTH']):
+    if (row.name, col) in zip(df_pic2['index'], df_pic2['MONTH']):
         return f'🔴 {val}'  # Menambahkan simbol merah jika kondisinya sesuai
     return val
 
 # Styling untuk menambahkan simbol merah pada cell tertentu
 def apply_red_symbol(row):
-    for col in df_pic.columns[1:]:
+    for col in df_pic.columns[2:]:
         # Menambahkan simbol merah berdasarkan referensi
         row[col] = add_red_symbol(row[col], row, col)
     return row
