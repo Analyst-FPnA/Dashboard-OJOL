@@ -250,7 +250,7 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
             original_value = df_styles.at[row_index, col_name]
             df_styles.at[row_index, col_name] = f"{original_value} 🔴"
     
-    return df_styled.style.format(na_rep="", escape="html")  
+    return df_styles.style.format(na_rep="", escape="html")  
 
 
 
