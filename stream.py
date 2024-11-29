@@ -234,12 +234,10 @@ df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=df_pic.sort_values(
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
 #df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
-
-
 for idx, col in zip(df_pic2['index'], df_pic2['MONTH']):
     df_pic.at[idx, col] = f'🔴 {df_pic.at[idx, col]}'
 
-styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
+styled_pivot_df = df_pic.style.background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
   
 st.dataframe(styled_pivot_df.to_html(escape=False), use_container_width=True, hide_index=True) 
 
