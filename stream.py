@@ -239,8 +239,8 @@ styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gra
 def add_red_symbol(val, row, col):
     # Menambahkan simbol merah di cell sesuai dengan indeks dan nama kolom yang ada di df_referensi
     if (row.name, col) in zip(df_pic2['index'], df_pic2['MONTH']):
-        return f'attr: {val}--;'  # Menambahkan simbol merah jika kondisinya sesuai
-    return f'attr: {val};'
+        return f'🔴'  # Menambahkan simbol merah jika kondisinya sesuai
+    return f'🔴'
 
 def apply_red_symbol(row):
     for col in df_pic.columns:
@@ -249,5 +249,4 @@ def apply_red_symbol(row):
     return row
 
 styled_pivot_df = styled_pivot_df.apply(apply_red_symbol, axis=1)
-styled_pivot_df.data.loc[3,'April 2024'] = "🔴"
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
