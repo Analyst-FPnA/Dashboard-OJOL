@@ -247,6 +247,25 @@ def apply_red_symbol(row):
         # Menambahkan simbol merah berdasarkan referensi
         row[col] = add_red_symbol(row[col], row, col)
     return row
+    
+# Membuat fungsi untuk menambahkan simbol 🔴 pada cell tertentu
+def add_red_circle(val, row_index, col_name, zip_condition):
+    # Mengecek apakah pasangan (index, MONTH) ada di dalam zip_condition
+    if (row_index, col_name) in zip_condition:
+        return f"{val} 🔴"  # Menambahkan simbol 🔴 jika kondisi terpenuhi
+    else:
+        return val  # Jika tidak, nilai tetap seperti semula
 
-styled_pivot_df = styled_pivot_df.apply(apply_red_symbol, axis=1)
+# Menyusun pasangan (index, MONTH) dari df_pic2
+zip_condition = list(zip(df_pic2['index'], df_pic2['MONTH']))
+
+
+# Jika kamu ingin menambahkan gradien latar belakang atau format lainnya
+styled_pivot_df = styled_pivot_df.apply(
+    lambda row: [
+        add_red_circle(row[col], row.name, col, zip_condition) 
+        for col in df_pic.columns
+    ],
+    axis=1
+)
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
