@@ -245,12 +245,12 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
         row_index = row['index']
         col_name = row['MONTH']
         
+        # Memeriksa apakah row_index dan col_name ada di DataFrame
         if row_index in df_styles.index and col_name in df_styles.columns:
-            # Menambahkan ikon merah di belakang angka
-            df_styles.at[row_index, col_name] = 'text-decoration: none;'
-            x.at[row_index, col_name] = f"{x.at[row_index, col_name]} <i class='fa fa-exclamation-circle' style='color:red'></i>"
+            df_styles.at[row_index, col_name] = 'background-color: yellow;'
+            x.at[row_index, col_name] = f"{x.at[row_index, col_name]} ❗"  # Menambahkan simbol exclamation merah.
 
-    return x
+    return df_styles
 
 
 styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None)
