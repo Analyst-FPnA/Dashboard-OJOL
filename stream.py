@@ -211,9 +211,9 @@ s_nas['SELISIH'] = abs(s_nas['SELISIH'])
 
 cn_nas['CAB'] = cn_nas['CAB'].str.extract(r'\((.*?)\)')[0].fillna(cn_nas['CAB'])
 cn_nas['CANCEL NOTA'] = abs(cn_nas['CANCEL NOTA'])
-pic['BULAN'] = pd.Categorical(pic['BULAN'], categories=['January','February','March','April','May','June','July','August','September','October'], ordered=True)
-pic = pic.sort_values('BULAN')
 
+pic
+df_pic
 df_pic = df_breakdown[df_breakdown['Kategori'].isin([x.upper() for x in kat_diperiksa])].groupby(['MONTH','CAB'])[df_breakdown.columns[-5:]].sum().sum(axis=1).reset_index().rename(columns={0:'SELISIH'})
 
 df_pic = df_pic.merge(pic,how='left',left_on=['CAB','MONTH'],right_on =['NAMA RESTO','BULAN']).groupby(['NAMA PIC','MONTH','CAB'])[['SELISIH']].sum().reset_index()
