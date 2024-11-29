@@ -268,4 +268,8 @@ styled_pivot_df = styled_pivot_df.apply(
     ],
     axis=1
 )
+styled_pivot_df = styled_pivot_df.set_table_styles({
+    (row_index, col_name): {'props': [('content', '"🔴"')] }
+    for (row_index, col_name) in zip_condition
+})
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
