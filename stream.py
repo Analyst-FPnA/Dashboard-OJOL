@@ -246,18 +246,22 @@ def apply_red_symbol(row):
 def add_red_circle(val, row_index, col_name, zip_condition):
     # Mengecek apakah pasangan (index, MONTH) ada di dalam zip_condition
     if (row_index, col_name) in zip_condition:
-        return 'attr: val;content:"\U0001F534";color:red'  # Menambahkan simbol 🔴 jika kondisi terpenuhi
+        return 'attr: val;color:red;'  # Menambahkan simbol 🔴 jika kondisi terpenuhi
     else:
-        return 'attr: val;content:"\U0001F534";'  # Jika tidak, nilai tetap seperti semula
+        return 'attr: val;'  # Jika tidak, nilai tetap seperti semula
 
 # Menyusun pasangan (index, MONTH) dari df_pic2
 zip_condition = list(zip(df_pic2['index'], df_pic2['MONTH']))
 
-styled_pivot_df = styled_pivot_df.apply(
-    lambda row: [
-        add_red_circle(row[col], row.name, col, zip_condition) 
-        for col in df_pic.columns
-    ],
-    axis=1
-)
+cell_styles = [
+    {
+        'selector': f'td[data-colname="{col_name}"][data-rowindex="{row_index}"]',
+        'props': [('color', 'red')]
+    }
+    for row_index, col_name in zip_condition
+]
+
+# Terapkan gaya CSS ke DataFrame
+styled_pivot_df = styled_pivot_df.set_table_styles(cell_styles)
+
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
