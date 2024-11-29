@@ -237,6 +237,7 @@ df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB']
 for idx, col in zip(df_pic2['index'], df_pic2['MONTH']):
     df_pic.at[idx, col] = f'🔴 {df_pic.at[idx, col]}'
 
+
 # DataFrame dengan angka float
 data = {
     'Nama': ['Alice', 'Bob', 'Charlie', 'David'],
@@ -255,23 +256,24 @@ df_referensi = pd.DataFrame({
     'Kolom': ['Nilai', 'Nilai']  # Kolom 'Nilai' pada baris ke-2 dan ke-4
 })
 
-# Menyalin DataFrame asli untuk tampilan
+# 1. Menyalin DataFrame asli untuk tampilan
 df_display = df_pic.copy()
 
-# 1. Tambahkan simbol merah 🔴 hanya untuk tampilan (tidak mengubah data asli)
-for idx, col in zip(df_referensi['Indeks'], df_referensi['Kolom']):
-    df_display.at[idx, col] = f'🔴 {df_display.at[idx, col]}'
+# 2. Menambahkan simbol merah 🔴 untuk tampilan (tidak mengubah data asli)
+# Untuk menambahkan simbol, kita akan menggunakan styling
+def add_symbol(val):
+    if isinstance(val, (int, float)):  # Pastikan ini adalah angka
+        return f'🔴 {val}' if val == df_display.at[1, 'Nilai'] or val == df_display.at[3, 'Nilai'] else val
+    return val
 
-# 2. Menerapkan format tampilan accounting setelah menambahkan simbol
+# 3. Menerapkan format tampilan accounting setelah menambahkan simbol
 df_styled = df_display.style.format({
     'Nilai': '${:,.2f}',  # Format accounting dengan 2 desimal
     'Usia': '{:,.0f}'      # Format angka bulat untuk Usia
-})
+}).applymap(add_symbol, subset=['Nilai'])  # Tambahkan simbol hanya pada kolom 'Nilai'
 
-# 3. Menerapkan gradient warna pada kolom 'Nilai' dan 'Usia' menggunakan cmap 'Reds' dan axis=1
+# 4. Menerapkan gradient warna pada kolom 'Nilai' dan 'Usia' menggunakan cmap 'Reds' dan axis=1
 df_styled = df_styled.background_gradient(cmap='Reds', axis=1, subset=df_display.columns[1:])
 
 # Menampilkan DataFrame yang sudah di-styling dan ditambahkan simbol menggunakan Streamlit
 st.dataframe(df_styled)
-
-
