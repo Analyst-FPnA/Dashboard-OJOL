@@ -249,7 +249,7 @@ def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SE
         if row_index in df_styles.index and col_name in df_styles.columns:
             
             # Berikan warna latar belakang kuning pada cell yang dipilih
-            df_styles.at[row_index, col_name] = f'<span style="color:red">{x.at[row_index, col_name]}🔴</span>'
+            df_styles.at[row_index, col_name] = f'<span> {x.at[row_index, col_name]}🔴</span>'
 
     return df_styles
 
