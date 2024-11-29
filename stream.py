@@ -234,21 +234,28 @@ df_pic['MONTH'] = pd.Categorical(df_pic['MONTH'], categories=df_pic.sort_values(
 df_pic = df_pic.sort_values(['NAMA PIC','MONTH']).pivot(index=['NAMA PIC','CAB'],columns='MONTH',values='SELISIH').reset_index()
 #df_pic = df_pic.fillna(0).style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:])
 
-def highlight_cells(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH'])):
-    # Membuat DataFrame kosong dengan warna default (tidak ada warna)
-    df_styles = pd.DataFrame('', index=x.index, columns=x.columns)
-    
-    # Iterasi melalui highlight_info untuk mengisi DataFrame styles dengan warna
+
+def highlight_cells_with_icon(x, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH'])):
+    """
+    Menambahkan ikon merah pada cell tertentu berdasarkan informasi highlight.
+    """
+    # Copy DataFrame untuk menjaga format asli
+    df_styled = x.copy()
+
+    # Iterasi melalui highlight_info untuk menambahkan ikon merah
     for idx, row in highlight_info.iterrows():
-        # Menentukan warna untuk sel yang dipilih
         row_index = row['index']
         col_name = row['MONTH']
         
         # Memeriksa apakah row_index dan col_name ada di DataFrame
-        if row_index in df_styles.index and col_name in df_styles.columns:
-            df_styles.at[row_index, col_name] = 'background-color: yellow;'
+        if row_index in df_styled.index and col_name in df_styled.columns:
+            original_value = df_styled.at[row_index, col_name]
+            
+            # Tambahkan ikon merah di belakang angka
+            df_styled.at[row_index, col_name] = f"{original_value} 🔴"
     
-    return df_styles
-    
-styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None).set_properties(**{'color': 'black'})
+    return df_styled.style.format(na_rep="", escape="html")  # Memastikan format HTML didukung
+
+
+styled_pivot_df = df_pic.style.format(lambda x: format_number(x)).background_gradient(cmap='Reds', axis=1, subset=df_pic.columns[2:]).apply(highlight_cells, highlight_info=df_pic2.drop(columns=['CAB','NAMA PIC','SELISIH']), axis=None)
 st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
