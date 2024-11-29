@@ -246,7 +246,7 @@ def apply_red_symbol(row):
 def add_red_circle(val, row_index, col_name, zip_condition):
     # Mengecek apakah pasangan (index, MONTH) ada di dalam zip_condition
     if (row_index, col_name) in zip_condition:
-        return 'attr: val;content:"\U0001F534";color:"red"'  # Menambahkan simbol 🔴 jika kondisi terpenuhi
+        return 'attr: val;content:"\U0001F534";color:red'  # Menambahkan simbol 🔴 jika kondisi terpenuhi
     else:
         return 'attr: val;content:"\U0001F534";'  # Jika tidak, nilai tetap seperti semula
 
