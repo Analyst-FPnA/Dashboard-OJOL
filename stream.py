@@ -248,5 +248,5 @@ def apply_red_symbol(row):
         row[col] = add_red_symbol(row[col], row, col)
     return row
     
-styled_pivot_df.apply(apply_red_symbol, axis=1)
-#st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
+styled_pivot_df = styled_pivot_df.apply(apply_red_symbol, axis=1)
+st.dataframe(styled_pivot_df, use_container_width=True, hide_index=True) 
